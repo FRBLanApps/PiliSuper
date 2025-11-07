@@ -107,7 +107,7 @@ dependencies:
   # media_kit_video: ^1.2.5 # For video rendering.
   media_kit_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/media-kit/media-kit.git
       path: media_kit_video
       ref: version_1.2.5
   media_kit_libs_video: 1.0.5
