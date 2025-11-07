@@ -103,14 +103,14 @@ dependencies:
   encrypt: ^5.0.3
 
   # 视频播放器
-  media_kit: 1.1.11 # Primary package.
+  media_kit: 1.2.1 # Primary package.
   # media_kit_video: ^1.2.5 # For video rendering.
   media_kit_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit_video
-      ref: version_1.2.5
-  media_kit_libs_video: 1.0.5
+      ref: version_1.3.1
+  media_kit_libs_video: 1.0.7
 
   # 媒体通知
   audio_service: ^0.18.15
@@ -242,32 +242,32 @@ dependency_overrides:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit
-      ref: version_1.2.5
+      ref: version_1.3.1
   media_kit_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit_video
-      ref: version_1.2.5
+      ref: version_1.3.1
   media_kit_libs_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: libs/universal/media_kit_libs_video
-      ref: version_1.2.5
+      ref: version_1.3.1
   media_kit_native_event_loop:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit_native_event_loop
-      ref: version_1.2.5
+      ref: version_1.3.1
   media_kit_libs_android_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: libs/android/media_kit_libs_android_video
-      ref: version_1.2.5
+      ref: version_1.3.1
   media_kit_libs_windows_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: libs/windows/media_kit_libs_windows_video
-      ref: version_1.2.5
+      ref: version_1.3.1
   font_awesome_flutter: 10.9.0
 
 dev_dependencies:
