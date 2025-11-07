@@ -107,9 +107,9 @@ dependencies:
   # media_kit_video: ^1.2.5 # For video rendering.
   media_kit_video:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: media_kit_video
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_libs_video: 1.0.7
 
   # 媒体通知
@@ -240,34 +240,34 @@ dependency_overrides:
   rxdart: ^0.28.0
   media_kit:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: media_kit
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_video:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: media_kit_video
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_libs_video:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: libs/universal/media_kit_libs_video
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_native_event_loop:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: media_kit_native_event_loop
-      ref: version_1.2.5
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_libs_android_video:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: libs/android/media_kit_libs_android_video
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   media_kit_libs_windows_video:
     git:
-      url: https://github.com/media-kit/media-kit.git
+      url: https://github.com/Li2548/media-kit.git
       path: libs/windows/media_kit_libs_windows_video
-      ref: d310049f24196250d876efb02b9ff56fa9ef5068
+      ref: 3220b8e352ab60e451d0e0b9040265d6e1d0c5d5
   font_awesome_flutter: 10.9.0
 
 dev_dependencies:
