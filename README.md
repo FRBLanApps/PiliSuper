@@ -8,9 +8,9 @@
     <h1>PiliSuper</h1>
 <div align="center">
     
-![GitHub repo size](https://img.shields.io/github/repo-size/furrybluelan/PiliSuper) 
-![GitHub Repo stars](https://img.shields.io/github/stars/furrybluelan/PiliSuper) 
-![GitHub all releases](https://img.shields.io/github/downloads/furrybluelan/PiliSuper/total) 
+![GitHub repo size](https://img.shields.io/github/repo-size/Li2548/PiliSuper) 
+![GitHub Repo stars](https://img.shields.io/github/stars/Li2548/PiliSuper) 
+![GitHub all releases](https://img.shields.io/github/downloads/Li2548/PiliSuper/total) 
 </div>
     <p>使用Flutter开发的BiliBili第三方客户端</p>
     
