@@ -80,7 +80,7 @@ dependencies:
   # extended_nested_scroll_view: ^6.2.1
   extended_nested_scroll_view:
     git:
-      url: https://github.com/furrybluelan/extended_nested_scroll_view.git
+      url: https://github.com/bggRGjQaUbCoE/extended_nested_scroll_view.git
       ref: mod
   # 上拉加载
   # loading_more_list: ^7.1.0
@@ -91,7 +91,7 @@ dependencies:
   # material_design_icons_flutter: ^7.0.7296
   material_design_icons_flutter:
     git:
-      url: https://github.com/furrybluelan/material_design_icons_flutter.git
+      url: https://github.com/bggRGjQaUbCoE/material_design_icons_flutter.git
       ref: const
   # toast
   flutter_smart_dialog: ^4.9.8+5
@@ -107,7 +107,7 @@ dependencies:
   # media_kit_video: ^1.2.5 # For video rendering.
   media_kit_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: media_kit_video
       ref: version_1.2.5
   media_kit_libs_video: 1.0.5
@@ -122,7 +122,7 @@ dependencies:
   # universal_platform: ^1.1.0
   auto_orientation:
     git:
-      url: https://github.com/furrybluelan/auto_orientation.git
+      url: https://github.com/bggRGjQaUbCoE/auto_orientation.git
       ref: master
   protobuf: ^5.0.0
   # animations: ^2.0.11
@@ -139,11 +139,11 @@ dependencies:
   # 弹幕
   # ns_danmaku:
   #   git:
-  #     url: https://github.com/furrybluelan/flutter_ns_danmaku.git
+  #     url: https://github.com/bggRGjQaUbCoE/flutter_ns_danmaku.git
   #     ref: master
   canvas_danmaku:
     git:
-      url: https://github.com/furrybluelan/canvas_danmaku.git
+      url: https://github.com/bggRGjQaUbCoE/canvas_danmaku.git
       ref: main
   # 状态栏图标控制
   # status_bar_control: ^3.2.1
@@ -153,7 +153,7 @@ dependencies:
   # floating: ^3.0.0
   floating:
     git:
-      url: https://github.com/furrybluelan/floating.git
+      url: https://github.com/bggRGjQaUbCoE/floating.git
       ref: version-3
   # html解析
   html: ^0.15.4
@@ -175,7 +175,7 @@ dependencies:
   # chat_bottom_container: ^0.2.0
   chat_bottom_container:
     git:
-      url: https://github.com/furrybluelan/flutter_chat_packages.git
+      url: https://github.com/bggRGjQaUbCoE/flutter_chat_packages.git
       ref: main
       path: packages/chat_bottom_container
   image_picker: ^1.1.2
@@ -199,7 +199,7 @@ dependencies:
   re_highlight: ^0.0.3
   flutter_sortable_wrap:
     git:
-      url: https://github.com/furrybluelan/flutter_sortable_wrap.git
+      url: https://github.com/bggRGjQaUbCoE/flutter_sortable_wrap.git
       ref: master
   crclib: ^3.0.0
   web_socket_channel: ^3.0.3
@@ -207,14 +207,14 @@ dependencies:
   # window_manager: ^0.5.1
   window_manager:
     git:
-      url: https://github.com/furrybluelan/window_manager.git
+      url: https://github.com/bggRGjQaUbCoE/window_manager.git
       path: packages/window_manager
       ref: main
   tray_manager: ^0.5.1
   file_picker: ^10.3.3
   super_sliver_list:
     git:
-      url: https://github.com/furrybluelan/super_sliver_list.git
+      url: https://github.com/bggRGjQaUbCoE/super_sliver_list.git
       ref: mod
 
   vector_math: any
@@ -240,32 +240,32 @@ dependency_overrides:
   rxdart: ^0.28.0
   media_kit:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: media_kit
       ref: version_1.2.5
   media_kit_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: media_kit_video
       ref: version_1.2.5
   media_kit_libs_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: libs/universal/media_kit_libs_video
       ref: version_1.2.5
   media_kit_native_event_loop:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: media_kit_native_event_loop
       ref: version_1.2.5
   media_kit_libs_android_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: libs/android/media_kit_libs_android_video
       ref: version_1.2.5
   media_kit_libs_windows_video:
     git:
-      url: https://github.com/furrybluelan/media-kit.git
+      url: https://github.com/bggRGjQaUbCoE/media-kit.git
       path: libs/windows/media_kit_libs_windows_video
       ref: version_1.2.5
   font_awesome_flutter: 10.9.0
