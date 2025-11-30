@@ -8,9 +8,9 @@
     <h1>PiliSuper</h1>
 <div align="center">
     
-![GitHub repo size](https://img.shields.io/github/repo-size/furrybluelan/PiliSuper) 
-![GitHub Repo stars](https://img.shields.io/github/stars/furrybluelan/PiliSuper) 
-![GitHub all releases](https://img.shields.io/github/downloads/furrybluelan/PiliSuper/total) 
+![GitHub repo size](https://img.shields.io/github/repo-size/FRBLanApps/PiliSuper) 
+![GitHub Repo stars](https://img.shields.io/github/stars/FRBLanApps/PiliSuper) 
+![GitHub all releases](https://img.shields.io/github/downloads/FRBLanApps/PiliSuper/total) 
 </div>
     <p>使用Flutter开发的BiliBili第三方客户端</p>
     
@@ -24,6 +24,17 @@
 
 
 <br/>
+
+## 此项目现状
+目前不方便提交代码
+~~因为没电脑（发怒摔坏了~~
+可能得明年才有大更新
+如果有人愿意来做这个项目，联系：3784474660@qq.com
+谢谢对此项目关心的人的帮助与支持！
+
+## 登陆凭证与设置的迁移
+直接在关于那里找导入/导出登录信息/设置即可。
+产生的文本既适用于本项目，也适用于上游的PiliPlus。
 
 ## 适配平台
 
@@ -211,10 +222,16 @@
 <br/>
 
 ## 大饼(
-- [ ] 离线缓存
+
+- [ ] Apple 通知推送（不可能的，那玩意需要Apple开发者账号，维护者没有人掏得出来这笔钱）
+- [ ] iOS视频小窗支持
+- [ ] 3D视频支持
+- [ ] 专栏/视频上传支持（好像有单独项目吧？）
 - [ ] 主题支持
 - [ ] 界面多样式切换
 - [ ] 创作中心
+- [ ] i18n
+- [ ] 有点麻烦的弹幕防挡
 - [ ] 听视频
 - [ ] Google FCM推送
 - [ ] 一些细节问题
