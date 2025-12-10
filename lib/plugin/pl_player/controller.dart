@@ -17,7 +17,7 @@ import 'package:PiliPlus/models/common/video/video_type.dart';
 import 'package:PiliPlus/models/user/danmaku_rule.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
-import 'package:PiliPlus/pages/danmaku/dnamaku_model.dart';
+import 'package:PiliPlus/pages/danmaku/danmaku_model.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/bottom_progress_behavior.dart';
 import 'package:PiliPlus/plugin/pl_player/models/data_source.dart';
@@ -229,9 +229,9 @@ class PlPlayerController {
 
   Offset initialFocalPoint = Offset.zero;
 
-  Future<void> exitDesktopPip() async {
+  Future<void> exitDesktopPip() {
     isDesktopPip = false;
-    await Future.wait([
+    return Future.wait([
       windowManager.setTitleBarStyle(TitleBarStyle.normal),
       windowManager.setMinimumSize(const Size(400, 700)),
       windowManager.setBounds(_lastWindowBounds),
@@ -357,7 +357,7 @@ class PlPlayerController {
   late double danmakuLineHeight = Pref.danmakuLineHeight;
   late int subtitlePaddingH = Pref.subtitlePaddingH;
   late int subtitlePaddingB = Pref.subtitlePaddingB;
-  late double subtitleBgOpaticy = Pref.subtitleBgOpaticy;
+  late double subtitleBgOpacity = Pref.subtitleBgOpacity;
   final bool showVipDanmaku = Pref.showVipDanmaku; // loop unswitching
   late double subtitleStrokeWidth = Pref.subtitleStrokeWidth;
   late int subtitleFontWeight = Pref.subtitleFontWeight;
@@ -437,9 +437,9 @@ class PlPlayerController {
     wordSpacing: 0.1,
     color: Colors.white,
     fontWeight: FontWeight.values[subtitleFontWeight],
-    backgroundColor: subtitleBgOpaticy == 0
+    backgroundColor: subtitleBgOpacity == 0
         ? null
-        : Colors.black.withValues(alpha: subtitleBgOpaticy),
+        : Colors.black.withValues(alpha: subtitleBgOpacity),
   );
 
   late final Rx<SubtitleViewConfiguration> subtitleConfig = _getSubConfig.obs;
@@ -448,7 +448,7 @@ class PlPlayerController {
     final subTitleStyle = this.subTitleStyle;
     return SubtitleViewConfiguration(
       style: subTitleStyle,
-      strokeStyle: subtitleBgOpaticy == 0
+      strokeStyle: subtitleBgOpacity == 0
           ? subTitleStyle.copyWith(
               color: null,
               background: null,
@@ -1009,8 +1009,9 @@ class PlPlayerController {
 
   /// 播放事件监听
   void startListeners() {
+    final controllerStream = videoPlayerController!.stream;
     subscriptions = {
-      videoPlayerController!.stream.playing.listen((event) {
+      controllerStream.playing.listen((event) {
         WakelockPlus.toggle(enable: event);
         if (event) {
           if (_shouldSetPip) {
@@ -1039,7 +1040,7 @@ class PlPlayerController {
           makeHeartBeat(positionSeconds.value, type: HeartBeatType.status);
         }
       }),
-      videoPlayerController!.stream.completed.listen((event) {
+      controllerStream.completed.listen((event) {
         if (event) {
           playerStatus.value = PlayerStatus.completed;
 
@@ -1052,7 +1053,7 @@ class PlPlayerController {
         }
         makeHeartBeat(positionSeconds.value, type: HeartBeatType.completed);
       }),
-      videoPlayerController!.stream.position.listen((event) {
+      controllerStream.position.listen((event) {
         position.value = event;
         updatePositionSecond();
         if (!isSliderMoving.value) {
@@ -1066,14 +1067,14 @@ class PlPlayerController {
         }
         makeHeartBeat(event.inSeconds);
       }),
-      videoPlayerController!.stream.duration.listen((Duration event) {
+      controllerStream.duration.listen((Duration event) {
         duration.value = event;
       }),
-      videoPlayerController!.stream.buffer.listen((Duration event) {
+      controllerStream.buffer.listen((Duration event) {
         buffered.value = event;
         updateBufferedSecond();
       }),
-      videoPlayerController!.stream.buffering.listen((bool event) {
+      controllerStream.buffering.listen((bool event) {
         isBuffering.value = event;
         videoPlayerServiceHandler?.onStatusChange(
           playerStatus.value,
@@ -1082,14 +1083,14 @@ class PlPlayerController {
         );
       }),
       if (kDebugMode)
-        videoPlayerController!.stream.log.listen(((PlayerLog log) {
+        controllerStream.log.listen(((PlayerLog log) {
           if (log.level == 'error' || log.level == 'fatal') {
-            Utils.reportError(log.text, null, log.prefix);
+            Utils.reportError('${log.prefix}: ${log.text}', null);
           } else {
             debugPrint(log.toString());
           }
         })),
-      videoPlayerController!.stream.error.listen((String event) {
+      controllerStream.error.listen((String event) {
         if (isFileSource && event.startsWith("Failed to open file")) {
           return;
         }
@@ -1107,7 +1108,7 @@ class PlPlayerController {
             //tcp: ffurl_read returned 0xffffff99
             event.startsWith('tcp: ffurl_read returned ')) {
           EasyThrottle.throttle(
-            'videoPlayerController!.stream.error.listen',
+            'controllerStream.error.listen',
             const Duration(milliseconds: 10000),
             () {
               Future.delayed(const Duration(milliseconds: 3000), () async {
@@ -1141,7 +1142,7 @@ class PlPlayerController {
           SmartDialog.showToast('视频加载错误, $event');
         }
       }),
-      // videoPlayerController!.stream.volume.listen((event) {
+      // controllerStream.volume.listen((event) {
       //   if (!mute.value && _volumeBeforeMute != event) {
       //     _volumeBeforeMute = event / 100;
       //   }
@@ -1167,8 +1168,8 @@ class PlPlayerController {
   }
 
   /// 移除事件监听
-  Future<void> removeListeners() async {
-    await Future.wait(subscriptions.map((e) => e.cancel()));
+  Future<void> removeListeners() {
+    return Future.wait(subscriptions.map((e) => e.cancel()));
   }
 
   /// 跳转至指定位置
@@ -1405,7 +1406,7 @@ class PlPlayerController {
   }
 
   /// 设置后台播放
-  Future<void> setBackgroundPlay(bool val) async {
+  void setBackgroundPlay(bool val) {
     videoPlayerServiceHandler?.enableBackgroundPlay = val;
     if (!tempPlayerConf) {
       setting.put(SettingBoxKey.enableBackgroundPlay, val);
@@ -1560,7 +1561,7 @@ class PlPlayerController {
             await fullAutoModeForceSensor();
             return;
           }
-          late final size = Get.mediaQuery.size;
+          late final size = MediaQuery.sizeOf(Get.context!);
           if ((mode == FullScreenMode.vertical ||
               (mode == FullScreenMode.auto && isVertical) ||
               (mode == FullScreenMode.ratio &&
@@ -1697,7 +1698,7 @@ class PlPlayerController {
       SettingBoxKey.subtitleFontScaleFS: subtitleFontScaleFS,
       SettingBoxKey.subtitlePaddingH: subtitlePaddingH,
       SettingBoxKey.subtitlePaddingB: subtitlePaddingB,
-      SettingBoxKey.subtitleBgOpaticy: subtitleBgOpaticy,
+      SettingBoxKey.subtitleBgOpacity: subtitleBgOpacity,
       SettingBoxKey.subtitleStrokeWidth: subtitleStrokeWidth,
       SettingBoxKey.subtitleFontWeight: subtitleFontWeight,
     });

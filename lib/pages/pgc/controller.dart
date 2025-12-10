@@ -14,14 +14,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PgcController
-    extends CommonListController<List<PgcIndexItem>?, PgcIndexItem> {
+    extends CommonListController<List<PgcIndexItem>?, PgcIndexItem>
+    with AccountMixin {
   PgcController({required this.tabType});
   final HomeTabType tabType;
 
   late final showPgcTimeline =
       tabType == HomeTabType.bangumi && Pref.showPgcTimeline;
 
-  AccountService accountService = Get.find<AccountService>();
+  @override
+  final accountService = Get.find<AccountService>();
 
   @override
   void onInit() {
@@ -40,14 +42,18 @@ class PgcController
   @override
   Future<void> onRefresh() {
     if (accountService.isLogin.value) {
-      followPage = 1;
-      followEnd = false;
+      _refreshPgcFollow();
     }
-    queryPgcFollow();
     if (showPgcTimeline) {
       queryPgcTimeline();
     }
     return super.onRefresh();
+  }
+
+  void _refreshPgcFollow() {
+    followPage = 1;
+    followEnd = false;
+    queryPgcFollow();
   }
 
   // follow
@@ -75,7 +81,7 @@ class PgcController
         list1.isNotEmpty &&
         list2.isNotEmpty) {
       for (var i = 0; i < list1.length; i++) {
-        list1[i] + list2[i];
+        list1[i].addAll(list2[i]);
       }
     } else {
       list1 ??= list2;
@@ -92,7 +98,6 @@ class PgcController
     }
     followLoading = true;
     var res = await FavHttp.favPgc(
-      mid: accountService.mid,
       type: tabType == HomeTabType.bangumi ? 1 : 2,
       pn: followPage,
     );
@@ -141,5 +146,14 @@ class PgcController
   void onClose() {
     followController?.dispose();
     super.onClose();
+  }
+
+  @override
+  void onChangeAccount(bool isLogin) {
+    if (isLogin) {
+      _refreshPgcFollow();
+    } else {
+      followState.value = LoadingState.loading();
+    }
   }
 }

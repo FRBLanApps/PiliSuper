@@ -77,8 +77,8 @@ abstract class SettingBoxKey {
       showRelatedVideo = 'showRelatedVideo',
       showVideoReply = 'showVideoReply',
       showBangumiReply = 'showBangumiReply',
-      alwaysExapndIntroPanel = 'alwaysExapndIntroPanel',
-      exapndIntroPanelH = 'exapndIntroPanelH',
+      alwaysExpandIntroPanel = 'alwaysExapndIntroPanel',
+      expandIntroPanelH = 'exapndIntroPanelH',
       horizontalSeasonPanel = 'horizontalSeasonPanel',
       horizontalMemberPage = 'horizontalMemberPage',
       replyLengthLimit = 'replyLengthLimit',
@@ -145,7 +145,8 @@ abstract class SettingBoxKey {
       enablePlayAll = 'enablePlayAll',
       enableTapDm = 'enableTapDm',
       setSystemBrightness = 'setSystemBrightness',
-      downloadPath = 'downloadPath';
+      downloadPath = 'downloadPath',
+      followOrderType = 'followOrderType';
 
   static const String minimizeOnExit = 'minimizeOnExit',
       windowSize = 'windowSize',
@@ -159,7 +160,7 @@ abstract class SettingBoxKey {
       enableDragSubtitle = 'enableDragSubtitle',
       subtitlePaddingH = 'subtitlePaddingH',
       subtitlePaddingB = 'subtitlePaddingB',
-      subtitleBgOpaticy = 'subtitleBgOpaticy',
+      subtitleBgOpacity = 'subtitleBgOpaticy',
       subtitleStrokeWidth = 'subtitleStrokeWidth',
       subtitleFontScale = 'subtitleFontScale',
       subtitleFontScaleFS = 'subtitleFontScaleFS',
@@ -207,6 +208,7 @@ abstract class SettingBoxKey {
       enableSingleRow = 'enableSingleRow',
       displayMode = 'displayMode',
       smallCardWidth = 'smallCardWidth',
+      recommendCardWidth = 'recommendCardWidth',
       dynamicsWaterfallFlow = 'dynamicsWaterfallFlow',
       upPanelPosition = 'upPanelPosition',
       dynamicsShowAllFollowedUp = 'dynamicsShowAllFollowedUp',
