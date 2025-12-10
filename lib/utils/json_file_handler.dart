@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:PiliPlus/services/logger.dart' show LoggerUtils;
+import 'package:PiliSuper/services/logger.dart' show LoggerUtils;
 import 'package:catcher_2/model/platform_type.dart';
 import 'package:catcher_2/model/report.dart';
 import 'package:catcher_2/model/report_handler.dart';
