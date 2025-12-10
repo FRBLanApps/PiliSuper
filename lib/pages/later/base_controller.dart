@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models/common/later_view_type.dart';
-import 'package:PiliPlus/utils/storage.dart';
-import 'package:PiliPlus/utils/storage_key.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/models/common/later_view_type.dart';
+import 'package:PiliSuper/utils/storage.dart';
+import 'package:PiliSuper/utils/storage_key.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:get/get.dart';
 
 class LaterBaseController extends GetxController {

@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/models/common/badge_type.dart';
+import 'package:PiliSuper/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

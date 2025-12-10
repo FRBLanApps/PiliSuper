@@ -3,8 +3,8 @@
 import 'dart:async';
 import 'dart:ffi';
 
-import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/http/constants.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/get_rx.dart';

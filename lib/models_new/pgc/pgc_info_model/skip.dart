@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/ed.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/op.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/ed.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/op.dart';
 
 class Skip {
   Ed? ed;

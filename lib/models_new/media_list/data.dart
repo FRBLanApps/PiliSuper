@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/media_list/media_list.dart';
+import 'package:PiliSuper/models_new/media_list/media_list.dart';
 
 class MediaListData {
   List<MediaListItemModel> mediaList;

@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/item.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_feed/topic_sort_by_conf.dart';
+import 'package:PiliSuper/models_new/dynamic/dyn_topic_feed/item.dart';
+import 'package:PiliSuper/models_new/dynamic/dyn_topic_feed/topic_sort_by_conf.dart';
 
 class TopicCardList {
   bool? hasMore;

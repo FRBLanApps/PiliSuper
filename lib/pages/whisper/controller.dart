@@ -1,10 +1,10 @@
-import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
+import 'package:PiliSuper/grpc/bilibili/app/im/v1.pb.dart'
     show Offset, Session, SessionMainReply, SessionPageType, ThreeDotItem;
-import 'package:PiliPlus/grpc/im.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/msg/msgfeed_unread.dart';
-import 'package:PiliPlus/pages/common/common_whisper_controller.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/grpc/im.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models_new/msg/msgfeed_unread.dart';
+import 'package:PiliSuper/pages/common/common_whisper_controller.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

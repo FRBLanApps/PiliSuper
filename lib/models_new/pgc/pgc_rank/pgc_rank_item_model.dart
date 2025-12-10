@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/pgc/pgc_rank/badge_info.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_rank/icon_font.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_rank/new_ep.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_rank/stat.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_rank/badge_info.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_rank/icon_font.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_rank/new_ep.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_rank/stat.dart';
 
 class PgcRankItemModel {
   String? badge;

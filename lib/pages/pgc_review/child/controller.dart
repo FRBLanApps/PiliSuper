@@ -1,9 +1,9 @@
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/pgc.dart';
-import 'package:PiliPlus/models/common/pgc_review_type.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_review/data.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_review/list.dart';
-import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/pgc.dart';
+import 'package:PiliSuper/models/common/pgc_review_type.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_review/data.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_review/list.dart';
+import 'package:PiliSuper/pages/common/common_list_controller.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 

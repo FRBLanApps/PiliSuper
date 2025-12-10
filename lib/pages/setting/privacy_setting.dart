@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/setting/models/privacy_settings.dart';
+import 'package:PiliSuper/pages/setting/models/privacy_settings.dart';
 import 'package:flutter/material.dart';
 
 class PrivacySetting extends StatefulWidget {

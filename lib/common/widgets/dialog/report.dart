@@ -1,6 +1,6 @@
-import 'package:PiliPlus/common/widgets/radio_widget.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/common/widgets/radio_widget.dart';
+import 'package:PiliSuper/utils/extension.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';

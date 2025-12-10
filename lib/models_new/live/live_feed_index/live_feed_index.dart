@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_feed_index/data.dart';
+import 'package:PiliSuper/models_new/live/live_feed_index/data.dart';
 
 class LiveFeedIndex {
   int? code;

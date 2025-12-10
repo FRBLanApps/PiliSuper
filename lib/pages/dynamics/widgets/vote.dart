@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/dialog/report.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/dynamics/vote_model.dart';
-import 'package:PiliPlus/utils/date_utils.dart';
-import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/num_utils.dart';
+import 'package:PiliSuper/common/widgets/badge.dart';
+import 'package:PiliSuper/common/widgets/dialog/report.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/http/dynamics.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models/common/badge_type.dart';
+import 'package:PiliSuper/models/dynamics/vote_model.dart';
+import 'package:PiliSuper/utils/date_utils.dart';
+import 'package:PiliSuper/utils/grid.dart';
+import 'package:PiliSuper/utils/num_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 

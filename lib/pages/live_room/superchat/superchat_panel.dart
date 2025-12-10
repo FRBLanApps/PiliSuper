@@ -1,6 +1,6 @@
-import 'package:PiliPlus/pages/live_room/controller.dart';
-import 'package:PiliPlus/pages/live_room/superchat/superchat_card.dart';
-import 'package:PiliPlus/pages/search/controller.dart';
+import 'package:PiliSuper/pages/live_room/controller.dart';
+import 'package:PiliSuper/pages/live_room/superchat/superchat_card.dart';
+import 'package:PiliSuper/pages/search/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 

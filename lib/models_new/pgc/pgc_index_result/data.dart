@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/pgc/pgc_index_result/list.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_index_result/list.dart';
 
 class PgcIndexResult {
   int? hasNext;

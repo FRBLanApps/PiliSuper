@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/live/live_room_play_info/expected_quality.dart';
-import 'package:PiliPlus/models_new/live/live_room_play_info/playurl.dart';
+import 'package:PiliSuper/models_new/live/live_room_play_info/expected_quality.dart';
+import 'package:PiliSuper/models_new/live/live_room_play_info/playurl.dart';
 
 class PlayurlInfo {
   String? confJson;

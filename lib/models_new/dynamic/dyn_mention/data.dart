@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/dynamic/dyn_mention/group.dart';
+import 'package:PiliSuper/models_new/dynamic/dyn_mention/group.dart';
 
 class DynMentionData {
   List<MentionGroup>? groups;

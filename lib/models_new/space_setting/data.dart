@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/space_setting/privacy.dart';
+import 'package:PiliSuper/models_new/space_setting/privacy.dart';
 
 class SpaceSettingData {
   Privacy? privacy;

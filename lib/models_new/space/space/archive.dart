@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/space/space/episodic_button.dart';
-import 'package:PiliPlus/models_new/space/space/order.dart';
-import 'package:PiliPlus/models_new/space/space_archive/item.dart';
+import 'package:PiliSuper/models_new/space/space/episodic_button.dart';
+import 'package:PiliSuper/models_new/space/space/order.dart';
+import 'package:PiliSuper/models_new/space/space_archive/item.dart';
 
 class Archive {
   EpisodicButton? episodicButton;

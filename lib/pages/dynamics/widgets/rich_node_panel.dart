@@ -1,16 +1,16 @@
 import 'dart:io' show Platform;
 
-import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/models/common/image_preview_type.dart'
+import 'package:PiliSuper/common/widgets/image/custom_grid_view.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/http/dynamics.dart';
+import 'package:PiliSuper/http/search.dart';
+import 'package:PiliSuper/models/common/image_preview_type.dart'
     show SourceModel;
-import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliSuper/models/common/image_type.dart';
+import 'package:PiliSuper/models/dynamics/result.dart';
+import 'package:PiliSuper/pages/dynamics/widgets/vote.dart';
+import 'package:PiliSuper/utils/app_scheme.dart';
+import 'package:PiliSuper/utils/page_utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_dm_block/shield_info.dart';
+import 'package:PiliSuper/models_new/live/live_dm_block/shield_info.dart';
 
 class LiveDmBlockData {
   ShieldInfo? shieldInfo;

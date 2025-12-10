@@ -1,9 +1,9 @@
-import 'package:PiliPlus/common/widgets/flutter/dyn/text_button.dart';
-import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/dynamics_repost/view.dart';
-import 'package:PiliPlus/utils/num_utils.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/request_utils.dart';
+import 'package:PiliSuper/common/widgets/flutter/dyn/text_button.dart';
+import 'package:PiliSuper/models/dynamics/result.dart';
+import 'package:PiliSuper/pages/dynamics_repost/view.dart';
+import 'package:PiliSuper/utils/num_utils.dart';
+import 'package:PiliSuper/utils/page_utils.dart';
+import 'package:PiliSuper/utils/request_utils.dart';
 import 'package:flutter/material.dart' hide TextButton;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

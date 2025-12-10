@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/space/space/res_native_draw.dart';
+import 'package:PiliSuper/models_new/space/space/res_native_draw.dart';
 
 class Resource {
   int? resType;

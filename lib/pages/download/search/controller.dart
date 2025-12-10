@@ -1,11 +1,11 @@
-import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
-import 'package:PiliPlus/pages/common/multi_select/base.dart'
+import 'package:PiliSuper/common/widgets/dialog/dialog.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models_new/download/bili_download_entry_info.dart';
+import 'package:PiliSuper/pages/common/multi_select/base.dart'
     show BaseMultiSelectMixin;
-import 'package:PiliPlus/pages/common/search/common_search_controller.dart';
-import 'package:PiliPlus/services/download/download_service.dart';
-import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliSuper/pages/common/search/common_search_controller.dart';
+import 'package:PiliSuper/services/download/download_service.dart';
+import 'package:PiliSuper/utils/storage.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 

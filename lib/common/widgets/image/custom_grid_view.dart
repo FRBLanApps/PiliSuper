@@ -1,32 +1,32 @@
 /*
- * This file is part of PiliPlus
+ * This file is part of PiliSuper
  *
- * PiliPlus is free software: you can redistribute it and/or modify
+ * PiliSuper is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PiliPlus is distributed in the hope that it will be useful,
+ * PiliSuper is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PiliPlus.  If not, see <https://www.gnu.org/licenses/>.
+ * along with PiliSuper.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import 'dart:math' show min;
 
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/flutter/custom_layout.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models/common/badge_type.dart';
-import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/common/constants.dart';
+import 'package:PiliSuper/common/widgets/badge.dart';
+import 'package:PiliSuper/common/widgets/flutter/custom_layout.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/models/common/badge_type.dart';
+import 'package:PiliSuper/models/common/image_preview_type.dart';
+import 'package:PiliSuper/utils/context_ext.dart';
+import 'package:PiliSuper/utils/extension.dart';
+import 'package:PiliSuper/utils/page_utils.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:flutter/material.dart'
     hide CustomMultiChildLayout, MultiChildLayoutDelegate;
 

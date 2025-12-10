@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/space/space/pos_spec.dart';
-import 'package:PiliPlus/models_new/space/space/render_spec.dart';
-import 'package:PiliPlus/models_new/space/space/size_spec.dart';
+import 'package:PiliSuper/models_new/space/space/pos_spec.dart';
+import 'package:PiliSuper/models_new/space/space/render_spec.dart';
+import 'package:PiliSuper/models_new/space/space/size_spec.dart';
 
 class GeneralSpec {
   PosSpec? posSpec;

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
+import 'package:PiliSuper/models_new/video/video_detail/data.dart';
 
 class VideoDetailResponse {
   int? code;

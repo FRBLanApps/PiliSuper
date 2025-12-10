@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/dynamics/result.dart' show ModuleBlocked;
-import 'package:PiliPlus/pages/article/widgets/opus_content.dart'
+import 'package:PiliSuper/models/dynamics/result.dart' show ModuleBlocked;
+import 'package:PiliSuper/pages/article/widgets/opus_content.dart'
     show moduleBlockedItem;
 import 'package:flutter/material.dart';
 

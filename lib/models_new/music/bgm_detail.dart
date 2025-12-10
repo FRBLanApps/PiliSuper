@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/model_owner.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/models/model_owner.dart';
+import 'package:PiliSuper/utils/extension.dart';
 
 class MusicDetail {
   MusicDetail({

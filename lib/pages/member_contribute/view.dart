@@ -1,14 +1,14 @@
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
-import 'package:PiliPlus/models/common/member/contribute_type.dart';
-import 'package:PiliPlus/models_new/space/space/tab2.dart';
-import 'package:PiliPlus/pages/member_article/view.dart';
-import 'package:PiliPlus/pages/member_audio/view.dart';
-import 'package:PiliPlus/pages/member_comic/view.dart';
-import 'package:PiliPlus/pages/member_contribute/controller.dart';
-import 'package:PiliPlus/pages/member_opus/view.dart';
-import 'package:PiliPlus/pages/member_season_series/view.dart';
-import 'package:PiliPlus/pages/member_video/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliSuper/models/common/member/contribute_type.dart';
+import 'package:PiliSuper/models_new/space/space/tab2.dart';
+import 'package:PiliSuper/pages/member_article/view.dart';
+import 'package:PiliSuper/pages/member_audio/view.dart';
+import 'package:PiliSuper/pages/member_comic/view.dart';
+import 'package:PiliSuper/pages/member_contribute/controller.dart';
+import 'package:PiliSuper/pages/member_opus/view.dart';
+import 'package:PiliSuper/pages/member_season_series/view.dart';
+import 'package:PiliSuper/pages/member_video/view.dart';
+import 'package:PiliSuper/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/model_video.dart';
-import 'package:PiliPlus/utils/duration_utils.dart';
+import 'package:PiliSuper/models/model_video.dart';
+import 'package:PiliSuper/utils/duration_utils.dart';
 
 class VListItemModel extends BaseVideoItemModel {
   int? comment;

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_dm_info/host_list.dart';
+import 'package:PiliSuper/models_new/live/live_dm_info/host_list.dart';
 
 class LiveDmInfoData {
   String? group;

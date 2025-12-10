@@ -1,7 +1,7 @@
-import 'package:PiliPlus/grpc/bilibili/community/service/dm/v1.pb.dart';
-import 'package:PiliPlus/grpc/grpc_req.dart';
-import 'package:PiliPlus/grpc/url.dart';
-import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliSuper/grpc/bilibili/community/service/dm/v1.pb.dart';
+import 'package:PiliSuper/grpc/grpc_req.dart';
+import 'package:PiliSuper/grpc/url.dart';
+import 'package:PiliSuper/http/loading_state.dart';
 import 'package:fixnum/fixnum.dart';
 
 class DmGrpc {

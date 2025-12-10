@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/space/space/item.dart';
+import 'package:PiliSuper/models_new/space/space/item.dart';
 
 class SpaceSeries {
   List<Item>? item;

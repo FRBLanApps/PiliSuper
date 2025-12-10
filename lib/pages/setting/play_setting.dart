@@ -1,4 +1,4 @@
-import 'package:PiliPlus/pages/setting/models/play_settings.dart';
+import 'package:PiliSuper/pages/setting/models/play_settings.dart';
 import 'package:flutter/material.dart';
 
 class PlaySetting extends StatefulWidget {

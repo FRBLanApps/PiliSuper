@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/msg/msg_like/cursor.dart';
-import 'package:PiliPlus/models_new/msg/msg_like/item.dart';
+import 'package:PiliSuper/models_new/msg/msg_like/cursor.dart';
+import 'package:PiliSuper/models_new/msg/msg_like/item.dart';
 
 class Total {
   Cursor? cursor;

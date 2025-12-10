@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/skeleton/skeleton.dart';
+import 'package:PiliSuper/common/skeleton/skeleton.dart';
 import 'package:flutter/material.dart';
 
 class VideoReplySkeleton extends StatelessWidget {

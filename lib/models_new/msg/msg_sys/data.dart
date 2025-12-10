@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:PiliPlus/models_new/msg/msg_sys/publisher.dart';
-import 'package:PiliPlus/models_new/msg/msg_sys/source.dart';
+import 'package:PiliSuper/models_new/msg/msg_sys/publisher.dart';
+import 'package:PiliSuper/models_new/msg/msg_sys/source.dart';
 
 class MsgSysItem {
   int? id;

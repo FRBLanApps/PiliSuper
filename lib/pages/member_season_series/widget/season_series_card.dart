@@ -1,10 +1,10 @@
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/common/widgets/badge.dart';
-import 'package:PiliPlus/common/widgets/image/image_save.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models_new/space/space_season_series/season.dart';
-import 'package:PiliPlus/utils/date_utils.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/common/constants.dart';
+import 'package:PiliSuper/common/widgets/badge.dart';
+import 'package:PiliSuper/common/widgets/image/image_save.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/models_new/space/space_season_series/season.dart';
+import 'package:PiliSuper/utils/date_utils.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SeasonSeriesCard extends StatelessWidget {

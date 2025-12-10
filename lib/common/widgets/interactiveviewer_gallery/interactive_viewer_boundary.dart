@@ -1,4 +1,4 @@
-import 'package:PiliPlus/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
+import 'package:PiliSuper/common/widgets/interactiveviewer_gallery/interactive_viewer.dart'
     as custom;
 import 'package:flutter/material.dart';
 

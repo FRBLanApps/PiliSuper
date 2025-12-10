@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/live/live_feed_index/card_data_list_item.dart';
-import 'package:PiliPlus/models_new/live/live_feed_index/module_info.dart';
+import 'package:PiliSuper/models_new/live/live_feed_index/card_data_list_item.dart';
+import 'package:PiliSuper/models_new/live/live_feed_index/module_info.dart';
 
 class CardDataItem {
   ModuleInfo? moduleInfo;

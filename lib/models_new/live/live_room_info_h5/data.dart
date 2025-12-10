@@ -1,12 +1,12 @@
-import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
+import 'package:PiliSuper/models_new/live/live_feed_index/watched_show.dart';
 
-import 'package:PiliPlus/models_new/live/live_room_info_h5/anchor_info.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/area_mask_info.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/block_info.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/like_info_v3.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/new_switch_info.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/news_info.dart';
-import 'package:PiliPlus/models_new/live/live_room_info_h5/room_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/anchor_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/area_mask_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/block_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/like_info_v3.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/new_switch_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/news_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/room_info.dart';
 
 class RoomInfoH5Data {
   RoomInfo? roomInfo;

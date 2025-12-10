@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/space/space_cheese/item.dart';
-import 'package:PiliPlus/models_new/space/space_cheese/page.dart';
+import 'package:PiliSuper/models_new/space/space_cheese/item.dart';
+import 'package:PiliSuper/models_new/space/space_cheese/page.dart';
 
 class SpaceCheeseData {
   List<SpaceCheeseItem>? items;

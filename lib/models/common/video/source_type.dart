@@ -1,4 +1,4 @@
-import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pbenum.dart'
+import 'package:PiliSuper/grpc/bilibili/app/listener/v1.pbenum.dart'
     show PlaylistSource;
 
 enum SourceType {

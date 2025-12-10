@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/space/space/senior_inquiry.dart';
+import 'package:PiliSuper/models_new/space/space/senior_inquiry.dart';
 
 class LevelInfo {
   int? currentLevel;

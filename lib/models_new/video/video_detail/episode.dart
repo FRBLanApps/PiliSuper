@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/video/video_detail/arc.dart';
-import 'package:PiliPlus/models_new/video/video_detail/page.dart';
+import 'package:PiliSuper/models_new/video/video_detail/arc.dart';
+import 'package:PiliSuper/models_new/video/video_detail/page.dart';
 
 class BaseEpisodeItem {
   int? id;

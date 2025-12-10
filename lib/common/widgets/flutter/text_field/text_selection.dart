@@ -8,9 +8,9 @@ library;
 
 import 'dart:math' as math;
 
-import 'package:PiliPlus/common/widgets/flutter/text_field/controller.dart';
-import 'package:PiliPlus/common/widgets/flutter/text_field/editable.dart';
-import 'package:PiliPlus/common/widgets/flutter/text_field/editable_text.dart';
+import 'package:PiliSuper/common/widgets/flutter/text_field/controller.dart';
+import 'package:PiliSuper/common/widgets/flutter/text_field/editable.dart';
+import 'package:PiliSuper/common/widgets/flutter/text_field/editable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide EditableText, EditableTextState;

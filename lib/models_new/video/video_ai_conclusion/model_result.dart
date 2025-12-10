@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/video/video_ai_conclusion/outline.dart';
-import 'package:PiliPlus/models_new/video/video_ai_conclusion/subtitle.dart';
+import 'package:PiliSuper/models_new/video/video_ai_conclusion/outline.dart';
+import 'package:PiliSuper/models_new/video/video_ai_conclusion/subtitle.dart';
 
 class AiConclusionResult {
   int? resultType;

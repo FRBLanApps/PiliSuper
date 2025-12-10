@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/sub/sub/list.dart';
-import 'package:PiliPlus/models_new/sub/sub_detail/media.dart';
+import 'package:PiliSuper/models_new/sub/sub/list.dart';
+import 'package:PiliSuper/models_new/sub/sub_detail/media.dart';
 
 class SubDetailData {
   SubItemModel? info;

@@ -1,13 +1,13 @@
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/common/widgets/view_safe_area.dart';
-import 'package:PiliPlus/models/common/search/search_type.dart';
-import 'package:PiliPlus/pages/search/controller.dart';
-import 'package:PiliPlus/pages/search_panel/article/view.dart';
-import 'package:PiliPlus/pages/search_panel/live/view.dart';
-import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
-import 'package:PiliPlus/pages/search_panel/user/view.dart';
-import 'package:PiliPlus/pages/search_panel/video/view.dart';
-import 'package:PiliPlus/pages/search_result/controller.dart';
+import 'package:PiliSuper/common/widgets/scroll_physics.dart';
+import 'package:PiliSuper/common/widgets/view_safe_area.dart';
+import 'package:PiliSuper/models/common/search/search_type.dart';
+import 'package:PiliSuper/pages/search/controller.dart';
+import 'package:PiliSuper/pages/search_panel/article/view.dart';
+import 'package:PiliSuper/pages/search_panel/live/view.dart';
+import 'package:PiliSuper/pages/search_panel/pgc/view.dart';
+import 'package:PiliSuper/pages/search_panel/user/view.dart';
+import 'package:PiliSuper/pages/search_panel/video/view.dart';
+import 'package:PiliSuper/pages/search_result/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

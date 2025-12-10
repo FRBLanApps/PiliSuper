@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_emote/emoticon.dart';
+import 'package:PiliSuper/models_new/live/live_emote/emoticon.dart';
 
 class LiveEmoteDatum {
   List<Emoticon>? emoticons;

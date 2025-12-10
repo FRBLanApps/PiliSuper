@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:PiliPlus/common/widgets/flutter/text_field/text_field.dart';
-import 'package:PiliPlus/common/widgets/view_safe_area.dart';
-import 'package:PiliPlus/http/live.dart';
-import 'package:PiliPlus/models/common/publish_panel_type.dart';
-import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
-import 'package:PiliPlus/pages/live_emote/controller.dart';
-import 'package:PiliPlus/pages/live_emote/view.dart';
-import 'package:PiliPlus/pages/live_room/controller.dart';
+import 'package:PiliSuper/common/widgets/flutter/text_field/text_field.dart';
+import 'package:PiliSuper/common/widgets/view_safe_area.dart';
+import 'package:PiliSuper/http/live.dart';
+import 'package:PiliSuper/models/common/publish_panel_type.dart';
+import 'package:PiliSuper/pages/common/publish/common_rich_text_pub_page.dart';
+import 'package:PiliSuper/pages/live_emote/controller.dart';
+import 'package:PiliSuper/pages/live_emote/view.dart';
+import 'package:PiliSuper/pages/live_room/controller.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart' hide MultipartFile;

@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/space/space_article/item.dart';
-import 'package:PiliPlus/models_new/space/space_article/list.dart';
+import 'package:PiliSuper/models_new/space/space_article/item.dart';
+import 'package:PiliSuper/models_new/space/space_article/list.dart';
 
 class SpaceArticleData {
   int? count;

@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/dynamics/up.dart';
-import 'package:PiliPlus/models/model_avatar.dart';
+import 'package:PiliSuper/models/dynamics/up.dart';
+import 'package:PiliSuper/models/model_avatar.dart';
 
 class FollowItemModel extends UpItem {
   int? attribute;

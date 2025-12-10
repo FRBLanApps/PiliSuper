@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/models/dynamics/vote_model.dart';
+import 'package:PiliSuper/models/dynamics/result.dart';
+import 'package:PiliSuper/models/dynamics/vote_model.dart';
 
 class ArticleContentModel {
   int? align;

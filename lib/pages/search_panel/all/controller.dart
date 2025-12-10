@@ -1,10 +1,10 @@
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/models/common/search/search_type.dart';
-import 'package:PiliPlus/models/search/result.dart';
-import 'package:PiliPlus/pages/search_panel/controller.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/id_utils.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/search.dart';
+import 'package:PiliSuper/models/common/search/search_type.dart';
+import 'package:PiliSuper/models/search/result.dart';
+import 'package:PiliSuper/pages/search_panel/controller.dart';
+import 'package:PiliSuper/utils/app_scheme.dart';
+import 'package:PiliSuper/utils/id_utils.dart';
 
 class SearchAllController
     extends SearchPanelController<SearchAllData, dynamic> {

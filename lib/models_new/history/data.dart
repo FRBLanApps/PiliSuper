@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/history/cursor.dart';
-import 'package:PiliPlus/models_new/history/list.dart';
-import 'package:PiliPlus/models_new/history/tab.dart';
+import 'package:PiliSuper/models_new/history/cursor.dart';
+import 'package:PiliSuper/models_new/history/list.dart';
+import 'package:PiliSuper/models_new/history/tab.dart';
 
 class HistoryData {
   Cursor? cursor;

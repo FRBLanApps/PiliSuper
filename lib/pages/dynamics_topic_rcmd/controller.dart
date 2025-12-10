@@ -1,7 +1,7 @@
-import 'package:PiliPlus/http/dynamics.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/dynamic/dyn_topic_top/topic_item.dart';
-import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliSuper/http/dynamics.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models_new/dynamic/dyn_topic_top/topic_item.dart';
+import 'package:PiliSuper/pages/common/common_list_controller.dart';
 
 class DynTopicRcmdController
     extends CommonListController<List<TopicItem>?, TopicItem> {

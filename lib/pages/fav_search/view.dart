@@ -1,11 +1,11 @@
-import 'package:PiliPlus/models/common/fav_order_type.dart';
-import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_detail/media.dart';
-import 'package:PiliPlus/pages/common/search/common_search_page.dart';
-import 'package:PiliPlus/pages/fav_detail/widget/fav_video_card.dart';
-import 'package:PiliPlus/pages/fav_search/controller.dart';
-import 'package:PiliPlus/utils/grid.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/models/common/fav_order_type.dart';
+import 'package:PiliSuper/models_new/fav/fav_detail/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_detail/media.dart';
+import 'package:PiliSuper/pages/common/search/common_search_page.dart';
+import 'package:PiliSuper/pages/fav_detail/widget/fav_video_card.dart';
+import 'package:PiliSuper/pages/fav_search/controller.dart';
+import 'package:PiliSuper/utils/grid.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

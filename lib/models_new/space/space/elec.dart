@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/space/space/elec_set.dart';
-import 'package:PiliPlus/models_new/space/space/list.dart';
+import 'package:PiliSuper/models_new/space/space/elec_set.dart';
+import 'package:PiliSuper/models_new/space/space/list.dart';
 
 class Elec {
   bool? show;

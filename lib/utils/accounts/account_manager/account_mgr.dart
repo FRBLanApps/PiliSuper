@@ -2,15 +2,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:PiliPlus/http/api.dart';
-import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/models/common/account_type.dart';
-import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/accounts/account.dart';
-import 'package:PiliPlus/utils/app_sign.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/http/api.dart';
+import 'package:PiliSuper/http/constants.dart';
+import 'package:PiliSuper/models/common/account_type.dart';
+import 'package:PiliSuper/utils/accounts.dart';
+import 'package:PiliSuper/utils/accounts/account.dart';
+import 'package:PiliSuper/utils/app_sign.dart';
+import 'package:PiliSuper/utils/extension.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;

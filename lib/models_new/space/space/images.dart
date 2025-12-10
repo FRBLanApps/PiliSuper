@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/space/space/collection_top_simple.dart';
-import 'package:PiliPlus/models_new/space/space/digital_info.dart';
-import 'package:PiliPlus/models_new/space/space/entrance_button.dart';
-import 'package:PiliPlus/models_new/space/space/purchase_button.dart';
+import 'package:PiliSuper/models_new/space/space/collection_top_simple.dart';
+import 'package:PiliSuper/models_new/space/space/digital_info.dart';
+import 'package:PiliSuper/models_new/space/space/entrance_button.dart';
+import 'package:PiliSuper/models_new/space/space/purchase_button.dart';
 
 class SpaceImages {
   String? imgUrl;

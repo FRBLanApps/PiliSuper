@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/fav/fav_pgc/content_attr.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/vip_or_pay.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/content_attr.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/vip_or_pay.dart';
 
 class BadgeInfos {
   ContentAttr? contentAttr;

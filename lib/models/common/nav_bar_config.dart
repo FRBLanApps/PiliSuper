@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models/common/enum_with_label.dart';
-import 'package:PiliPlus/pages/dynamics/view.dart';
-import 'package:PiliPlus/pages/home/view.dart';
-import 'package:PiliPlus/pages/mine/view.dart';
+import 'package:PiliSuper/models/common/enum_with_label.dart';
+import 'package:PiliSuper/pages/dynamics/view.dart';
+import 'package:PiliSuper/pages/home/view.dart';
+import 'package:PiliSuper/pages/mine/view.dart';
 import 'package:flutter/material.dart';
 
 enum NavigationBarType implements EnumWithLabel {

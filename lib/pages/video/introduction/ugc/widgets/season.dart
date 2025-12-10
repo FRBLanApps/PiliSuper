@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:PiliPlus/models_new/video/video_detail/data.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
-import 'package:PiliPlus/models_new/video/video_detail/section.dart';
-import 'package:PiliPlus/pages/video/controller.dart';
-import 'package:PiliPlus/pages/video/introduction/ugc/controller.dart';
+import 'package:PiliSuper/models_new/video/video_detail/data.dart';
+import 'package:PiliSuper/models_new/video/video_detail/episode.dart';
+import 'package:PiliSuper/models_new/video/video_detail/section.dart';
+import 'package:PiliSuper/pages/video/controller.dart';
+import 'package:PiliSuper/pages/video/introduction/ugc/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

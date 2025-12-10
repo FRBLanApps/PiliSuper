@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/coin_log/list.dart';
+import 'package:PiliSuper/models_new/coin_log/list.dart';
 
 class CoinLogData {
   List<CoinLogItem>? list;

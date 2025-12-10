@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' show Random;
 
-import 'package:PiliPlus/common/constants.dart';
+import 'package:PiliSuper/common/constants.dart';
 import 'package:catcher_2/catcher_2.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';

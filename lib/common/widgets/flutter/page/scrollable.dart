@@ -19,7 +19,7 @@ library;
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:PiliPlus/common/widgets/flutter/page/scrollable_helpers.dart';
+import 'package:PiliSuper/common/widgets/flutter/page/scrollable_helpers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'

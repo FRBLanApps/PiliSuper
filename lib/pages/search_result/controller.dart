@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/common/search/search_type.dart';
+import 'package:PiliSuper/models/common/search/search_type.dart';
 import 'package:get/get.dart';
 
 class SearchResultController extends GetxController {

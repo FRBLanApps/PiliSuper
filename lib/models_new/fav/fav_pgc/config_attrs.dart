@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/fav/fav_pgc/cc_on_lock.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/highlight_ineffective_hd.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/highlight_ineffective_ott.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/highlight_ineffective_pink.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/cc_on_lock.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/highlight_ineffective_hd.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/highlight_ineffective_ott.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/highlight_ineffective_pink.dart';
 
 class ConfigAttrs {
   CcOnLock? ccOnLock;

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/later/dimension.dart';
+import 'package:PiliSuper/models_new/later/dimension.dart';
 
 class Page {
   int? cid;

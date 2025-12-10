@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_detail/stat_detail.dart';
+import 'package:PiliSuper/models_new/video/video_detail/stat_detail.dart';
 
 class PgcStat extends StatDetail {
   int? favorites;

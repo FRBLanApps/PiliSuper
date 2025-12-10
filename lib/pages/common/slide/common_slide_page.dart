@@ -1,6 +1,6 @@
 import 'dart:math' show max;
 
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:flutter/gestures.dart' show PositionedGestureDetails;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/sponsor_block_api.dart';
-import 'package:PiliPlus/models/common/sponsor_block/post_segment_model.dart';
-import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
-import 'package:PiliPlus/models_new/sponsor_block/segment_item.dart';
-import 'package:PiliPlus/models_new/sponsor_block/user_info.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/common/constants.dart';
+import 'package:PiliSuper/http/init.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/sponsor_block_api.dart';
+import 'package:PiliSuper/models/common/sponsor_block/post_segment_model.dart';
+import 'package:PiliSuper/models/common/sponsor_block/segment_type.dart';
+import 'package:PiliSuper/models_new/sponsor_block/segment_item.dart';
+import 'package:PiliSuper/models_new/sponsor_block/user_info.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:dio/dio.dart';
 
 /// https://github.com/hanydd/BilibiliSponsorBlock/wiki/API

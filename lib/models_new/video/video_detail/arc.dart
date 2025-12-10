@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models/model_owner.dart';
-import 'package:PiliPlus/models/model_video.dart';
-import 'package:PiliPlus/models_new/video/video_detail/rights.dart';
-import 'package:PiliPlus/models_new/video/video_detail/stat.dart';
+import 'package:PiliSuper/models/model_owner.dart';
+import 'package:PiliSuper/models/model_video.dart';
+import 'package:PiliSuper/models_new/video/video_detail/rights.dart';
+import 'package:PiliSuper/models_new/video/video_detail/stat.dart';
 
 class Arc {
   int? aid;

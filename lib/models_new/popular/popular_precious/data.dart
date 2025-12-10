@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/model_hot_video_item.dart';
+import 'package:PiliSuper/models/model_hot_video_item.dart';
 
 class PopularPreciousData {
   String? title;

@@ -1,7 +1,7 @@
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/main.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/common/constants.dart';
+import 'package:PiliSuper/main.dart';
+import 'package:PiliSuper/utils/extension.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -1,9 +1,9 @@
-import 'package:PiliPlus/common/widgets/scroll_physics.dart';
-import 'package:PiliPlus/common/widgets/view_safe_area.dart';
-import 'package:PiliPlus/models/common/reply/reply_search_type.dart';
-import 'package:PiliPlus/pages/video/reply_search_item/child/view.dart';
-import 'package:PiliPlus/pages/video/reply_search_item/controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/common/widgets/scroll_physics.dart';
+import 'package:PiliSuper/common/widgets/view_safe_area.dart';
+import 'package:PiliSuper/models/common/reply/reply_search_type.dart';
+import 'package:PiliSuper/pages/video/reply_search_item/child/view.dart';
+import 'package:PiliSuper/pages/video/reply_search_item/controller.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/msg/msg_like/content.dart';
+import 'package:PiliSuper/models_new/msg/msg_like/content.dart';
 
-import 'package:PiliPlus/models_new/msg/msg_like/user.dart';
+import 'package:PiliSuper/models_new/msg/msg_like/user.dart';
 
 class MsgLikeItem {
   int? id;

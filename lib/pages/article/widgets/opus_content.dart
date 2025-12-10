@@ -1,20 +1,20 @@
 import 'dart:math';
 
-import 'package:PiliPlus/common/widgets/image/cached_network_svg_image.dart';
-import 'package:PiliPlus/common/widgets/image/custom_grid_view.dart';
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/http/constants.dart';
-import 'package:PiliPlus/models/common/image_preview_type.dart';
-import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models/dynamics/article_content_model.dart'
+import 'package:PiliSuper/common/widgets/image/cached_network_svg_image.dart';
+import 'package:PiliSuper/common/widgets/image/custom_grid_view.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/http/constants.dart';
+import 'package:PiliSuper/models/common/image_preview_type.dart';
+import 'package:PiliSuper/models/common/image_type.dart';
+import 'package:PiliSuper/models/dynamics/article_content_model.dart'
     show ArticleContentModel, Rich, Style, Word, Node;
-import 'package:PiliPlus/models/dynamics/result.dart';
-import 'package:PiliPlus/pages/dynamics/widgets/vote.dart';
-import 'package:PiliPlus/utils/app_scheme.dart';
-import 'package:PiliPlus/utils/context_ext.dart';
-import 'package:PiliPlus/utils/extension.dart';
-import 'package:PiliPlus/utils/image_utils.dart';
-import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliSuper/models/dynamics/result.dart';
+import 'package:PiliSuper/pages/dynamics/widgets/vote.dart';
+import 'package:PiliSuper/utils/app_scheme.dart';
+import 'package:PiliSuper/utils/context_ext.dart';
+import 'package:PiliSuper/utils/extension.dart';
+import 'package:PiliSuper/utils/image_utils.dart';
+import 'package:PiliSuper/utils/page_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';

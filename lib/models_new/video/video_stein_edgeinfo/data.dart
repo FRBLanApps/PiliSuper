@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/edges.dart';
-import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/preload.dart';
-import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/story_list.dart';
+import 'package:PiliSuper/models_new/video/video_stein_edgeinfo/edges.dart';
+import 'package:PiliSuper/models_new/video/video_stein_edgeinfo/preload.dart';
+import 'package:PiliSuper/models_new/video/video_stein_edgeinfo/story_list.dart';
 
 class EdgeInfoData {
   String? title;

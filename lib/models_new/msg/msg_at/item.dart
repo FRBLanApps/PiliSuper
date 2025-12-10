@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/msg/msg_at/content.dart';
-import 'package:PiliPlus/models_new/msg/msg_at/user.dart';
+import 'package:PiliSuper/models_new/msg/msg_at/content.dart';
+import 'package:PiliSuper/models_new/msg/msg_at/user.dart';
 
 class MsgAtItem {
   int? id;

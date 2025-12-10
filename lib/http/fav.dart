@@ -1,20 +1,20 @@
-import 'package:PiliPlus/common/constants.dart';
-import 'package:PiliPlus/http/api.dart';
-import 'package:PiliPlus/http/init.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/fav_order_type.dart';
-import 'package:PiliPlus/models_new/fav/fav_article/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_detail/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_folder/list.dart';
-import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_topic/data.dart';
-import 'package:PiliPlus/models_new/space/space_cheese/data.dart';
-import 'package:PiliPlus/models_new/space/space_fav/data.dart';
-import 'package:PiliPlus/models_new/sub/sub_detail/data.dart';
-import 'package:PiliPlus/utils/accounts.dart';
-import 'package:PiliPlus/utils/app_sign.dart';
+import 'package:PiliSuper/common/constants.dart';
+import 'package:PiliSuper/http/api.dart';
+import 'package:PiliSuper/http/init.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models/common/fav_order_type.dart';
+import 'package:PiliSuper/models_new/fav/fav_article/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_detail/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_folder/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_folder/list.dart';
+import 'package:PiliSuper/models_new/fav/fav_note/list.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_topic/data.dart';
+import 'package:PiliSuper/models_new/space/space_cheese/data.dart';
+import 'package:PiliSuper/models_new/space/space_fav/data.dart';
+import 'package:PiliSuper/models_new/sub/sub_detail/data.dart';
+import 'package:PiliSuper/utils/accounts.dart';
+import 'package:PiliSuper/utils/app_sign.dart';
 import 'package:dio/dio.dart';
 
 class FavHttp {

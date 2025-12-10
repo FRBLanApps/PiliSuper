@@ -1,4 +1,4 @@
-import 'package:PiliPlus/utils/accounts/account.dart';
+import 'package:PiliSuper/utils/accounts/account.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
 

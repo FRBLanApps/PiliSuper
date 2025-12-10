@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/member/search_archive/vlist.dart';
+import 'package:PiliSuper/models_new/member/search_archive/vlist.dart';
 
 class SearchArchiveList {
   List<VListItemModel>? vlist;

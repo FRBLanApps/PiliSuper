@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/space/space/day.dart';
-import 'package:PiliPlus/models_new/space/space/night.dart';
+import 'package:PiliSuper/models_new/space/space/day.dart';
+import 'package:PiliSuper/models_new/space/space/night.dart';
 
 class ColorConfig {
   bool? isDarkModeAware;

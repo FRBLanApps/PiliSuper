@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_room_info_h5/official_info.dart';
+import 'package:PiliSuper/models_new/live/live_room_info_h5/official_info.dart';
 
 class BaseInfo {
   String? uname;

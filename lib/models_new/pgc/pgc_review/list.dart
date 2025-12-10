@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/pgc/pgc_review/author.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_review/stat.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_review/author.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_review/stat.dart';
 
 class PgcReviewItemModel {
   Author? author;

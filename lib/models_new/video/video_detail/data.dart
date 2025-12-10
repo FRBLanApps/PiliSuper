@@ -1,14 +1,14 @@
-import 'package:PiliPlus/models_new/video/video_detail/argue_info.dart';
-import 'package:PiliPlus/models_new/video/video_detail/desc_v2.dart';
-import 'package:PiliPlus/models_new/video/video_detail/dimension.dart';
-import 'package:PiliPlus/models_new/video/video_detail/owner.dart';
-import 'package:PiliPlus/models_new/video/video_detail/page.dart';
-import 'package:PiliPlus/models_new/video/video_detail/rights.dart';
-import 'package:PiliPlus/models_new/video/video_detail/staff.dart';
-import 'package:PiliPlus/models_new/video/video_detail/stat.dart';
-import 'package:PiliPlus/models_new/video/video_detail/subtitle.dart';
-import 'package:PiliPlus/models_new/video/video_detail/ugc_season.dart';
-import 'package:PiliPlus/models_new/video/video_detail/user_garb.dart';
+import 'package:PiliSuper/models_new/video/video_detail/argue_info.dart';
+import 'package:PiliSuper/models_new/video/video_detail/desc_v2.dart';
+import 'package:PiliSuper/models_new/video/video_detail/dimension.dart';
+import 'package:PiliSuper/models_new/video/video_detail/owner.dart';
+import 'package:PiliSuper/models_new/video/video_detail/page.dart';
+import 'package:PiliSuper/models_new/video/video_detail/rights.dart';
+import 'package:PiliSuper/models_new/video/video_detail/staff.dart';
+import 'package:PiliSuper/models_new/video/video_detail/stat.dart';
+import 'package:PiliSuper/models_new/video/video_detail/subtitle.dart';
+import 'package:PiliSuper/models_new/video/video_detail/ugc_season.dart';
+import 'package:PiliSuper/models_new/video/video_detail/user_garb.dart';
 
 class VideoDetailData {
   String? bvid;

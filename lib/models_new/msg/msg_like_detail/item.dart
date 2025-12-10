@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/msg/msg_like_detail/user.dart';
+import 'package:PiliSuper/models_new/msg/msg_like_detail/user.dart';
 
 class MsgLikeDetailItem {
   MsgLikeDetailUser? user;

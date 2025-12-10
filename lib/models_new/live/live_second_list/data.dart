@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/live/live_feed_index/card_data_list_item.dart';
-import 'package:PiliPlus/models_new/live/live_second_list/tag.dart';
+import 'package:PiliSuper/models_new/live/live_feed_index/card_data_list_item.dart';
+import 'package:PiliSuper/models_new/live/live_second_list/tag.dart';
 
 class LiveSecondData {
   int? count;

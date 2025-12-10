@@ -1,9 +1,9 @@
-import 'package:PiliPlus/http/fav.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/video.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/data.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
-import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
+import 'package:PiliSuper/http/fav.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/video.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/data.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/list.dart';
+import 'package:PiliSuper/pages/common/multi_select/multi_select_controller.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

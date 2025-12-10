@@ -12,7 +12,7 @@ class StyleString {
 }
 
 class Constants {
-  static const appName = 'PiliPlus';
+  static const appName = 'PiliSuper';
   static const sourceCodeUrl = 'https://github.com/FRBLanApps/PiliSuper';
 
   // 27eb53fc9058f8c3  移动端 Android

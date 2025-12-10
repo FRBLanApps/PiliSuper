@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/video/video_detail/dimension.dart';
-import 'package:PiliPlus/models_new/video/video_detail/episode.dart';
+import 'package:PiliSuper/models_new/video/video_detail/dimension.dart';
+import 'package:PiliSuper/models_new/video/video_detail/episode.dart';
 
 class Part extends BaseEpisodeItem {
   int? page;

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_ai_conclusion/part_subtitle.dart';
+import 'package:PiliSuper/models_new/video/video_ai_conclusion/part_subtitle.dart';
 
 class Subtitle {
   String? title;

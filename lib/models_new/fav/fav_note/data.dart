@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/fav/fav_note/list.dart';
-import 'package:PiliPlus/models_new/fav/fav_note/page.dart';
+import 'package:PiliSuper/models_new/fav/fav_note/list.dart';
+import 'package:PiliSuper/models_new/fav/fav_note/page.dart';
 
 class FavNoteData {
   List<FavNoteItemModel>? list;

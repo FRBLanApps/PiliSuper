@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models/model_avatar.dart';
+import 'package:PiliSuper/models/model_avatar.dart';
 
 class BlackListItem {
   int? mid;

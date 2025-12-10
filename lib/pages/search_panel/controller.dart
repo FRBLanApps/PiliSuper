@@ -1,13 +1,13 @@
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/search.dart';
-import 'package:PiliPlus/models/common/search/article_search_type.dart';
-import 'package:PiliPlus/models/common/search/search_type.dart';
-import 'package:PiliPlus/models/common/search/user_search_type.dart';
-import 'package:PiliPlus/models/common/search/video_search_type.dart';
-import 'package:PiliPlus/models/search/result.dart';
-import 'package:PiliPlus/pages/common/common_list_controller.dart';
-import 'package:PiliPlus/pages/search_result/controller.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/search.dart';
+import 'package:PiliSuper/models/common/search/article_search_type.dart';
+import 'package:PiliSuper/models/common/search/search_type.dart';
+import 'package:PiliSuper/models/common/search/user_search_type.dart';
+import 'package:PiliSuper/models/common/search/video_search_type.dart';
+import 'package:PiliSuper/models/search/result.dart';
+import 'package:PiliSuper/pages/common/common_list_controller.dart';
+import 'package:PiliSuper/pages/search_result/controller.dart';
+import 'package:PiliSuper/utils/extension.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 

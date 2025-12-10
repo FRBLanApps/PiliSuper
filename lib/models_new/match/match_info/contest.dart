@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/match/match_info/home_away.dart';
-import 'package:PiliPlus/models_new/match/match_info/season.dart';
-import 'package:PiliPlus/models_new/match/match_info/success_teaminfo.dart';
-import 'package:PiliPlus/models_new/match/match_info/team.dart';
+import 'package:PiliSuper/models_new/match/match_info/home_away.dart';
+import 'package:PiliSuper/models_new/match/match_info/season.dart';
+import 'package:PiliSuper/models_new/match/match_info/success_teaminfo.dart';
+import 'package:PiliSuper/models_new/match/match_info/team.dart';
 
 class MatchContest {
   int? id;

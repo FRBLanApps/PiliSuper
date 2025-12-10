@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/badge_info.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/icon_font.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/new_ep.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/stat.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/badge_info.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/icon_font.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/new_ep.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/stat.dart';
 
 class Season {
   String? badge;

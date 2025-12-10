@@ -1,5 +1,5 @@
-import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:PiliPlus/utils/num_utils.dart';
+import 'package:PiliSuper/utils/duration_utils.dart';
+import 'package:PiliSuper/utils/num_utils.dart';
 
 class UserInfo {
   final int viewCount;

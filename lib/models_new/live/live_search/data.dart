@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/live/live_search/room.dart';
-import 'package:PiliPlus/models_new/live/live_search/user.dart';
+import 'package:PiliSuper/models_new/live/live_search/room.dart';
+import 'package:PiliSuper/models_new/live/live_search/user.dart';
 
 class LiveSearchData {
   String? type;

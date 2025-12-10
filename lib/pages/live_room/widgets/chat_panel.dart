@@ -1,9 +1,9 @@
-import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
-import 'package:PiliPlus/models/common/image_type.dart';
-import 'package:PiliPlus/models_new/live/live_danmaku/danmaku_msg.dart';
-import 'package:PiliPlus/models_new/live/live_superchat/item.dart';
-import 'package:PiliPlus/pages/live_room/controller.dart';
-import 'package:PiliPlus/utils/utils.dart';
+import 'package:PiliSuper/common/widgets/image/network_img_layer.dart';
+import 'package:PiliSuper/models/common/image_type.dart';
+import 'package:PiliSuper/models_new/live/live_danmaku/danmaku_msg.dart';
+import 'package:PiliSuper/models_new/live/live_superchat/item.dart';
+import 'package:PiliSuper/pages/live_room/controller.dart';
+import 'package:PiliSuper/utils/utils.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

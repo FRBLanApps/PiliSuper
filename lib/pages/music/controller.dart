@@ -1,8 +1,8 @@
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/http/music.dart';
-import 'package:PiliPlus/models_new/music/bgm_detail.dart';
-import 'package:PiliPlus/pages/common/dyn/common_dyn_controller.dart';
-import 'package:PiliPlus/utils/storage_pref.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/http/music.dart';
+import 'package:PiliSuper/models_new/music/bgm_detail.dart';
+import 'package:PiliSuper/pages/common/dyn/common_dyn_controller.dart';
+import 'package:PiliSuper/utils/storage_pref.dart';
 import 'package:get/get.dart';
 
 class MusicDetailController extends CommonDynController {

@@ -1,8 +1,8 @@
-import 'package:PiliPlus/models/common/pgc_review_type.dart';
-import 'package:PiliPlus/pages/pgc_review/child/controller.dart';
-import 'package:PiliPlus/pages/pgc_review/child/view.dart';
-import 'package:PiliPlus/pages/pgc_review/post/view.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/models/common/pgc_review_type.dart';
+import 'package:PiliSuper/pages/pgc_review/child/controller.dart';
+import 'package:PiliSuper/pages/pgc_review/child/view.dart';
+import 'package:PiliSuper/pages/pgc_review/post/view.dart';
+import 'package:PiliSuper/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

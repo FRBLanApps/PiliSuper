@@ -1,7 +1,7 @@
-import 'package:PiliPlus/models_new/space/space_archive/episodic_button.dart';
-import 'package:PiliPlus/models_new/space/space_archive/item.dart';
-import 'package:PiliPlus/models_new/space/space_archive/last_watched_locator.dart';
-import 'package:PiliPlus/models_new/space/space_archive/order.dart';
+import 'package:PiliSuper/models_new/space/space_archive/episodic_button.dart';
+import 'package:PiliSuper/models_new/space/space_archive/item.dart';
+import 'package:PiliSuper/models_new/space/space_archive/last_watched_locator.dart';
+import 'package:PiliSuper/models_new/space/space_archive/order.dart';
 
 class SpaceArchiveData {
   EpisodicButton? episodicButton;

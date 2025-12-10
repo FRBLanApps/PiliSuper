@@ -1,6 +1,6 @@
-import 'package:PiliPlus/models_new/live/live_dm_block/shield_rules.dart';
-import 'package:PiliPlus/models_new/live/live_dm_block/shield_user_list.dart';
-import 'package:PiliPlus/utils/extension.dart';
+import 'package:PiliSuper/models_new/live/live_dm_block/shield_rules.dart';
+import 'package:PiliSuper/models_new/live/live_dm_block/shield_user_list.dart';
+import 'package:PiliSuper/utils/extension.dart';
 
 class ShieldInfo {
   List<ShieldUserList>? shieldUserList;

@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/video.dart';
+import 'package:PiliSuper/models_new/video/video_stein_edgeinfo/video.dart';
 
 class Preload {
   List<Video>? video;

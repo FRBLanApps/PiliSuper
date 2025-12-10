@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/pgc/pgc_index_condition/value.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_index_condition/value.dart';
 
 class PgcCondition {
   String? field;

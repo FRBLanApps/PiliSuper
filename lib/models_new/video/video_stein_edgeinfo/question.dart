@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/choice.dart';
+import 'package:PiliSuper/models_new/video/video_stein_edgeinfo/choice.dart';
 
 class Question {
   int? id;

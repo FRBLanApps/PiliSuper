@@ -1,4 +1,4 @@
-import 'package:PiliPlus/models_new/live/live_room_play_info/format.dart';
+import 'package:PiliSuper/models_new/live/live_room_play_info/format.dart';
 
 class Stream {
   String? protocolName;

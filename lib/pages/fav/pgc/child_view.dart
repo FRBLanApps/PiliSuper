@@ -1,13 +1,13 @@
-import 'package:PiliPlus/common/skeleton/fav_pgc_item.dart';
-import 'package:PiliPlus/common/widgets/button/icon_button.dart';
-import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/common/widgets/flutter/refresh_indicator.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models_new/fav/fav_pgc/list.dart';
-import 'package:PiliPlus/pages/fav/pgc/controller.dart';
-import 'package:PiliPlus/pages/fav/pgc/widget/item.dart';
-import 'package:PiliPlus/utils/grid.dart';
+import 'package:PiliSuper/common/skeleton/fav_pgc_item.dart';
+import 'package:PiliSuper/common/widgets/button/icon_button.dart';
+import 'package:PiliSuper/common/widgets/dialog/dialog.dart';
+import 'package:PiliSuper/common/widgets/flutter/refresh_indicator.dart';
+import 'package:PiliSuper/common/widgets/loading_widget/http_error.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/models_new/fav/fav_pgc/list.dart';
+import 'package:PiliSuper/pages/fav/pgc/controller.dart';
+import 'package:PiliSuper/pages/fav/pgc/widget/item.dart';
+import 'package:PiliSuper/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

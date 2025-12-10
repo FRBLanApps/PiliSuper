@@ -1,9 +1,9 @@
-import 'package:PiliPlus/grpc/bilibili/app/archive/middleware/v1.pb.dart';
-import 'package:PiliPlus/grpc/bilibili/app/listener/v1.pb.dart';
-import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
-import 'package:PiliPlus/grpc/grpc_req.dart';
-import 'package:PiliPlus/grpc/url.dart';
-import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliSuper/grpc/bilibili/app/archive/middleware/v1.pb.dart';
+import 'package:PiliSuper/grpc/bilibili/app/listener/v1.pb.dart';
+import 'package:PiliSuper/grpc/bilibili/pagination.pb.dart';
+import 'package:PiliSuper/grpc/grpc_req.dart';
+import 'package:PiliSuper/grpc/url.dart';
+import 'package:PiliSuper/http/loading_state.dart';
 import 'package:fixnum/fixnum.dart';
 
 class AudioGrpc {

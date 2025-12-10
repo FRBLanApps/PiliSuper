@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/danmaku.dart';
-import 'package:PiliPlus/models_new/pgc/pgc_info_model/vt.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/danmaku.dart';
+import 'package:PiliSuper/models_new/pgc/pgc_info_model/vt.dart';
 
 class StatForUnity {
   num? coin;

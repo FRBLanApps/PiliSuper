@@ -1,5 +1,5 @@
-import 'package:PiliPlus/models_new/space/space/preference.dart';
-import 'package:PiliPlus/models_new/space/space/top.dart';
+import 'package:PiliSuper/models_new/space/space/preference.dart';
+import 'package:PiliSuper/models_new/space/space/top.dart';
 
 class CollectionTopSimple {
   Top? top;

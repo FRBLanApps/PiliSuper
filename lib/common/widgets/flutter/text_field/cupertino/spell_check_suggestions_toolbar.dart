@@ -5,7 +5,7 @@
 /// @docImport 'package:flutter/material.dart';
 library;
 
-import 'package:PiliPlus/common/widgets/flutter/text_field/editable_text.dart';
+import 'package:PiliSuper/common/widgets/flutter/text_field/editable_text.dart';
 import 'package:flutter/cupertino.dart' hide EditableText, EditableTextState;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart'

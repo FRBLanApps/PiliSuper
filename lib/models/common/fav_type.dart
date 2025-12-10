@@ -1,9 +1,9 @@
-import 'package:PiliPlus/pages/fav/article/view.dart';
-import 'package:PiliPlus/pages/fav/cheese/view.dart';
-import 'package:PiliPlus/pages/fav/note/view.dart';
-import 'package:PiliPlus/pages/fav/pgc/view.dart';
-import 'package:PiliPlus/pages/fav/topic/view.dart';
-import 'package:PiliPlus/pages/fav/video/view.dart';
+import 'package:PiliSuper/pages/fav/article/view.dart';
+import 'package:PiliSuper/pages/fav/cheese/view.dart';
+import 'package:PiliSuper/pages/fav/note/view.dart';
+import 'package:PiliSuper/pages/fav/pgc/view.dart';
+import 'package:PiliSuper/pages/fav/topic/view.dart';
+import 'package:PiliSuper/pages/fav/video/view.dart';
 import 'package:flutter/material.dart';
 
 enum FavTabType {

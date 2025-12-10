@@ -1,10 +1,10 @@
-import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
-import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
-import 'package:PiliPlus/grpc/bilibili/app/im/v1.pb.dart'
+import 'package:PiliSuper/common/widgets/dialog/dialog.dart';
+import 'package:PiliSuper/common/widgets/loading_widget/loading_widget.dart';
+import 'package:PiliSuper/grpc/bilibili/app/im/v1.pb.dart'
     show KeywordBlockingItem;
-import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/pages/search/widgets/search_text.dart';
-import 'package:PiliPlus/pages/whisper_block/controller.dart';
+import 'package:PiliSuper/http/loading_state.dart';
+import 'package:PiliSuper/pages/search/widgets/search_text.dart';
+import 'package:PiliSuper/pages/whisper_block/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter_svg/svg.dart';
