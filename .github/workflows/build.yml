@@ -70,7 +70,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: pubspec.yaml
+          #flutter-version-file: pubspec.yaml
+          # Has Problem when using flutter-version-file: pubspec.yaml
           flutter-version: '3.41.3'
           cache: true
 
