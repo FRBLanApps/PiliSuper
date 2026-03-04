@@ -72,7 +72,8 @@ jobs:
           channel: stable
           #flutter-version-file: pubspec.yaml
           # Has Problem when using flutter-version-file: pubspec.yaml
-          flutter-version: '3.41.3'
+          #flutter-version: '3.41.3'
+          # Try to use the latest stable version to avoid the problem of old flutter version not supporting the new Android Gradle Plugin
           cache: true
 
       - name: Add Rename CLI tool
