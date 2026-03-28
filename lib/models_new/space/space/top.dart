@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/extension/iterable_ext.dart';
 import 'package:PiliPlus/utils/parse_string.dart';
 
 class Top {
@@ -20,6 +21,7 @@ class TopImage {
   late final String fullCover;
   String get header => _defaultImage ?? fullCover;
   late final double dy;
+  TopTitle? title;
 
   @pragma('vm:notify-debugger-on-exception')
   TopImage.fromJson(Map<String, dynamic> json) {
@@ -47,4 +49,37 @@ class TopImage {
     } catch (_) {}
     this.dy = dy;
   }
+}
+
+class TopTitle {
+  String? title;
+  String? subTitle;
+  SubTitleColorFormat? subTitleColorFormat;
+
+  TopTitle({
+    this.title,
+    this.subTitle,
+    this.subTitleColorFormat,
+  });
+
+  factory TopTitle.fromJson(Map<String, dynamic> json) => TopTitle(
+    title: json["title"],
+    subTitle: json["sub_title"],
+    subTitleColorFormat: json["sub_title_color_format"] == null
+        ? null
+        : SubTitleColorFormat.fromJson(json["sub_title_color_format"]),
+  );
+}
+
+class SubTitleColorFormat {
+  List<String>? colors;
+
+  SubTitleColorFormat({
+    this.colors,
+  });
+
+  factory SubTitleColorFormat.fromJson(Map<String, dynamic> json) =>
+      SubTitleColorFormat(
+        colors: (json["colors"] as List?)?.fromCast(),
+      );
 }

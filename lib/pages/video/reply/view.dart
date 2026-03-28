@@ -1,5 +1,5 @@
-import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/common/skeleton/video_reply.dart';
+import 'package:PiliPlus/common/style.dart';
 import 'package:PiliPlus/common/widgets/flutter/refresh_indicator.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/sliver/sliver_floating_header.dart';
@@ -103,7 +103,7 @@ class _VideoReplyPanelState extends State<VideoReplyPanel>
                           ),
                         ),
                         TextButton.icon(
-                          style: StyleString.buttonStyle,
+                          style: Style.buttonStyle,
                           onPressed: _videoReplyController.queryBySort,
                           icon: Icon(
                             Icons.sort,

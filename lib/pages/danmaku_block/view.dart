@@ -82,7 +82,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
 
   Widget tabViewBuilder(final int tabIndex, List<SimpleRule> list) {
     if (list.isEmpty) {
-      return scrollErrorWidget();
+      return scrollableError;
     }
     return ListView.builder(
       itemCount: list.length,
@@ -97,7 +97,7 @@ class _DanmakuBlockPageState extends State<DanmakuBlockPage> {
           icon: const Icon(Icons.delete_outlined),
           onPressed: () => showConfirmDialog(
             context: context,
-            title: '确定删除该规则？',
+            title: const Text('确定删除该规则？'),
             onConfirm: () => _controller.danmakuFilterDel(
               tabIndex,
               itemIndex,

@@ -27,7 +27,7 @@ import sys
 import textwrap
 import time
 from pathlib import Path
-from typing import Sequence
+from typing import Any, Sequence
 from urllib.request import urlopen
 
 try:
@@ -52,14 +52,14 @@ class VersionInfo:
     version_full: str
 
 
-def configure_logging() -> tuple[logging.Logger, Console | None]:
+def configure_logging() -> tuple[logging.Logger, Any | None]:
     logger = logging.getLogger("pilisuper.build")
     logger.handlers.clear()
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
     if RichHandler is not None and Console is not None:
-        console: Console | None = Console(stderr=True, soft_wrap=True)
+        console: Any | None = Console(stderr=True, soft_wrap=True)
         if install_rich_traceback is not None:
             install_rich_traceback(show_locals=False)
         handler: logging.Handler = RichHandler(
@@ -530,20 +530,26 @@ def apply_flutter_patches(root: str, platform_name: str = "") -> None:
             bad_message="Add RawTooltip.ignorePointer 应用失败（已忽略）",
         )
 
-    for name in [
-        "bottom_sheet.patch",
-        "modal_barrier.patch",
-        "mouse_cursor.patch",
-    ]:
-        patch_path = Path("lib/scripts") / name
+    # bottom_sheet.patch 仅 Android 适用（upstream patch.ps1 同逻辑）
+    # https://github.com/flutter/flutter/issues/182281
+    if platform_name == "android":
         apply_git_patch(
-            patch_path,
+            Path("lib/scripts/bottom_sheet.patch"),
+            cwd=root,
+            notfound_message="patch 不存在，跳过: bottom_sheet.patch",
+            finished_message="Patch OK: bottom_sheet.patch",
+            bad_message="Patch 应用失败（已忽略）: bottom_sheet.patch",
+        )
+
+    # modal_barrier.patch / mouse_cursor.patch 所有平台通用
+    for name in ["modal_barrier.patch", "mouse_cursor.patch"]:
+        apply_git_patch(
+            Path("lib/scripts") / name,
             cwd=root,
             notfound_message=f"patch 不存在，跳过: {name}",
             finished_message=f"Patch OK: {name}",
             bad_message=f"Patch 应用失败（已忽略）: {name}",
         )
-
 
 def run_common_setup(args: argparse.Namespace) -> str | None:
     flutter_root_dir = find_flutter_root()
@@ -810,6 +816,48 @@ def resolve_package_name(args: argparse.Namespace) -> str:
     return args.app_name or get_pubspec_name()
 
 
+def get_linux_desktop_file() -> Path | None:
+    assets_linux = Path("assets/linux")
+    if not assets_linux.exists():
+        return None
+    return next(assets_linux.glob("*.desktop"), None)
+
+
+def read_desktop_entry_value(desktop_file: Path | None, key: str) -> str | None:
+    if desktop_file is None or not desktop_file.exists():
+        return None
+    pattern = re.compile(rf"^{re.escape(key)}=(.+)$", re.MULTILINE)
+    match = pattern.search(desktop_file.read_text(encoding="utf-8"))
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def resolve_linux_binary_name(bundle: Path, desktop_file: Path | None, app_name: str) -> str:
+    exec_value = read_desktop_entry_value(desktop_file, "Exec")
+    if exec_value:
+        exec_name = exec_value.split()[0].strip()
+        if exec_name and (bundle / exec_name).exists():
+            return exec_name
+
+    candidate = bundle / app_name
+    if candidate.exists():
+        return app_name
+
+    for file_path in bundle.iterdir():
+        if not file_path.is_file():
+            continue
+        if file_path.name.endswith((".so", ".json", ".dat", ".pak")):
+            continue
+        return file_path.name
+
+    return app_name
+
+
+def resolve_linux_icon_name(desktop_file: Path | None, app_name: str) -> str:
+    return read_desktop_entry_value(desktop_file, "Icon") or app_name
+
+
 def package_tar_gz(prefix: str, version: str, arch: str, bundle: Path, output_dir: Path) -> None:
     output_file = output_dir / f"{prefix}_linux_{version}_{arch}.tar.gz"
     run_shell_command(f"tar -zcf {output_file} -C {bundle} .")
@@ -850,6 +898,9 @@ def package_arch_package(
     require_command("makepkg", "请在 Arch Linux 系统上运行")
 
     app_name = resolve_package_name(args)
+    desktop = get_linux_desktop_file()
+    binary_name = resolve_linux_binary_name(bundle, desktop, app_name)
+    icon_name = resolve_linux_icon_name(desktop, app_name)
     # pacman 版本号不能含 + -，转成 _
     pkg_ver = re.sub(r"[+\-]", "_", version)
     pkg_arch = "x86_64" if arch == "x64" else arch
@@ -865,16 +916,11 @@ def package_arch_package(
     src_dir.mkdir()
     shutil.copytree(bundle, src_dir / "bundle", dirs_exist_ok=True)
 
-    desktop = (
-        next(Path("assets/linux").glob("*.desktop"), None)
-        if Path("assets/linux").exists()
-        else None
-    )
     logo = Path("assets/images/logo/logo.png")
     if desktop:
         shutil.copy2(desktop, src_dir / desktop.name)
     if logo.exists():
-        shutil.copy2(logo, src_dir / f"{app_name}.png")
+        shutil.copy2(logo, src_dir / f"{icon_name}.png")
 
     src_tar = work / f"{src_name}.tar.gz"
     run_shell_command(f"tar -zcf {src_tar} -C {work} {src_name}")
@@ -905,13 +951,13 @@ def package_arch_package(
             # 主体文件
             install -dm755 "$pkgdir/opt/{app_name}"
             cp -rdp --no-preserve=ownership bundle/. "$pkgdir/opt/{app_name}/"
-            chmod 755 "$pkgdir/opt/{app_name}/{app_name}"
+            chmod 755 "$pkgdir/opt/{app_name}/{binary_name}"
 
             # 启动脚本（处理 LD_LIBRARY_PATH，Arch 需要）
             install -dm755 "$pkgdir/usr/bin"
             cat > "$pkgdir/usr/bin/{app_name}" << 'LAUNCHER'
         #!/bin/bash
-        LD_LIBRARY_PATH="/opt/{app_name}/lib:$LD_LIBRARY_PATH" exec "/opt/{app_name}/{app_name}" "$@"
+        LD_LIBRARY_PATH="/opt/{app_name}/lib:$LD_LIBRARY_PATH" exec "/opt/{app_name}/{binary_name}" "$@"
         LAUNCHER
             chmod 755 "$pkgdir/usr/bin/{app_name}"
 
@@ -922,8 +968,8 @@ def package_arch_package(
 
             # 图标
             install -dm755 "$pkgdir/usr/share/icons/hicolor/512x512/apps"
-            [[ -f {app_name}.png ]] && install -Dm644 {app_name}.png \\
-                "$pkgdir/usr/share/icons/hicolor/512x512/apps/{app_name}.png"
+            [[ -f {icon_name}.png ]] && install -Dm644 {icon_name}.png \
+                "$pkgdir/usr/share/icons/hicolor/512x512/apps/{icon_name}.png"
         }}
     """),
         encoding="utf-8",
@@ -968,6 +1014,8 @@ def package_deb(
     log_step("打包 deb")
     require_command("dpkg-deb")
     app_name = resolve_package_name(args)
+    desktop = get_linux_desktop_file()
+    icon_name = resolve_linux_icon_name(desktop, app_name)
     deb_arch = map_deb_architecture(arch)
     root = Path(f"/tmp/{prefix}_deb")
     if root.exists():
@@ -1012,17 +1060,12 @@ def package_deb(
             f"Maintainer: Unknown\nInstalled-Size: 0\nDescription: Flutter App\n"
         )
 
-    desktop = (
-        next(Path("assets/linux").glob("*.desktop"), None)
-        if Path("assets/linux").exists()
-        else None
-    )
     if desktop:
         shutil.copy2(desktop, root / "usr/share/applications" / desktop.name)
     logo = Path("assets/images/logo/logo.png")
     if logo.exists():
         shutil.copy2(
-            logo, root / f"usr/share/icons/hicolor/512x512/apps/{app_name}.png"
+            logo, root / f"usr/share/icons/hicolor/512x512/apps/{icon_name}.png"
         )
 
     output_file = output_dir / f"{prefix}_linux_{version}_{arch}.deb"
@@ -1048,6 +1091,9 @@ def package_rpm(
     import datetime
 
     app_name = resolve_package_name(args)
+    desktop = get_linux_desktop_file()
+    binary_name = resolve_linux_binary_name(bundle, desktop, app_name)
+    icon_name = resolve_linux_icon_name(desktop, app_name)
     rpm_ver = re.sub(r"[+\-]", "_", version)
     rpm_root = Path(f"/tmp/{prefix}_rpm")
     for d in ["BUILD", "RPMS", "SOURCES", "SPECS", "SRPMS"]:
@@ -1059,16 +1105,11 @@ def package_rpm(
     (src_dir / "assets").mkdir()
     shutil.copytree(bundle, src_dir / "bundle", dirs_exist_ok=True)
 
-    desktop = (
-        next(Path("assets/linux").glob("*.desktop"), None)
-        if Path("assets/linux").exists()
-        else None
-    )
     logo = Path("assets/images/logo/logo.png")
     if desktop:
         shutil.copy2(desktop, src_dir / "assets" / desktop.name)
     if logo.exists():
-        shutil.copy2(logo, src_dir / f"assets/{app_name}.png")
+        shutil.copy2(logo, src_dir / f"assets/{icon_name}.png")
 
     run_shell_command(
         f"tar -zcf {rpm_root}/SOURCES/{app_name}-{rpm_ver}.tar.gz "
@@ -1099,15 +1140,15 @@ def package_rpm(
         %install
         mkdir -p %{{buildroot}}/opt/{app_name}
         cp -r bundle/* %{{buildroot}}/opt/{app_name}/
-        chmod 755 %{{buildroot}}/opt/{app_name}/{app_name}
+        chmod 755 %{{buildroot}}/opt/{app_name}/{binary_name}
         mkdir -p %{{buildroot}}/usr/bin
-        ln -sf /opt/{app_name}/{app_name} %{{buildroot}}/usr/bin/{app_name}
+        ln -sf /opt/{app_name}/{binary_name} %{{buildroot}}/usr/bin/{app_name}
         mkdir -p %{{buildroot}}/usr/share/applications
         install -m 644 assets/{desktop_name} \\
             %{{buildroot}}/usr/share/applications/{desktop_name}
         mkdir -p %{{buildroot}}/usr/share/icons/hicolor/512x512/apps
-        install -m 644 assets/{app_name}.png \\
-            %{{buildroot}}/usr/share/icons/hicolor/512x512/apps/{app_name}.png
+        install -m 644 assets/{icon_name}.png \
+            %{{buildroot}}/usr/share/icons/hicolor/512x512/apps/{icon_name}.png
 
         %post
         update-desktop-database -q || true
@@ -1121,7 +1162,7 @@ def package_rpm(
         /opt/{app_name}
         /usr/bin/{app_name}
         /usr/share/applications/{desktop_name}
-        /usr/share/icons/hicolor/512x512/apps/{app_name}.png
+        /usr/share/icons/hicolor/512x512/apps/{icon_name}.png
 
         %changelog
         * {date_str} - {rpm_ver}-1
@@ -1152,6 +1193,9 @@ def package_appimage(
 ) -> None:
     log_step("打包 AppImage")
     app_name = resolve_package_name(args)
+    desktop = get_linux_desktop_file()
+    binary_name = resolve_linux_binary_name(bundle, desktop, app_name)
+    icon_name = resolve_linux_icon_name(desktop, app_name)
     tool = Path("appimagetool-x86_64.AppImage")
     if not tool.exists():
         download_file(
@@ -1174,26 +1218,21 @@ def package_appimage(
 
     shutil.copytree(bundle, appdir / "usr/bin", dirs_exist_ok=True)
 
-    desktop = (
-        next(Path("assets/linux").glob("*.desktop"), None)
-        if Path("assets/linux").exists()
-        else None
-    )
     logo = Path("assets/images/logo/logo.png")
     if desktop:
         shutil.copy2(desktop, appdir / desktop.name)
         shutil.copy2(desktop, appdir / "usr/share/applications" / desktop.name)
     if logo.exists():
-        shutil.copy2(logo, appdir / f"{app_name}.png")
+        shutil.copy2(logo, appdir / f"{icon_name}.png")
         shutil.copy2(
-            logo, appdir / f"usr/share/icons/hicolor/512x512/apps/{app_name}.png"
+            logo, appdir / f"usr/share/icons/hicolor/512x512/apps/{icon_name}.png"
         )
 
     (appdir / "AppRun").write_text(
         '#!/bin/bash\nSELF=$(readlink -f "$0")\nHERE=${SELF%/*}\n'
         'export PATH="${HERE}/usr/bin:${PATH}"\n'
         'export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"\n'
-        f'exec "${{HERE}}/usr/bin/{app_name}" "$@"\n'
+        f'exec "${{HERE}}/usr/bin/{binary_name}" "$@"\n'
     )
     (appdir / "AppRun").chmod(0o755)
 
