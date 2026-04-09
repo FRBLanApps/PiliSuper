@@ -433,7 +433,9 @@ class _EpisodePanelState extends State<EpisodePanel>
           type: MaterialType.transparency,
           child: InkWell(
             onTap: () {
-              if (episode.badge == "会员" && vipStatus != 1) {
+              if (episode.badge == "会员" &&
+                  Accounts.mainEqVideo &&
+                  vipStatus != 1) {
                 SmartDialog.showToast('需要大会员');
                 // return;
               }
