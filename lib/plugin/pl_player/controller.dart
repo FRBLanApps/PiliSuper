@@ -49,7 +49,7 @@ import 'package:easy_debounce/easy_throttle.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback;
+import 'package:flutter/services.dart' show HapticFeedback, DeviceOrientation;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:get/get.dart';
@@ -516,36 +516,53 @@ class PlPlayerController with BlockConfigMixin {
 
   bool visible = true;
 
-  StreamSubscription<NativeDeviceOrientation>? _orientationListener;
+  DeviceOrientation? _orientation;
+  late final checkIsAutoRotate = Platform.isAndroid && mode != .gravity;
+  StreamSubscription<OrientationParams>? _orientationListener;
 
   void _stopOrientationListener() {
     _orientationListener?.cancel();
     _orientationListener = null;
   }
 
-  void _onOrientationChanged(NativeDeviceOrientation value) {
+  void _onOrientationChanged(OrientationParams param) {
     if (!visible) return;
-    switch (value) {
+    final orientation = _orientation = param.orientation;
+    final isFullScreen = this.isFullScreen.value;
+    if (checkIsAutoRotate &&
+        param.isAutoRotate != true &&
+        (!isFullScreen ||
+            _isVertical ||
+            orientation == .portraitUp ||
+            orientation == .portraitDown)) {
+      return;
+    }
+    switch (orientation) {
       case .portraitUp:
         if (!_isVertical && controlsLock.value) return;
-        if (!horizontalScreen && !_isVertical && isFullScreen.value) {
-          triggerFullScreen(status: false, orientation: value);
+        if (!horizontalScreen && !_isVertical && isFullScreen) {
+          if (!isManualFS) {
+            triggerFullScreen(status: false, orientation: orientation);
+          }
         } else {
           portraitUpMode();
         }
+      case .portraitDown:
+        if (!horizontalScreen) return;
+        if (!_isVertical && controlsLock.value) return;
+        portraitDownMode();
       case .landscapeLeft:
-        if (!horizontalScreen && !isFullScreen.value) {
-          triggerFullScreen(orientation: value);
+        if (!horizontalScreen && !isFullScreen) {
+          triggerFullScreen(orientation: orientation, isManualFS: false);
         } else {
           landscapeLeftMode();
         }
       case .landscapeRight:
-        if (!horizontalScreen && !isFullScreen.value) {
-          triggerFullScreen(orientation: value);
+        if (!horizontalScreen && !isFullScreen) {
+          triggerFullScreen(orientation: orientation, isManualFS: false);
         } else {
           landscapeRightMode();
         }
-      case _:
     }
   }
 
@@ -555,7 +572,7 @@ class PlPlayerController with BlockConfigMixin {
       _orientationListener = NativeDeviceOrientationPlatform.instance
           .onOrientationChanged(
             useSensor: Platform.isAndroid,
-            checkIsAutoRotate: mode != .gravity,
+            checkIsAutoRotate: checkIsAutoRotate,
           )
           .listen(_onOrientationChanged);
     }
@@ -1404,15 +1421,18 @@ class PlPlayerController with BlockConfigMixin {
   }
 
   double screenRatio = 0.0;
+  bool isManualFS = true;
   late final FullScreenMode mode = Pref.fullScreenMode;
   late final horizontalScreen = Pref.horizontalScreen;
+  late final removeSafeArea = Pref.removeSafeArea;
 
   // 全屏
   bool _fsProcessing = false;
   Future<void> triggerFullScreen({
     bool status = true,
     bool inAppFullScreen = false,
-    NativeDeviceOrientation? orientation,
+    DeviceOrientation? orientation,
+    bool isManualFS = true,
   }) async {
     if (isDesktopPip) return;
     if (isFullScreen.value == status) return;
@@ -1420,10 +1440,11 @@ class PlPlayerController with BlockConfigMixin {
     if (_fsProcessing) return;
     _fsProcessing = true;
     toggleFullScreen(status);
+    this.isManualFS = isManualFS;
     try {
       if (status) {
         if (PlatformUtils.isMobile) {
-          hideStatusBar();
+          hideSystemBar();
           if (orientation == null && mode == .none) {
             return;
           }
@@ -1437,7 +1458,7 @@ class PlPlayerController with BlockConfigMixin {
             // https://github.com/flutter/flutter/issues/73651
             // https://github.com/flutter/flutter/issues/183708
             if (Platform.isAndroid) {
-              if (orientation == .landscapeRight) {
+              if ((orientation ?? _orientation) == .landscapeRight) {
                 await landscapeRightMode();
               } else {
                 await landscapeLeftMode();
@@ -1455,12 +1476,26 @@ class PlPlayerController with BlockConfigMixin {
         }
       } else {
         if (PlatformUtils.isMobile) {
-          showStatusBar();
+          if (!removeSafeArea) {
+            showSystemBar();
+          }
           if (orientation == null && mode == .none) {
             return;
           }
           if (!horizontalScreen) {
             await portraitUpMode();
+          } else {
+            switch (_orientation) {
+              case .portraitUp:
+                await portraitUpMode();
+              case .landscapeLeft:
+                await landscapeLeftMode();
+              case .portraitDown:
+                await portraitDownMode();
+              case .landscapeRight:
+                await landscapeRightMode();
+              case _:
+            }
           }
         } else {
           await exitDesktopFullScreen();
@@ -1597,6 +1632,9 @@ class PlPlayerController with BlockConfigMixin {
     }
 
     _playerCount = 0;
+    if (removeSafeArea) {
+      showSystemBar();
+    }
     danmakuController = null;
     _stopOrientationListener();
     _disableAutoEnterPip();
