@@ -40,6 +40,7 @@ abstract class BaseVideoWebState<
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(name),
         actions: [
@@ -98,6 +99,7 @@ abstract class BaseVideoWebState<
                       if (index == response.length - 1) {
                         controller.onLoadMore();
                       }
+                      // TODO: dimension
                       return VideoCardH(videoItem: response[index]);
                     },
                   ),
