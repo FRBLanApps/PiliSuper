@@ -30,11 +30,16 @@ class ImageHorizontalDragGestureRecognizer
       _pointer = event.pointer;
       return;
     }
-    _reset = false;
     _pointer = event.pointer;
     if (isPointerAllowed) {
       super.addPointer(event);
     }
+  }
+
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    _reset = false;
+    super.addAllowedPointer(event);
   }
 
   void setAtBothEdges() {

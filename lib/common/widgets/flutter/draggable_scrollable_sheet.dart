@@ -984,6 +984,7 @@ class _InheritedResetNotifier extends InheritedNotifier<_ResetNotifier> {
     required _ResetNotifier super.notifier,
   });
 
+  // ignore: unused_element
   bool _sendReset() => notifier!.sendReset();
 
   /// Specifies whether the [DraggableScrollableSheet] should reset to its
