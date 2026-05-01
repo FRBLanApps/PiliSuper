@@ -11,7 +11,7 @@ body:
       options:
         - label: 搜索了 [历史 issue](https://github.com/FRBLanApps/PiliSuper/issues?q=is%3Aissue) ，并未发现相同功能请求
           required: true
-        - label: 搜索了 [上游的历史 issue](https://github.com/bggRGjQaUbCoE/PiliPlus/issues?q=is%3Aissue) ，404 Not Found
+        - label: 搜索了 [上游的历史 issue](https://github.com/bggRGjQaUbCoE/PiliPlus/issues?q=is%3Aissue) ，并未发现相同功能请求
           required: true
         - label: 正在使用最新版本。
           required: true
