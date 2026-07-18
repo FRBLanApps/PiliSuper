@@ -9,6 +9,8 @@ class RcmdVideoItemAppModel extends BaseRcmdVideoItemModel {
 
   String? cardType;
   ThreePoint? threePoint;
+  /// 分区名（args.tname），用于本地屏蔽
+  String? tname;
 
   RcmdVideoItemAppModel.fromJson(Map<String, dynamic> json) {
     aid = json['player_args']?['aid'] ?? int.tryParse(json['param'] ?? '0');
@@ -20,6 +22,7 @@ class RcmdVideoItemAppModel extends BaseRcmdVideoItemModel {
     duration = json['player_args']?['duration'] ?? 0;
     //duration = json['cover_right_text'];
     title = json['title'];
+    tname = json['args']?['tname'] as String?;
     owner = RcmdOwner.fromJson(json);
     rcmdReason = json['rcmd_reason'];
     //     json['bottom_rcmd_reason'] ??
@@ -35,6 +38,8 @@ class RcmdVideoItemAppModel extends BaseRcmdVideoItemModel {
     if (isFollowed) rcmdReason = null;
 
     goto = json['goto'];
+    // 优先 card_goto（类型更细），否则 goto
+    gotoType = (json['card_goto'] as String?) ?? (json['goto'] as String?);
     param = int.parse(json['param']);
     uri = json['uri'];
     talkBack = json['talk_back'];

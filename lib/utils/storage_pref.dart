@@ -84,6 +84,41 @@ abstract final class Pref {
     GlobalData().blackMids..remove(mid),
   );
 
+  /// 本地屏蔽 UP（mid → 显示名），与官方账号黑名单分离
+  static Map<int, String> get recommendBlockedMids {
+    final data = _localCache.get(LocalCacheKey.recommendBlockedMids);
+    if (data is Set) {
+      final map = <int, String>{};
+      for (final mid in data) {
+        if (mid is int) {
+          map[mid] = 'UID:$mid';
+        }
+      }
+      _localCache.put(LocalCacheKey.recommendBlockedMids, map);
+      return map;
+    }
+    if (data is Map) {
+      final map = <int, String>{};
+      for (final entry in data.entries) {
+        final key = entry.key;
+        final value = entry.value;
+        final uid = key is int
+            ? key
+            : key is String
+            ? int.tryParse(key)
+            : null;
+        if (uid != null && value is String) {
+          map[uid] = value;
+        }
+      }
+      return map;
+    }
+    return <int, String>{};
+  }
+
+  static set recommendBlockedMids(Map<int, String> blockedMidsMap) =>
+      _localCache.put(LocalCacheKey.recommendBlockedMids, blockedMidsMap);
+
   static MemberTabType get memberTab =>
       MemberTabType.values[_setting.get(
         SettingBoxKey.memberTab,
@@ -297,6 +332,15 @@ abstract final class Pref {
 
   static String get banWordForRecommend =>
       _setting.get(SettingBoxKey.banWordForRecommend, defaultValue: '');
+
+  static String get banWordForDesc =>
+      _setting.get(SettingBoxKey.banWordForDesc, defaultValue: '');
+
+  static String get banWordForTag =>
+      _setting.get(SettingBoxKey.banWordForTag, defaultValue: '');
+
+  static String get banWordForTopic =>
+      _setting.get(SettingBoxKey.banWordForTopic, defaultValue: '');
 
   static String get banWordForReply =>
       _setting.get(SettingBoxKey.banWordForReply, defaultValue: '');
@@ -655,6 +699,36 @@ abstract final class Pref {
     SettingBoxKey.applyFilterToRelatedVideos,
     defaultValue: true,
   );
+
+  static bool get applyFilterToHotVideos => _setting.get(
+    SettingBoxKey.applyFilterToHotVideos,
+    defaultValue: true,
+  );
+
+  static bool get applyFilterToRankVideos => _setting.get(
+    SettingBoxKey.applyFilterToRankVideos,
+    defaultValue: true,
+  );
+
+  static bool get applyFilterToSearch => _setting.get(
+    SettingBoxKey.applyFilterToSearch,
+    defaultValue: false,
+  );
+
+  /// 推流屏蔽的稿件类型（goto），如 bangumi / picture / live
+  static Set<String> get blockedRcmdTypes {
+    final raw = _setting.get(SettingBoxKey.blockedRcmdTypes);
+    if (raw is List) {
+      return raw.map((e) => e.toString()).toSet();
+    }
+    if (raw is Set) {
+      return raw.map((e) => e.toString()).toSet();
+    }
+    return <String>{};
+  }
+
+  static set blockedRcmdTypes(Set<String> value) =>
+      _setting.put(SettingBoxKey.blockedRcmdTypes, value.toList());
 
   static bool get enableBackgroundPlay =>
       _setting.get(SettingBoxKey.enableBackgroundPlay, defaultValue: true);

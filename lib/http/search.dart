@@ -12,6 +12,7 @@ import 'package:PiliPlus/models_new/search/search_rcmd/data.dart';
 import 'package:PiliPlus/models_new/search/search_trending/data.dart';
 import 'package:PiliPlus/models_new/video/video_detail/dimension.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';
+import 'package:PiliPlus/utils/recommend_filter.dart';
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/wbi_sign.dart';
 import 'package:dio/dio.dart';
@@ -101,7 +102,18 @@ abstract final class SearchHttp {
         try {
           switch (searchType) {
             case SearchType.video:
-              data = SearchVideoData.fromJson(dataData);
+              final videoData = SearchVideoData.fromJson(dataData);
+              if (RecommendFilter.applyFilterToSearch) {
+                videoData.list = videoData.list
+                    ?.where(
+                      (e) => !RecommendFilter.filterForSearch(
+                        mid: e.owner.mid,
+                        title: e.title,
+                      ),
+                    )
+                    .toList();
+              }
+              data = videoData;
               break;
             case SearchType.live_room:
               data = SearchLiveData.fromJson(dataData);

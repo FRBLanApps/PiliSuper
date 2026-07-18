@@ -28,6 +28,7 @@ import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/pages/video/reply/widgets/zan_grpc.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_scheme.dart';
+import 'package:PiliPlus/utils/ban_word_utils.dart';
 import 'package:PiliPlus/utils/bili_utils.dart';
 import 'package:PiliPlus/utils/color_utils.dart';
 import 'package:PiliPlus/utils/danmaku_utils.dart';
@@ -1237,33 +1238,24 @@ class ReplyItemGrpc extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
             final select = editableTextState.textEditingValue;
-            String text = RegExp.escape(
-              select.selection.textInside(select.text),
-            );
-            if (ReplyGrpc.enableFilter) text = '|$text';
+            final text = select.selection.textInside(select.text).trim();
+            if (text.isEmpty) return;
 
             showConfirmDialog(
               context: context,
-              title: const Text('是否确认评论过滤的变更：'),
-              content: Text.rich(
-                TextSpan(
-                  text: ReplyGrpc.replyRegExp.pattern,
-                  children: [
-                    TextSpan(
-                      text: text,
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              title: const Text('是否加入评论关键词过滤：'),
+              content: Text(text),
               onConfirm: () {
-                final filter = ReplyGrpc.replyRegExp.pattern + text;
-                ReplyGrpc.replyRegExp = RegExp(filter, caseSensitive: true);
-                ReplyGrpc.enableFilter = true;
-                GStorage.setting.put(SettingBoxKey.banWordForReply, filter);
+                final stored =
+                    GStorage.setting.get(
+                          SettingBoxKey.banWordForReply,
+                          defaultValue: '',
+                        )
+                        as String;
+                final next = BanWordUtils.appendRule(stored, text);
+                GStorage.setting.put(SettingBoxKey.banWordForReply, next);
+                ReplyGrpc.replyRegExp = BanWordUtils.buildRegExp(next);
+                ReplyGrpc.enableFilter = ReplyGrpc.replyRegExp.pattern.isNotEmpty;
                 SmartDialog.showToast('已保存');
               },
             );

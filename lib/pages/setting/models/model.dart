@@ -1,9 +1,11 @@
 import 'package:PiliPlus/common/style.dart';
 import 'package:PiliPlus/models/common/enum_with_label.dart';
+import 'package:PiliPlus/pages/setting/widgets/list_editor_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/normal_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/popup_item.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/switch_item.dart';
+import 'package:PiliPlus/utils/ban_word_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:flutter/material.dart' hide PopupMenuItemSelected;
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
@@ -215,51 +217,97 @@ SettingsModel getBanWordModel({
   return NormalModel(
     leading: const Icon(Icons.filter_alt_outlined),
     title: title,
-    getSubtitle: () => banWord.isEmpty ? "点击添加" : banWord,
-    onTap: (context, setState) {
-      String editValue = banWord;
-      showDialog(
+    getSubtitle: () {
+      if (banWord.isEmpty) return '点击添加';
+      final items = BanWordUtils.parseItems(banWord);
+      return items.isEmpty ? '点击添加' : '${items.length} 条规则';
+    },
+    onTap: (context, setState) async {
+      final items = BanWordUtils.parseItems(banWord);
+      final result = await showDialog<List<String>>(
         context: context,
-        builder: (context) => AlertDialog(
-          constraints: Style.dialogFixedConstraints,
-          title: Text(title),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('使用|隔开，如：尝试|测试'),
-              TextFormField(
-                autofocus: true,
-                initialValue: editValue,
-                textInputAction: TextInputAction.newline,
-                minLines: 1,
-                maxLines: 4,
-                onChanged: (value) => editValue = value,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: Get.back,
-              child: Text(
-                '取消',
-                style: TextStyle(color: ColorScheme.of(context).outline),
-              ),
-            ),
-            TextButton(
-              child: const Text('保存'),
-              onPressed: () {
-                Get.back();
-                banWord = editValue;
-                setState();
-                onChanged(RegExp(banWord, caseSensitive: false));
-                SmartDialog.showToast('已保存');
-                GStorage.setting.put(key, banWord);
-              },
-            ),
-          ],
+        builder: (context) => ListEditorDialog(
+          title: title,
+          initialItems: items,
+          hintText: '普通文字或 /正则/flags',
+          itemLabel: '规则',
         ),
       );
+      if (result != null) {
+        banWord = BanWordUtils.joinItems(result);
+        setState();
+        onChanged(BanWordUtils.buildRegExp(banWord));
+        SmartDialog.showToast('已保存');
+        GStorage.setting.put(key, banWord);
+      }
+    },
+  );
+}
+
+/// 本地屏蔽 UP 列表（mid → 名称）
+SettingsModel getListUidWithNameModel({
+  required String title,
+  required Map<int, String> Function() getUidsMap,
+  required void Function(Map<int, String>) setUidsMap,
+  required void Function() onUpdate,
+  Widget? leading,
+}) {
+  return NormalModel(
+    leading: leading ?? const Icon(Icons.person_off_outlined),
+    title: title,
+    getSubtitle: () {
+      final uidsMap = getUidsMap();
+      if (uidsMap.isEmpty) return '点击添加';
+      return '已屏蔽 ${uidsMap.length} 个用户';
+    },
+    onTap: (context, setState) async {
+      final uidsMap = getUidsMap();
+      final items = uidsMap.entries
+          .map((e) => '${e.value} (${e.key})')
+          .toList();
+
+      final result = await showDialog<List<String>>(
+        context: context,
+        builder: (context) => ListEditorDialog(
+          title: title,
+          initialItems: items,
+          hintText: '输入用户 UID',
+          itemLabel: 'UID',
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          allowEdit: false,
+          validator: (value) {
+            if (value.isEmpty) return '请输入 UID';
+            final uid = int.tryParse(value);
+            if (uid == null) return 'UID 必须是数字';
+            if (uid <= 0) return 'UID 必须大于 0';
+            return null;
+          },
+        ),
+      );
+
+      if (result != null) {
+        final newMap = <int, String>{};
+        for (final item in result) {
+          final match = RegExp(r'(.+?)\s*\((\d+)\)$').firstMatch(item);
+          if (match != null) {
+            final name = match.group(1)?.trim() ?? '';
+            final uid = int.tryParse(match.group(2) ?? '');
+            if (uid != null && uid > 0) {
+              newMap[uid] = name.isEmpty ? 'UID:$uid' : name;
+            }
+          } else {
+            final uid = int.tryParse(item);
+            if (uid != null && uid > 0) {
+              newMap[uid] = 'UID:$uid';
+            }
+          }
+        }
+        setUidsMap(newMap);
+        onUpdate();
+        setState();
+        SmartDialog.showToast('已保存');
+      }
     },
   );
 }

@@ -47,8 +47,13 @@ class _SettingPageState extends State<SettingPage> {
       icon: Icon(Icons.privacy_tip_outlined),
     ),
     _SettingsModel(
+      type: SettingType.filterSetting,
+      subtitle: '视频过滤、点赞率、浏览量、已关注豁免',
+      icon: Icon(Icons.filter_alt_outlined),
+    ),
+    _SettingsModel(
       type: SettingType.recommendSetting,
-      subtitle: '推荐来源（web/app）、刷新保留内容、过滤器',
+      subtitle: '推荐来源（web/app）、刷新保留内容',
       icon: Icon(Icons.explore_outlined),
     ),
     _SettingsModel(
@@ -114,6 +119,7 @@ class _SettingPageState extends State<SettingPage> {
                     flex: 6,
                     child: switch (_type) {
                       .privacySetting ||
+                      .filterSetting ||
                       .recommendSetting ||
                       .videoSetting ||
                       .playSetting ||
@@ -145,6 +151,7 @@ class _SettingPageState extends State<SettingPage> {
       Get.to(
         () => switch (type) {
           .privacySetting ||
+          .filterSetting ||
           .recommendSetting ||
           .videoSetting ||
           .playSetting ||

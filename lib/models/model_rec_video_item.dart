@@ -17,6 +17,7 @@ class RcmdVideoItemModel extends BaseRcmdVideoItemModel {
     bvid = json["bvid"];
     cid = json["cid"];
     goto = json["goto"];
+    gotoType = json["goto"] as String?;
     uri = json["uri"];
     cover = json["pic"];
     title = json["title"];
@@ -25,9 +26,6 @@ class RcmdVideoItemModel extends BaseRcmdVideoItemModel {
     owner = Owner.fromJson(json["owner"]);
     stat = Stat.fromJson(json["stat"]);
     isFollowed = json["is_followed"] == 1;
-    // rcmdReason = json["rcmd_reason"] != null
-    //     ? RcmdReason.fromJson(json["rcmd_reason"])
-    //     : RcmdReason(content: '');
     rcmdReason = json["rcmd_reason"]?['content'];
   }
 

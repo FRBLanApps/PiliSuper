@@ -7,6 +7,7 @@ import 'package:PiliPlus/models/model_avatar.dart';
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models_new/live/live_feed_index/watched_show.dart';
 import 'package:PiliPlus/utils/extension/iterable_ext.dart';
+import 'package:PiliPlus/utils/ban_word_utils.dart';
 import 'package:PiliPlus/utils/parse_bool.dart';
 import 'package:PiliPlus/utils/parse_int.dart';
 import 'package:PiliPlus/utils/parse_string.dart';
@@ -39,10 +40,7 @@ class DynamicsDataModel {
     return title ?? '';
   }
 
-  static RegExp banWordForDyn = RegExp(
-    Pref.banWordForDyn,
-    caseSensitive: false,
-  );
+  static RegExp banWordForDyn = BanWordUtils.buildRegExp(Pref.banWordForDyn);
   static bool enableFilter = banWordForDyn.pattern.isNotEmpty;
 
   static bool antiGoodsDyn = Pref.antiGoodsDyn;

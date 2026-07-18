@@ -13,6 +13,8 @@ class VideoDetailData {
   String? bvid;
   int? aid;
   int? videos;
+  int? tid;
+  String? tname;
   int? copyright;
   String? pic;
   String? title;
@@ -39,6 +41,8 @@ class VideoDetailData {
     this.bvid,
     this.aid,
     this.videos,
+    this.tid,
+    this.tname,
     this.copyright,
     this.pic,
     this.title,
@@ -66,6 +70,8 @@ class VideoDetailData {
         bvid: json['bvid'] as String?,
         aid: json['aid'] as int?,
         videos: json['videos'] as int?,
+        tid: json['tid'] as int?,
+        tname: json['tname'] as String?,
         copyright: json['copyright'] as int?,
         pic: json['pic'] as String?,
         title: json['title'] as String?,

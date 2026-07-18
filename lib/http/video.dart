@@ -30,10 +30,12 @@ import 'package:PiliPlus/models_new/video/video_relation/data.dart';
 import 'package:PiliPlus/models_new/video/video_shot/data.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/app_sign.dart';
+import 'package:PiliPlus/utils/ban_word_utils.dart';
 import 'package:PiliPlus/utils/extension/string_ext.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
-import 'package:PiliPlus/utils/recommend_filter.dart';
+import 'package:PiliPlus/utils/recommend_filter.dart'
+    show FilterScope, RecommendFilter;
 import 'package:PiliPlus/utils/request_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
@@ -46,7 +48,7 @@ import 'package:protobuf/protobuf.dart';
 
 /// view层根据 status 判断渲染逻辑
 abstract final class VideoHttp {
-  static RegExp zoneRegExp = RegExp(Pref.banWordForZone, caseSensitive: false);
+  static RegExp zoneRegExp = BanWordUtils.buildRegExp(Pref.banWordForZone);
   static bool enableFilter = zoneRegExp.pattern.isNotEmpty;
 
   // 首页推荐视频
@@ -69,12 +71,13 @@ abstract final class VideoHttp {
     if (res.data['code'] == 0) {
       List<RcmdVideoItemModel> list = <RcmdVideoItemModel>[];
       for (final i in res.data['data']['item']) {
-        //过滤掉live与ad，以及拉黑用户
-        if (i['goto'] == 'av' &&
-            (i['owner'] != null &&
-                !GlobalData().blackMids.contains(i['owner']['mid']))) {
-          RcmdVideoItemModel videoItem = RcmdVideoItemModel.fromJson(i);
-          if (!RecommendFilter.filter(videoItem)) {
+        // web 推荐仍以 av 为主；非 av 仅在未屏蔽该类型时保留（当前模型仅解析 av）
+        if (i['goto'] != 'av') continue;
+        if (i['owner'] != null &&
+            !GlobalData().blackMids.contains(i['owner']['mid'])) {
+          final map = Map<String, dynamic>.from(i as Map);
+          RcmdVideoItemModel videoItem = RcmdVideoItemModel.fromJson(map);
+          if (!RecommendFilter.filter(videoItem, scope: FilterScope.rcmd)) {
             list.add(videoItem);
           }
         }
@@ -142,19 +145,28 @@ abstract final class VideoHttp {
     if (res.data['code'] == 0) {
       List<RcmdVideoItemAppModel> list = <RcmdVideoItemAppModel>[];
       for (final i in res.data['data']['items']) {
+        final cardGoto = i['card_goto'] as String?;
+        final goto = i['goto'] as String?;
         // 屏蔽推广和拉黑用户
-        if (i['card_goto'] != 'ad_av' &&
-            i['card_goto'] != 'ad_web_s' &&
-            i['ad_info'] == null &&
-            (i['args'] != null &&
-                !GlobalData().blackMids.contains(i['args']['up_id']))) {
+        if (cardGoto == 'ad_av' ||
+            cardGoto == 'ad_web_s' ||
+            i['ad_info'] != null) {
+          continue;
+        }
+        if (RecommendFilter.filterRcmdType(cardGoto) ||
+            RecommendFilter.filterRcmdType(goto)) {
+          continue;
+        }
+        if (i['args'] != null &&
+            !GlobalData().blackMids.contains(i['args']['up_id'])) {
           if (enableFilter &&
               i['args']?['tname'] != null &&
               zoneRegExp.hasMatch(i['args']['tname'])) {
             continue;
           }
-          RcmdVideoItemAppModel videoItem = RcmdVideoItemAppModel.fromJson(i);
-          if (!RecommendFilter.filter(videoItem)) {
+          final map = Map<String, dynamic>.from(i as Map);
+          RcmdVideoItemAppModel videoItem = RcmdVideoItemAppModel.fromJson(map);
+          if (!RecommendFilter.filter(videoItem, scope: FilterScope.rcmd)) {
             list.add(videoItem);
           }
         }
@@ -176,19 +188,20 @@ abstract final class VideoHttp {
     );
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
-      for (final i in res.data['data']['list']) {
-        if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
-            !RecommendFilter.filterTitle(i['title']) &&
-            !RecommendFilter.filterLikeRatio(
-              i['stat']['like'],
-              i['stat']['view'],
-            )) {
-          if (enableFilter &&
-              i['tname'] != null &&
-              zoneRegExp.hasMatch(i['tname'])) {
-            continue;
-          }
-          list.add(HotVideoItemModel.fromJson(i));
+      for (final raw in res.data['data']['list']) {
+        final i = Map<String, dynamic>.from(raw as Map);
+        if (GlobalData().blackMids.contains(i['owner']?['mid'])) continue;
+        final item = HotVideoItemModel.fromJson(i);
+        // 分区关键词仅在作用域开启时应用
+        if (RecommendFilter.isScopeEnabled(FilterScope.hot) &&
+            enableFilter &&
+            i['tname'] != null &&
+            zoneRegExp.hasMatch(i['tname'] as String)) {
+          continue;
+        }
+        // filter()：本地 UP 始终；其余规则受作用域控制
+        if (!RecommendFilter.filter(item, scope: FilterScope.hot)) {
+          list.add(item);
         }
       }
       return Success(list);
@@ -327,9 +340,11 @@ abstract final class VideoHttp {
       final items = (res.data['data'] as List?)?.map(
         (i) => HotVideoItemModel.fromJson(i),
       );
-      final list = RecommendFilter.applyFilterToRelatedVideos
-          ? items?.where((i) => !RecommendFilter.filterAll(i)).toList()
-          : items?.toList();
+      final list = items
+          ?.where(
+            (i) => !RecommendFilter.filter(i, scope: FilterScope.related),
+          )
+          .toList();
       return Success(list);
     } else {
       return Error(res.data['message']);
@@ -853,21 +868,20 @@ abstract final class VideoHttp {
     return null;
   }
 
-  static bool _canAddRank(Map i) {
-    if (!GlobalData().blackMids.contains(i['owner']['mid']) &&
-        !RecommendFilter.filterTitle(i['title']) &&
-        !RecommendFilter.filterLikeRatio(
-          i['stat']['like'],
-          i['stat']['view'],
-        )) {
-      if (enableFilter &&
-          i['tname'] != null &&
-          zoneRegExp.hasMatch(i['tname'])) {
-        return false;
-      }
-      return true;
+  /// 返回 null 表示应丢弃；否则返回可加入列表的模型
+  static HotVideoItemModel? _tryRankItem(Map raw) {
+    final map = Map<String, dynamic>.from(raw);
+    if (GlobalData().blackMids.contains(map['owner']?['mid'])) return null;
+    final item = HotVideoItemModel.fromJson(map);
+    if (RecommendFilter.isScopeEnabled(FilterScope.rank) &&
+        enableFilter &&
+        map['tname'] != null &&
+        zoneRegExp.hasMatch(map['tname'] as String)) {
+      return null;
     }
-    return false;
+    // 本地 UP 始终过滤；其余受作用域控制
+    if (RecommendFilter.filter(item, scope: FilterScope.rank)) return null;
+    return item;
   }
 
   // 视频排行
@@ -881,17 +895,8 @@ abstract final class VideoHttp {
     if (res.data['code'] == 0) {
       List<HotVideoItemModel> list = <HotVideoItemModel>[];
       for (final i in res.data['data']['list']) {
-        if (_canAddRank(i)) {
-          list.add(HotVideoItemModel.fromJson(i));
-          // final List? others = i['others'];
-          // if (others != null && others.isNotEmpty) {
-          //   for (final j in others) {
-          //     if (_canAddRank(j)) {
-          //       list.add(HotVideoItemModel.fromJson(j));
-          //     }
-          //   }
-          // }
-        }
+        final item = _tryRankItem(i as Map);
+        if (item != null) list.add(item);
       }
       return Success(list);
     } else {

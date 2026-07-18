@@ -13,6 +13,9 @@ class GlobalData {
 
   Set<int> blackMids = Pref.blackMids;
 
+  /// 本地推荐流屏蔽的 UP（mid → 名称）
+  Map<int, String> recommendBlockedMids = Pref.recommendBlockedMids;
+
   bool dynamicsWaterfallFlow = Pref.dynamicsWaterfallFlow;
 
   bool showMedal = Pref.showMedal;

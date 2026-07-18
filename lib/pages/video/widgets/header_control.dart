@@ -8,6 +8,7 @@ import 'package:PiliPlus/common/widgets/button/icon_button.dart';
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
 import 'package:PiliPlus/common/widgets/dialog/report.dart';
 import 'package:PiliPlus/common/widgets/dialog/simple_dialog_option.dart';
+import 'package:PiliPlus/common/widgets/local_block_dialog.dart';
 import 'package:PiliPlus/common/widgets/marquee.dart';
 import 'package:PiliPlus/http/danmaku.dart';
 import 'package:PiliPlus/http/danmaku_block.dart';
@@ -435,6 +436,30 @@ class HeaderControlState extends State<HeaderControl>
                   title: const Text('定时关闭', style: titleStyle),
                 ),
                 if (!isFileSource) ...[
+                  ListTile(
+                    dense: true,
+                    onTap: () {
+                      Get.back();
+                      final detail = introController.videoDetail.value;
+                      LocalBlockDialog.show(
+                        context: this.context,
+                        bvid: videoDetailCtr.bvid,
+                        cid: videoDetailCtr.cid.value,
+                        ownerName: detail.owner?.name,
+                        ownerMid: detail.owner?.mid,
+                        title: detail.title,
+                        zoneName: detail.tname,
+                        desc: detail.desc,
+                        initialTags: introController.videoTags.value,
+                      );
+                    },
+                    leading: const Icon(MdiIcons.accountOff, size: 20),
+                    title: const Text('本地屏蔽', style: titleStyle),
+                    subtitle: const Text(
+                      'UP / 标题 / 分区 / TAG / 话题 / 简介',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
                   ListTile(
                     dense: true,
                     onTap: () {

@@ -194,11 +194,11 @@ mixin HeaderMixin<T extends StatefulWidget> on State<T> {
                           onPressed: () => Get
                             ..back()
                             ..toNamed(
-                              '/danmakuBlock',
-                              arguments: plPlayerController,
+                              '/localBlock',
+                              arguments: const {'tab': 'danmaku'},
                             ),
                           child: Text(
-                            "屏蔽管理(${plPlayerController.filters.count})",
+                            "视频过滤·弹幕(${plPlayerController.filters.count})",
                           ),
                         ),
                       ],

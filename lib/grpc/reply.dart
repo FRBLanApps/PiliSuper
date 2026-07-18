@@ -4,15 +4,13 @@ import 'package:PiliPlus/grpc/bilibili/pagination.pb.dart';
 import 'package:PiliPlus/grpc/grpc_req.dart';
 import 'package:PiliPlus/grpc/url.dart';
 import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/utils/ban_word_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:fixnum/fixnum.dart';
 
 abstract final class ReplyGrpc {
   static bool antiGoodsReply = Pref.antiGoodsReply;
-  static RegExp replyRegExp = RegExp(
-    Pref.banWordForReply,
-    caseSensitive: false,
-  );
+  static RegExp replyRegExp = BanWordUtils.buildRegExp(Pref.banWordForReply);
   static bool enableFilter = replyRegExp.pattern.isNotEmpty;
 
   // static Future replyInfo({required int rpid}) {

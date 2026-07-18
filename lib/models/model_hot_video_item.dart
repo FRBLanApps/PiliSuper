@@ -38,6 +38,7 @@ class HotVideoItemModel extends HorizontalVideoModel with MultiSelectData {
     firstFrame = json["first_frame"];
     pubLocation = json["pub_location"];
     redirectUrl = json['redirect_url'];
+    gotoType = (json['goto'] as String?) ?? 'av';
     progress = json['progress'];
     if (json['charging_pay']?['level'] != null) {
       badge = '充电专属';

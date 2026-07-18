@@ -1,8 +1,10 @@
 import 'package:PiliPlus/common/widgets/custom_icon.dart';
+import 'package:PiliPlus/common/widgets/local_block_dialog.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/common/account_type.dart';
 import 'package:PiliPlus/models/home/rcmd/result.dart';
+import 'package:PiliPlus/models/model_hot_video_item.dart';
 import 'package:PiliPlus/models/model_video.dart';
 import 'package:PiliPlus/models_new/space/space_archive/item.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -37,6 +39,42 @@ class VideoPopupMenu extends StatelessWidget {
     this.onRemove,
     this.menuItemHeight = 45,
   });
+
+  String? _getZoneName() {
+    if (videoItem case HotVideoItemModel(:final tname)) {
+      return tname;
+    }
+    if (videoItem case RcmdVideoItemAppModel(:final tname)) {
+      return tname;
+    }
+    return null;
+  }
+
+  String? _getDesc() {
+    if (videoItem case BaseVideoItemModel(:final desc)) {
+      final d = desc?.trim();
+      if (d != null && d.isNotEmpty) return d;
+    }
+    return null;
+  }
+
+  void _showLocalBlock(BuildContext context) {
+    final BaseVideoItemModel? full =
+        videoItem is BaseVideoItemModel ? videoItem as BaseVideoItemModel : null;
+    LocalBlockDialog.show(
+      context: context,
+      bvid: videoItem.bvid,
+      cid: videoItem.cid,
+      ownerName: videoItem.owner.name,
+      ownerMid: videoItem.owner.mid,
+      title: videoItem.title,
+      zoneName: _getZoneName(),
+      desc: _getDesc(),
+      preloadedTagNames: full?.tagNames,
+      preloadedTopicNames: full?.topicNames,
+      onBlocked: onRemove,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +133,11 @@ class VideoPopupMenu extends StatelessWidget {
                     '访问：${videoItem.owner.name}',
                     const Icon(MdiIcons.accountCircleOutline, size: 16),
                     () => Get.toNamed('/member?mid=${videoItem.owner.mid}'),
+                  ),
+                  _VideoCustomAction(
+                    '本地屏蔽',
+                    const Icon(MdiIcons.accountOff, size: 16),
+                    () => _showLocalBlock(context),
                   ),
                   _VideoCustomAction(
                     '不感兴趣',
