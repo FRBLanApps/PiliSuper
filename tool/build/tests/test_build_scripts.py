@@ -267,6 +267,102 @@ class TelegramNotifyTests(unittest.TestCase):
         )
         self.assertIn("这是一个 Release", message)
         self.assertIn("v2.1.0", message)
+        self.assertIn("#Release", message)
+
+    def test_dev_build_has_dev_tag(self):
+        message = notify_telegram.build_message(
+            label="Build",
+            repository="owner/repo",
+            branch="main",
+            commit_sha="abcdef123456",
+            commit_message="dev build",
+            run_url="https://example.test/run",
+            artifacts=[],
+            skipped=[],
+            release_tag="",
+        )
+        self.assertIn("#Dev", message)
+
+    def test_detect_release_type_dev(self):
+        self.assertEqual(notify_telegram.detect_release_type(""), "#Dev")
+
+    def test_detect_release_type_alpha(self):
+        self.assertEqual(notify_telegram.detect_release_type("v1.0.0-alpha"), "#Alpha")
+        self.assertEqual(notify_telegram.detect_release_type("v1.0.0-ALPHA.1"), "#Alpha")
+
+    def test_detect_release_type_beta(self):
+        self.assertEqual(notify_telegram.detect_release_type("v1.0.0-beta"), "#Beta")
+        self.assertEqual(notify_telegram.detect_release_type("v1.0.0-BETA.2"), "#Beta")
+
+    def test_detect_release_type_stable(self):
+        self.assertEqual(notify_telegram.detect_release_type("v2.1.0"), "#Release")
+
+    def test_find_artifacts_only_matches_pilisuper_prefix(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            (output / "PiliSuper.exe").write_bytes(b"content1")
+            (output / "pilisuper_android.apk").write_bytes(b"content2")
+            (output / "PILISUPER.dmg").write_bytes(b"content3")
+            (output / "piliplus.exe").write_bytes(b"excluded")
+            (output / "other.zip").write_bytes(b"excluded")
+
+            artifacts = notify_telegram.find_artifacts(output)
+
+            names = [item.name for item in artifacts]
+            self.assertIn("PiliSuper.exe", names)
+            self.assertIn("pilisuper_android.apk", names)
+            self.assertIn("PILISUPER.dmg", names)
+            self.assertEqual(len(names), 3)
+
+    def test_send_media_group_returns_first_message_id(self):
+        with tempfile.TemporaryDirectory() as temp:
+            file_a = Path(temp) / "a.apk"
+            file_a.write_bytes(b"content_a")
+
+            client = notify_telegram.TelegramClient("fake_token", "fake_chat", None)
+            artifacts = [notify_telegram.Artifact(file_a, "PiliSuper.apk", 1024)]
+
+            with patch("urllib.request.urlopen") as urlopen_mock:
+                urlopen_mock.return_value.__enter__.return_value.read.return_value = (
+                    b'{"ok": true, "result": [{"message_id": 123}, {"message_id": 124}]}'
+                )
+                message_id = client.send_media_group(artifacts, caption="Test caption")
+
+            self.assertEqual(message_id, 123)
+            call_args = urlopen_mock.call_args
+            self.assertIn("sendMediaGroup", call_args[0][0].full_url)
+
+    def test_main_sends_media_group_and_pins_first_message(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            (output / "PiliSuper.apk").write_bytes(b"x" * 1024)
+
+            with (
+                patch.dict(
+                    os.environ,
+                    {
+                        "TELEGRAM_BOT_TOKEN": "test_token",
+                        "TELEGRAM_CHAT_ID": "test_chat",
+                        "GITHUB_REPOSITORY": "owner/repo",
+                        "GITHUB_SHA": "abc123",
+                    },
+                ),
+                patch.object(
+                    sys, "argv", ["notify_telegram.py", "--output", str(output), "--release-tag", "v2.1.0-beta"]
+                ),
+                patch("urllib.request.urlopen") as urlopen_mock,
+            ):
+                urlopen_mock.return_value.__enter__.return_value.read.return_value = (
+                    b'{"ok": true, "result": [{"message_id": 123}]}'
+                )
+                notify_telegram.main()
+
+                calls = [call[0][0].full_url for call in urlopen_mock.call_args_list]
+                media_group_calls = [c for c in calls if "sendMediaGroup" in c]
+                pin_calls = [c for c in calls if "pinChatMessage" in c]
+
+                self.assertEqual(len(media_group_calls), 1)
+                self.assertEqual(len(pin_calls), 1)
 
 
 if __name__ == "__main__":
