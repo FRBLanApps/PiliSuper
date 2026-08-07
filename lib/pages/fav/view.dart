@@ -52,6 +52,12 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final body = ViewSafeArea(
+      child: tabBarView(
+        controller: _tabController,
+        children: FavTabType.values.map((item) => item.page).toList(),
+      ),
+    );
     return SimpleScaffold(
       appBar: AppBar(
         title: const Text('我的收藏'),
@@ -152,12 +158,7 @@ class _FavPageState extends State<FavPage> with SingleTickerProviderStateMixin {
           },
         ),
       ),
-      body: ViewSafeArea(
-        child: tabBarView(
-          controller: _tabController,
-          children: FavTabType.values.map((item) => item.page).toList(),
-        ),
-      ),
+      body: body,
     );
   }
 }

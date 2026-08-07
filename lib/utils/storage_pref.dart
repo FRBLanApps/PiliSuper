@@ -758,6 +758,36 @@ abstract final class Pref {
   static bool get enableMYBar =>
       _setting.get(SettingBoxKey.enableMYBar, defaultValue: true);
 
+  static bool get historyInNav =>
+      (_setting.get(SettingBoxKey.navBarSort) as List?)?.contains(
+        NavigationBarType.history.index,
+      ) ??
+      false;
+
+  static bool get favInNav =>
+      (_setting.get(SettingBoxKey.navBarSort) as List?)?.contains(
+        NavigationBarType.fav.index,
+      ) ??
+      false;
+
+  static bool get downloadInNav =>
+      (_setting.get(SettingBoxKey.navBarSort) as List?)?.contains(
+        NavigationBarType.download.index,
+      ) ??
+      false;
+
+  static bool get subscriptionInNav =>
+      (_setting.get(SettingBoxKey.navBarSort) as List?)?.contains(
+        NavigationBarType.subscription.index,
+      ) ??
+      false;
+
+  static bool get laterInNav =>
+      (_setting.get(SettingBoxKey.navBarSort) as List?)?.contains(
+        NavigationBarType.later.index,
+      ) ??
+      false;
+
   static Transition get pageTransition =>
       Transition.values[_setting.get(
         SettingBoxKey.pageTransition,

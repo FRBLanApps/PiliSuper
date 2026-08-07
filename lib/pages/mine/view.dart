@@ -20,6 +20,7 @@ import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
+import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:flutter/material.dart' hide ListTile;
 import 'package:flutter_svg/svg.dart';
@@ -87,7 +88,8 @@ class _MediaPageState extends CommonPageState<MinePage>
                     _buildUserInfo(theme, secondary),
                     _buildActions(secondary),
                     Obx(
-                      () => controller.loadingState.value is Loading
+                      () => controller.loadingState.value is Loading ||
+                              Pref.favInNav
                           ? const SizedBox.shrink()
                           : _buildFav(theme, secondary),
                     ),

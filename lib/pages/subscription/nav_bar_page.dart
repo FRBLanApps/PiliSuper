@@ -12,61 +12,63 @@ import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SubPage extends StatefulWidget {
-  const SubPage({super.key});
+/// NavBar-embedded subscription page.
+class SubNavBarPage extends StatefulWidget {
+  const SubNavBarPage({super.key});
 
   @override
-  State<SubPage> createState() => _SubPageState();
+  State<SubNavBarPage> createState() => _SubNavBarPageState();
 }
 
-class _SubPageState extends State<SubPage> with GridMixin {
+class _SubNavBarPageState extends State<SubNavBarPage> with GridMixin {
   final SubController _subController = Get.put(SubController());
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final enableMultiSelect = _subController.enableMultiSelect.value;
-      return popScope(
-        canPop: !enableMultiSelect,
-        onPopInvokedWithResult: (didPop, result) {
-          if (enableMultiSelect) {
-            _subController.handleSelect();
-          }
-        },
-        child: SimpleScaffold(
-          appBar: MultiSelectAppBarWidget(
-            visible: enableMultiSelect,
-            ctr: _subController,
-            child: AppBar(
-              title: const Text('我的订阅'),
-              actions: [
-                IconButton(
-                  tooltip: '批量删除',
-                  onPressed: () {
-                    _subController.enableMultiSelect.value = true;
-                  },
-                  icon: const Icon(Icons.checklist_outlined),
-                ),
-                const SizedBox(width: 6),
-              ],
-            ),
-          ),
-          body: refreshIndicator(
-            onRefresh: _subController.onRefresh,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                ViewSliverSafeArea(
-                  sliver: Obx(
-                    () => _buildBody(_subController.loadingState.value),
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Obx(() {
+        final enableMultiSelect = _subController.enableMultiSelect.value;
+        return popScope(
+          canPop: !enableMultiSelect,
+          onPopInvokedWithResult: (didPop, result) {
+            if (enableMultiSelect) _subController.handleSelect();
+          },
+          child: SimpleScaffold(
+            appBar: MultiSelectAppBarWidget(
+              visible: enableMultiSelect,
+              ctr: _subController,
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                actions: [
+                  IconButton(
+                    tooltip: '批量删除',
+                    onPressed: () =>
+                        _subController.enableMultiSelect.value = true,
+                    icon: const Icon(Icons.checklist_outlined),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 6),
+                ],
+              ),
+            ),
+            body: refreshIndicator(
+              onRefresh: _subController.onRefresh,
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  ViewSliverSafeArea(
+                    sliver: Obx(
+                      () => _buildBody(_subController.loadingState.value),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 
   Widget _buildBody(LoadingState<List<SubItemModel>?> loadingState) {

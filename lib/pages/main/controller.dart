@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:PiliPlus/common/widgets/view_safe_area.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:PiliPlus/grpc/dyn.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
@@ -225,15 +226,30 @@ class MainController extends GetxController
         (GStorage.setting.get(SettingBoxKey.navBarSort) as List?)?.fromCast();
     late final List<NavigationBarType> navigationBars;
     if (navBarSort == null || navBarSort.isEmpty) {
-      navigationBars = NavigationBarType.values;
+      navigationBars = NavigationBarType.values
+          .where((item) => !const {
+            NavigationBarType.history,
+            NavigationBarType.fav,
+            NavigationBarType.download,
+            NavigationBarType.subscription,
+            NavigationBarType.later,
+          }.contains(item))
+          .toList();
     } else {
-      navigationBars = navBarSort
+      final mapped = navBarSort
           .map((i) => NavigationBarType.values[i])
           .toList();
+      if (mapped.length > 6) {
+        navigationBars = mapped.take(6).toList();
+        SmartDialog.showToast('底栏最多显示 6 个，已自动截断');
+      } else {
+        navigationBars = mapped;
+      }
     }
     this.navigationBars = navigationBars;
     final defPage = Pref.defaultHomePage;
-    selectedIndex.value = navigationBars.indexOf(defPage);
+    final defIndex = navigationBars.indexOf(defPage);
+    selectedIndex.value = defIndex < 0 ? 0 : defIndex;
   }
 
   void checkDefaultSearch([bool shouldCheck = false]) {

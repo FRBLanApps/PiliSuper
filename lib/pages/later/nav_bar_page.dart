@@ -17,14 +17,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class LaterPage extends StatefulWidget {
-  const LaterPage({super.key});
+/// NavBar-embedded "稍后再看" page.
+class LaterNavBarPage extends StatefulWidget {
+  const LaterNavBarPage({super.key});
 
   @override
-  State<LaterPage> createState() => _LaterPageState();
+  State<LaterNavBarPage> createState() => _LaterNavBarPageState();
 }
 
-class _LaterPageState extends State<LaterPage>
+class _LaterNavBarPageState extends State<LaterNavBarPage>
     with SingleTickerProviderStateMixin {
   final LaterBaseController _baseCtr = Get.put(LaterBaseController());
   late final TabController _tabController;
@@ -38,7 +39,7 @@ class _LaterPageState extends State<LaterPage>
   }
 
   final _sortKey = GlobalKey();
-  void listener() {
+  void _listener() {
     (_sortKey.currentContext as Element?)?.markNeedsBuild();
   }
 
@@ -48,13 +49,13 @@ class _LaterPageState extends State<LaterPage>
     _tabController = TabController(
       length: LaterViewType.values.length,
       vsync: this,
-    )..addListener(listener);
+    )..addListener(_listener);
   }
 
   @override
   void dispose() {
     _tabController
-      ..removeListener(listener)
+      ..removeListener(_listener)
       ..dispose();
     Get.delete<LaterBaseController>();
     super.dispose();
@@ -63,20 +64,20 @@ class _LaterPageState extends State<LaterPage>
   @override
   Widget build(BuildContext context) {
     final padding = MediaQuery.viewPaddingOf(context);
-    return Obx(
-      () {
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Obx(() {
         final enableMultiSelect = _baseCtr.enableMultiSelect.value;
         return popScope(
           canPop: !enableMultiSelect,
           onPopInvokedWithResult: (didPop, result) {
-            if (enableMultiSelect) {
-              currCtr().handleSelect();
-            }
+            if (enableMultiSelect) currCtr().handleSelect();
           },
           child: SimpleScaffold(
             appBar: _buildAppbar(enableMultiSelect),
             fab: Padding(
-              padding: .only(
+              padding: EdgeInsets.only(
                 right: kFloatingActionButtonMargin + padding.right,
                 bottom: kFloatingActionButtonMargin + padding.bottom,
               ),
@@ -125,14 +126,14 @@ class _LaterPageState extends State<LaterPage>
             ),
           ),
         );
-      },
+      }),
     );
   }
 
   PreferredSizeWidget _buildAppbar(bool enableMultiSelect) {
     final theme = Theme.of(context);
-    Color color = theme.colorScheme.secondary;
-    final btnStyle = TextButton.styleFrom(visualDensity: .compact);
+    final color = theme.colorScheme.secondary;
+    final btnStyle = TextButton.styleFrom(visualDensity: VisualDensity.compact);
     final textStyle = TextStyle(color: theme.colorScheme.onSurfaceVariant);
     return MultiSelectAppBarWidget(
       visible: enableMultiSelect,
@@ -168,7 +169,27 @@ class _LaterPageState extends State<LaterPage>
         ),
       ],
       child: AppBar(
-        title: const Text('稍后再看'),
+        automaticallyImplyLeading: false,
+        toolbarHeight: 50,
+        title: SizedBox(
+          height: 50,
+          child: TabBar(
+            controller: _tabController,
+            tabs: LaterViewType.values.map((item) {
+              final count = _baseCtr.counts[item.index];
+              return Tab(
+                text: '${item.title}${count != -1 ? '($count)' : ''}',
+              );
+            }).toList(),
+            onTap: (_) {
+              if (!_tabController.indexIsChanging) {
+                currCtr().scrollController.animToTop();
+              } else if (_baseCtr.enableMultiSelect.value) {
+                currCtr(_tabController.previousIndex).handleSelect();
+              }
+            },
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: '搜索',
@@ -197,9 +218,9 @@ class _LaterPageState extends State<LaterPage>
                 onSelected: (value) => currCtr()
                   ..asc.value = value
                   ..onReload(),
-                borderRadius: const .all(.circular(20)),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
                 child: Padding(
-                  padding: const .symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: Text.rich(
                     style: TextStyle(fontSize: 14, height: 1, color: color),
                     strutStyle: const StrutStyle(
@@ -211,7 +232,7 @@ class _LaterPageState extends State<LaterPage>
                       children: [
                         TextSpan(text: value ? '最早添加' : '最近添加'),
                         WidgetSpan(
-                          alignment: .middle,
+                          alignment: PlaceholderAlignment.middle,
                           child: Icon(
                             size: 14,
                             MdiIcons.unfoldMoreHorizontal,
@@ -223,24 +244,18 @@ class _LaterPageState extends State<LaterPage>
                     ),
                   ),
                 ),
-                itemBuilder: (_) => [
-                  const PopupMenuItem(
-                    value: false,
-                    child: Text('最近添加'),
-                  ),
-                  const PopupMenuItem(
-                    value: true,
-                    child: Text('最早添加'),
-                  ),
+                itemBuilder: (_) => const [
+                  PopupMenuItem(value: false, child: Text('最近添加')),
+                  PopupMenuItem(value: true, child: Text('最早添加')),
                 ],
               );
             },
           ),
           PopupMenuButton(
             tooltip: '清空',
-            borderRadius: const .all(.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: Padding(
-              padding: const .symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Text.rich(
                 style: TextStyle(fontSize: 14, height: 1, color: color),
                 strutStyle: const StrutStyle(
@@ -252,7 +267,7 @@ class _LaterPageState extends State<LaterPage>
                   children: [
                     const TextSpan(text: '清空'),
                     WidgetSpan(
-                      alignment: .middle,
+                      alignment: PlaceholderAlignment.middle,
                       child: Icon(
                         size: 14,
                         MdiIcons.unfoldMoreHorizontal,

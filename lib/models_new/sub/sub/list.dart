@@ -1,7 +1,8 @@
 import 'package:PiliPlus/models/model_owner.dart';
 import 'package:PiliPlus/models_new/fav/fav_detail/cnt_info.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
 
-class SubItemModel {
+class SubItemModel with MultiSelectData {
   int? id;
   int? fid;
   int? mid;

@@ -2,6 +2,7 @@ import 'package:PiliPlus/common/style.dart';
 import 'package:PiliPlus/common/widgets/badge.dart';
 import 'package:PiliPlus/common/widgets/image/image_save.dart';
 import 'package:PiliPlus/common/widgets/image/network_img_layer.dart';
+import 'package:PiliPlus/common/widgets/select_mask.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
 import 'package:PiliPlus/pages/subscription_detail/view.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
@@ -13,48 +14,56 @@ import 'package:get/get.dart';
 class SubItem extends StatelessWidget {
   final SubItemModel item;
   final VoidCallback cancelSub;
+  final bool enableMultiSelect;
+  final VoidCallback? onSelect;
+
   const SubItem({
     super.key,
     required this.item,
     required this.cancelSub,
+    this.enableMultiSelect = false,
+    this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(item.id);
+    final heroTag = Utils.makeHeroTag(item.id);
     final type = switch (item.type) {
       11 => '收藏夹',
       21 => '合集',
       _ => '其它(${item.type})',
     };
-    void onLongPress() => imageSaveDialog(
-      title: item.title,
-      cover: item.cover,
-    );
+
+    final onLongPress = enableMultiSelect
+        ? () => imageSaveDialog(title: item.title, cover: item.cover)
+        : onSelect;
+
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
-        onTap: () {
-          if (item.state == 1) {
-            SmartDialog.showToast('该$type已失效');
-            return;
-          }
-          if (item.type == 11) {
-            Get.toNamed(
-              '/favDetail',
-              parameters: {
-                'mediaId': item.id!.toString(),
-                'heroTag': heroTag,
+        onTap: enableMultiSelect
+            ? onSelect
+            : () {
+                if (item.state == 1) {
+                  SmartDialog.showToast('该$type已失效');
+                  return;
+                }
+                if (item.type == 11) {
+                  Get.toNamed(
+                    '/favDetail',
+                    parameters: {
+                      'mediaId': item.id!.toString(),
+                      'heroTag': heroTag,
+                    },
+                  );
+                } else {
+                  SubDetailPage.toSubDetailPage(
+                    item.id!,
+                    heroTag: heroTag,
+                    subInfo: item,
+                  );
+                }
               },
-            );
-          } else {
-            SubDetailPage.toSubDetailPage(
-              item.id!,
-              heroTag: heroTag,
-              subInfo: item,
-            );
-          }
-        },
         onLongPress: onLongPress,
         onSecondaryTap: PlatformUtils.isMobile ? null : onLongPress,
         child: Padding(
@@ -66,8 +75,8 @@ class SubItem extends StatelessWidget {
                 aspectRatio: Style.aspectRatio,
                 child: LayoutBuilder(
                   builder: (context, boxConstraints) {
-                    double maxWidth = boxConstraints.maxWidth;
-                    double maxHeight = boxConstraints.maxHeight;
+                    final maxWidth = boxConstraints.maxWidth;
+                    final maxHeight = boxConstraints.maxHeight;
                     return Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -79,10 +88,12 @@ class SubItem extends StatelessWidget {
                             height: maxHeight,
                           ),
                         ),
-                        PBadge(
-                          right: 6,
-                          top: 6,
-                          text: type,
+                        PBadge(right: 6, top: 6, text: type),
+                        Positioned.fill(
+                          child: selectMask(
+                            Theme.of(context).colorScheme,
+                            item.checked,
+                          ),
                         ),
                       ],
                     );
@@ -90,7 +101,7 @@ class SubItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              content(context),
+              _content(context),
             ],
           ),
         ),
@@ -98,12 +109,9 @@ class SubItem extends StatelessWidget {
     );
   }
 
-  Widget content(BuildContext context) {
+  Widget _content(BuildContext context) {
     final theme = Theme.of(context);
-    final style = TextStyle(
-      fontSize: 13,
-      color: theme.colorScheme.outline,
-    );
+    final style = TextStyle(fontSize: 13, color: theme.colorScheme.outline);
     return Expanded(
       child: Stack(
         clipBehavior: Clip.none,
@@ -117,9 +125,7 @@ class SubItem extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    letterSpacing: 0.3,
-                  ),
+                  style: const TextStyle(letterSpacing: 0.3),
                 ),
               ),
               Text(
