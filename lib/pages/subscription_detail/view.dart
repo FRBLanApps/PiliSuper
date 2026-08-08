@@ -186,7 +186,8 @@ class _SubDetailPageState extends State<SubDetailPage> with GridMixin {
                         ),
                       ),
                     ),
-                    GestureDetector(
+                    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                    InkWell(
                       onTap: () =>
                           Get.toNamed('/member?mid=${info.upper!.mid}'),
                       child: Text(

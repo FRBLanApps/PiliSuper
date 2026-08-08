@@ -28,93 +28,102 @@ void imageSaveDialog({
           color: theme.colorScheme.surface,
           borderRadius: Style.mdRadius,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                GestureDetector(
-                  onTap: SmartDialog.dismiss,
-                  child: NetworkImgLayer(
-                    src: cover,
-                    quality: 100,
-                    width: imgWidth,
-                    height: imgWidth / Style.aspectRatio16x9,
-                    borderRadius: const .vertical(top: Style.imgRadius),
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  width: 30,
-                  height: 30,
-                  child: IconButton(
-                    tooltip: '关闭',
-                    style: IconButton.styleFrom(
-                      padding: .zero,
-                      backgroundColor: Colors.black.withValues(alpha: 0.3),
-                    ),
-                    onPressed: SmartDialog.dismiss,
-                    icon: const Icon(
-                      Icons.close,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
-              child: Row(
+        // SmartDialog 挂在 overlay 上，祖先链中没有 Material，而封面上的 InkWell
+        // （TV 遥控器聚焦所需）缺少 Material 会在运行时抛异常，故补一层透明 Material。
+        child: Material(
+          type: MaterialType.transparency,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  if (title != null)
-                    Expanded(
-                      child: SelectionText(
-                        title,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    )
-                  else
-                    const Spacer(),
-                  if (aid != null || bvid != null)
-                    iconButton(
-                      iconSize: iconSize,
-                      tooltip: '稍后再看',
-                      onPressed: () => {
-                        SmartDialog.dismiss(),
-                        UserHttp.toViewLater(aid: aid, bvid: bvid),
-                      },
-                      icon: const Icon(Icons.watch_later_outlined),
+                  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                  InkWell(
+                    onTap: SmartDialog.dismiss,
+                    borderRadius: const .vertical(top: Style.imgRadius),
+                    child: NetworkImgLayer(
+                      src: cover,
+                      quality: 100,
+                      width: imgWidth,
+                      height: imgWidth / Style.aspectRatio16x9,
+                      borderRadius: const .vertical(top: Style.imgRadius),
                     ),
-                  if (cover != null && cover.isNotEmpty) ...[
-                    if (PlatformUtils.isMobile)
-                      iconButton(
-                        iconSize: iconSize,
-                        tooltip: '分享',
-                        onPressed: () {
-                          SmartDialog.dismiss();
-                          ImageUtils.onShareImg(cover);
-                        },
-                        icon: const Icon(Icons.share),
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    width: 30,
+                    height: 30,
+                    child: IconButton(
+                      tooltip: '关闭',
+                      style: IconButton.styleFrom(
+                        padding: .zero,
+                        backgroundColor: Colors.black.withValues(alpha: 0.3),
                       ),
-                    iconButton(
-                      iconSize: iconSize,
-                      tooltip: '保存封面图',
-                      onPressed: () async {
-                        bool saveStatus = await ImageUtils.downloadImg([cover]);
-                        if (saveStatus) {
-                          SmartDialog.dismiss();
-                        }
-                      },
-                      icon: const Icon(Icons.download),
+                      onPressed: SmartDialog.dismiss,
+                      icon: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ],
+                  ),
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                child: Row(
+                  children: [
+                    if (title != null)
+                      Expanded(
+                        child: SelectionText(
+                          title,
+                          style: theme.textTheme.titleSmall,
+                        ),
+                      )
+                    else
+                      const Spacer(),
+                    if (aid != null || bvid != null)
+                      iconButton(
+                        iconSize: iconSize,
+                        tooltip: '稍后再看',
+                        onPressed: () => {
+                          SmartDialog.dismiss(),
+                          UserHttp.toViewLater(aid: aid, bvid: bvid),
+                        },
+                        icon: const Icon(Icons.watch_later_outlined),
+                      ),
+                    if (cover != null && cover.isNotEmpty) ...[
+                      if (PlatformUtils.isMobile)
+                        iconButton(
+                          iconSize: iconSize,
+                          tooltip: '分享',
+                          onPressed: () {
+                            SmartDialog.dismiss();
+                            ImageUtils.onShareImg(cover);
+                          },
+                          icon: const Icon(Icons.share),
+                        ),
+                      iconButton(
+                        iconSize: iconSize,
+                        tooltip: '保存封面图',
+                        onPressed: () async {
+                          bool saveStatus = await ImageUtils.downloadImg([
+                            cover,
+                          ]);
+                          if (saveStatus) {
+                            SmartDialog.dismiss();
+                          }
+                        },
+                        icon: const Icon(Icons.download),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     },

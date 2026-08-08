@@ -11,22 +11,23 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/history/list.dart';
 import 'package:PiliPlus/pages/history/base_controller.dart';
 import 'package:PiliPlus/pages/history/controller.dart';
+import 'package:PiliPlus/pages/history/view.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HistoryPage extends StatefulWidget {
-  const HistoryPage({super.key, this.type});
-
-  final String? type;
+/// NavBar-embedded history page.
+/// Owns all navbar-specific scaffold/appbar logic so [HistoryPage] stays clean.
+class HistoryNavBarPage extends StatefulWidget {
+  const HistoryNavBarPage({super.key});
 
   @override
-  State<HistoryPage> createState() => _HistoryPageState();
+  State<HistoryNavBarPage> createState() => _HistoryNavBarPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage>
+class _HistoryNavBarPageState extends State<HistoryNavBarPage>
     with AutomaticKeepAliveClientMixin, GridMixin {
   late final HistoryController _historyController;
 
@@ -34,8 +35,8 @@ class _HistoryPageState extends State<HistoryPage>
   void initState() {
     super.initState();
     _historyController = Get.put(
-      HistoryController(widget.type),
-      tag: widget.type ?? 'all',
+      HistoryController(null),
+      tag: 'all',
     );
   }
 
@@ -61,17 +62,14 @@ class _HistoryPageState extends State<HistoryPage>
   Widget build(BuildContext context) {
     super.build(context);
     final padding = MediaQuery.viewPaddingOf(context);
-    Widget child = refreshIndicator(
+    final child = refreshIndicator(
       onRefresh: _historyController.onRefresh,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _historyController.scrollController,
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
-              top: 7,
-              bottom: padding.bottom + 100,
-            ),
+            padding: EdgeInsets.only(top: 7, bottom: padding.bottom + 100),
             sliver: Obx(
               () => _buildBody(_historyController.loadingState.value),
             ),
@@ -79,61 +77,61 @@ class _HistoryPageState extends State<HistoryPage>
         ],
       ),
     );
-    if (widget.type != null) {
-      return child;
-    }
-    return Obx(
-      () {
+
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Obx(() {
         final enableMultiSelect =
             _historyController.baseCtr.enableMultiSelect.value;
         return popScope(
           canPop: !enableMultiSelect,
           onPopInvokedWithResult: (didPop, result) {
-            if (enableMultiSelect) {
-              currCtr().handleSelect();
-            }
+            if (enableMultiSelect) currCtr().handleSelect();
           },
-          child: SimpleScaffold(
-            appBar: MultiSelectAppBarWidget(
-              visible: enableMultiSelect,
-              ctr: currCtr(),
-              child: _buildAppBar,
-            ),
-            body: Padding(
-              padding: EdgeInsets.only(
-                left: padding.left,
-                right: padding.right,
+          child: Obx(() {
+            final tabs = _historyController.tabs;
+            return SimpleScaffold(
+              appBar: MultiSelectAppBarWidget(
+                visible: enableMultiSelect,
+                ctr: currCtr(),
+                child: AppBar(
+                  automaticallyImplyLeading: false,
+                  toolbarHeight: tabs.isEmpty ? kToolbarHeight : 50,
+                  bottom: _buildPauseTip,
+                  title: tabs.isEmpty
+                      ? null
+                      : SizedBox(
+                          height: 50,
+                          child: TabBar(
+                            controller: _historyController.tabController,
+                            onTap: (index) {
+                              if (!_historyController
+                                  .tabController!.indexIsChanging) {
+                                currCtr().scrollController.animToTop();
+                              } else if (enableMultiSelect) {
+                                currCtr(
+                                  _historyController.tabController!.previousIndex,
+                                ).handleSelect();
+                              }
+                            },
+                            tabs: [
+                              const Tab(text: '全部'),
+                              ...tabs.map((item) => Tab(text: item.name)),
+                            ],
+                          ),
+                        ),
+                  actions: _buildAppBar.actions,
+                ),
               ),
-              child: Obx(() {
-                final tabs = _historyController.tabs;
-                if (tabs.isEmpty) {
-                  return child;
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TabBar(
-                      controller: _historyController.tabController,
-                      onTap: (index) {
-                        if (!_historyController
-                            .tabController!
-                            .indexIsChanging) {
-                          currCtr().scrollController.animToTop();
-                        } else {
-                          if (enableMultiSelect) {
-                            currCtr(
-                              _historyController.tabController!.previousIndex,
-                            ).handleSelect();
-                          }
-                        }
-                      },
-                      tabs: [
-                        const Tab(text: '全部'),
-                        ...tabs.map((item) => Tab(text: item.name)),
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
+              body: Padding(
+                padding: EdgeInsets.only(
+                  left: padding.left,
+                  right: padding.right,
+                ),
+                child: tabs.isEmpty
+                    ? child
+                    : TabBarView(
                         physics: enableMultiSelect
                             ? const NeverScrollableScrollPhysics()
                             : tabBarScrollPhysics,
@@ -145,14 +143,11 @@ class _HistoryPageState extends State<HistoryPage>
                           ...tabs.map((item) => HistoryPage(type: item.type)),
                         ],
                       ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-          ),
+              ),
+            );
+          }),
         );
-      },
+      }),
     );
   }
 
@@ -168,7 +163,8 @@ class _HistoryPageState extends State<HistoryPage>
       PopupMenuButton(
         itemBuilder: (_) => [
           PopupMenuItem(
-            onTap: () => _historyController.baseCtr.onPauseHistory(context),
+            onTap: () =>
+                _historyController.baseCtr.onPauseHistory(context),
             child: Text(
               !_historyController.baseCtr.pauseStatus.value
                   ? '暂停观看记录'
@@ -185,9 +181,7 @@ class _HistoryPageState extends State<HistoryPage>
                     try {
                       Get.find<HistoryController>(
                         tag: item.type,
-                      ).loadingState.value = const Success(
-                        null,
-                      );
+                      ).loadingState.value = const Success(null);
                     } catch (_) {}
                   }
                 }
@@ -269,7 +263,8 @@ class _HistoryPageState extends State<HistoryPage>
               ),
               // 使用 InkWell 以支持 TV 遥控器方向键聚焦
               InkWell(
-                onTap: () => _historyController.baseCtr.onPauseHistory(context),
+                onTap: () =>
+                    _historyController.baseCtr.onPauseHistory(context),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 6,
@@ -287,10 +282,9 @@ class _HistoryPageState extends State<HistoryPage>
         ),
       );
     }
-
     return null;
   }
 
   @override
-  bool get wantKeepAlive => widget.type != null;
+  bool get wantKeepAlive => true;
 }

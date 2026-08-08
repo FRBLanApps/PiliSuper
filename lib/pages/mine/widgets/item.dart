@@ -19,7 +19,9 @@ class FavFolderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return GestureDetector(
+    // 用 InkWell 而非 GestureDetector：后者不参与焦点树，TV 遥控器无法聚焦到
+    // 收藏夹入口。
+    return InkWell(
       onTap: () {
         Get.toNamed(
           '/favDetail',
@@ -30,7 +32,7 @@ class FavFolderItem extends StatelessWidget {
           },
         )?.whenComplete(onPop);
       },
-      behavior: HitTestBehavior.opaque,
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

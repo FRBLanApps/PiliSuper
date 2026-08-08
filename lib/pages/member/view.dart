@@ -130,9 +130,9 @@ class _MemberPageState extends State<MemberPage> {
                 SliverAppBar(
                   pinned: true,
                   actions: _actions(theme),
-                  title: GestureDetector(
+                  // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                  title: InkWell(
                     onTap: _userController.onReload,
-                    behavior: HitTestBehavior.opaque,
                     child: Text(_userController.username ?? ''),
                   ),
                 ),

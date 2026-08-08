@@ -196,8 +196,8 @@ class _PgcReviewChildPageState extends State<PgcReviewChildPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+              InkWell(
                 onTap: () => Get.toNamed('/member?mid=${item.author!.mid}'),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

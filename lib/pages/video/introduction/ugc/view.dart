@@ -104,7 +104,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
           final videoDetail = introController.videoDetail.value;
           final isLoading = videoDetail.bvid == null;
           return SliverToBoxAdapter(
-            child: GestureDetector(
+            // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+            child: InkWell(
               onTap: () {
                 if (isLoading) return;
                 feedBack();
@@ -276,7 +277,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
 
   List<Widget> _infos(VideoDetailData videoDetail) => [
     const SizedBox(height: 8, width: .infinity),
-    GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+    InkWell(
       onTap: () => Utils.copyText('${videoDetail.bvid}'),
       child: Text(
         videoDetail.bvid ?? '',
@@ -767,8 +769,8 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
     void onTap() => Get.toNamed(
       '/member?mid=${item.mid}&from_view_aid=${videoDetailCtr.aid}',
     );
-    return GestureDetector(
-      behavior: .opaque,
+    // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+    return InkWell(
       onTap: () {
         if (item.mid == ownerMid &&
             !isPortrait &&
@@ -887,9 +889,10 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
 
   Widget _buildAvatar(
     VoidCallback onPushMember,
-  ) => GestureDetector(
+  ) =>
+  // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+  InkWell(
     onTap: onPushMember,
-    behavior: .opaque,
     onSecondaryTap:
         PlatformUtils.isDesktop && introController.horizontalMemberPage
         ? () => Get.toNamed(
@@ -979,8 +982,9 @@ class _UgcIntroPanelState extends State<UgcIntroPanel> {
   Widget get _aiBtn => Positioned(
     right: 8,
     child: Center(
-      child: GestureDetector(
-        behavior: .opaque,
+      // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+      child: InkWell(
+        customBorder: const CircleBorder(),
         onTap: () async {
           if (introController.aiConclusionResult == null) {
             await introController.aiConclusion();

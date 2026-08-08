@@ -196,8 +196,8 @@ class _PgcIndexPageState extends State<PgcIndexPage>
       ),
       if (count > 5) ...[
         const SizedBox(height: 8),
-        GestureDetector(
-          behavior: .opaque,
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        InkWell(
           onTap: _ctr.isExpand.toggle,
           child: Center(
             child: Row(

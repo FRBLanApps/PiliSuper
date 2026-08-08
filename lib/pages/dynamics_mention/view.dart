@@ -132,7 +132,9 @@ class _DynMentionPanelState
                 () => _controller.enableClear.value
                     ? Padding(
                         padding: const EdgeInsets.only(right: 12),
-                        child: GestureDetector(
+                        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
                           child: Container(
                             padding: const EdgeInsetsDirectional.all(2),
                             decoration: BoxDecoration(

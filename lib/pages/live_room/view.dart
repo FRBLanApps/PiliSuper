@@ -505,20 +505,25 @@ class _LiveRoomPageState extends State<LiveRoomPage>
     );
   }
 
-  Widget get onlineWidget => GestureDetector(
-    onTap: _showRank,
-    child: Obx(() {
-      if (_liveRoomController.onlineCount.value case final onlineCount?) {
-        return Text(
-          '高能观众($onlineCount)',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        );
-      }
-      return const SizedBox.shrink();
-    }),
+  // 使用 InkWell 以支持 TV 遥控器方向键聚焦。
+  // 该 widget 会传入播放器控制层，其祖先链中没有 Material，故补一层透明 Material。
+  Widget get onlineWidget => Material(
+    type: MaterialType.transparency,
+    child: InkWell(
+      onTap: _showRank,
+      child: Obx(() {
+        if (_liveRoomController.onlineCount.value case final onlineCount?) {
+          return Text(
+            '高能观众($onlineCount)',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            ),
+          );
+        }
+        return const SizedBox.shrink();
+      }),
+    ),
   );
 
   void _showRank() {
@@ -558,8 +563,8 @@ class _LiveRoomPageState extends State<LiveRoomPage>
                 if (roomInfoH5 == null) {
                   return const SizedBox.shrink();
                 }
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                return InkWell(
                   onTap: () =>
                       Get.toNamed('/member?mid=${roomInfoH5.roomInfo?.uid}'),
                   child: Row(
@@ -791,129 +796,133 @@ class _LiveRoomPageState extends State<LiveRoomPage>
         border: Border(top: BorderSide(color: Color(0x1AFFFFFF))),
         color: Color(0x1AFFFFFF),
       ),
-      child: GestureDetector(
-        onTap: _liveRoomController.onSendDanmaku,
-        behavior: .opaque,
-        child: Padding(
-          padding: const .only(top: 5, bottom: 10),
-          child: Align(
-            alignment: .topCenter,
-            child: Row(
-              spacing: 6,
-              children: [
-                Obx(
-                  () {
-                    final enableShowLiveDanmaku =
-                        plPlayerController.enableShowLiveDanmaku.value;
-                    return SizedBox(
-                      width: 34,
-                      height: 34,
-                      child: IconButton(
-                        style: IconButton.styleFrom(padding: .zero),
-                        onPressed: () {
-                          final newVal = !enableShowLiveDanmaku;
-                          plPlayerController.enableShowLiveDanmaku.value =
-                              newVal;
-                          if (!plPlayerController.tempPlayerConf) {
-                            GStorage.setting.put(
-                              SettingBoxKey.enableShowLiveDanmaku,
-                              newVal,
-                            );
-                          }
-                        },
-                        icon: enableShowLiveDanmaku
-                            ? const Icon(
-                                size: 22,
-                                CustomIcons.dm_on,
-                                color: baseWhite,
-                              )
-                            : const Icon(
-                                size: 22,
-                                CustomIcons.dm_off,
-                                color: baseWhite,
-                              ),
-                      ),
-                    );
-                  },
-                ),
-                const Expanded(
-                  child: Text(
-                    '发送弹幕',
-                    style: TextStyle(color: baseWhite),
-                  ),
-                ),
-                Builder(
-                  builder: (context) {
-                    final colorScheme = Theme.of(context).colorScheme;
-                    return Material(
-                      type: MaterialType.transparency,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          InkWell(
-                            overlayColor: overlayColor(colorScheme),
-                            customBorder: const CircleBorder(),
-                            onTapDown: _liveRoomController.onLikeTapDown,
-                            onTapUp: _liveRoomController.onLikeTapUp,
-                            onTapCancel: _liveRoomController.onLikeTapUp,
-                            child: const SizedBox.square(
-                              dimension: 34,
-                              child: Icon(
-                                size: 22,
-                                color: baseWhite,
-                                Icons.thumb_up_off_alt,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 30,
-                            top: -12,
-                            child: Obx(() {
-                              final likeClickTime =
-                                  _liveRoomController.likeClickTime.value;
-                              if (likeClickTime == 0) {
-                                return const SizedBox.shrink();
-                              }
-                              return AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 160),
-                                transitionBuilder: (child, animation) {
-                                  return ScaleTransition(
-                                    scale: animation,
-                                    child: child,
-                                  );
-                                },
-                                child: Text(
-                                  key: ValueKey(likeClickTime),
-                                  'x$likeClickTime',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: colorScheme.isDark
-                                        ? colorScheme.primary
-                                        : colorScheme.inversePrimary,
-                                  ),
-                                ),
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦。
+      // 直播间祖先链为裸 ScaffoldLayout，无 Material，故补一层透明 Material。
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: _liveRoomController.onSendDanmaku,
+          child: Padding(
+            padding: const .only(top: 5, bottom: 10),
+            child: Align(
+              alignment: .topCenter,
+              child: Row(
+                spacing: 6,
+                children: [
+                  Obx(
+                    () {
+                      final enableShowLiveDanmaku =
+                          plPlayerController.enableShowLiveDanmaku.value;
+                      return SizedBox(
+                        width: 34,
+                        height: 34,
+                        child: IconButton(
+                          style: IconButton.styleFrom(padding: .zero),
+                          onPressed: () {
+                            final newVal = !enableShowLiveDanmaku;
+                            plPlayerController.enableShowLiveDanmaku.value =
+                                newVal;
+                            if (!plPlayerController.tempPlayerConf) {
+                              GStorage.setting.put(
+                                SettingBoxKey.enableShowLiveDanmaku,
+                                newVal,
                               );
-                            }),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  width: 34,
-                  height: 34,
-                  child: IconButton(
-                    style: IconButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () => _liveRoomController.onSendDanmaku(true),
-                    icon: const Icon(
-                      size: 22,
-                      color: baseWhite,
-                      Icons.emoji_emotions_outlined,
+                            }
+                          },
+                          icon: enableShowLiveDanmaku
+                              ? const Icon(
+                                  size: 22,
+                                  CustomIcons.dm_on,
+                                  color: baseWhite,
+                                )
+                              : const Icon(
+                                  size: 22,
+                                  CustomIcons.dm_off,
+                                  color: baseWhite,
+                                ),
+                        ),
+                      );
+                    },
+                  ),
+                  const Expanded(
+                    child: Text(
+                      '发送弹幕',
+                      style: TextStyle(color: baseWhite),
                     ),
                   ),
-                ),
-              ],
+                  Builder(
+                    builder: (context) {
+                      final colorScheme = Theme.of(context).colorScheme;
+                      return Material(
+                        type: MaterialType.transparency,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            InkWell(
+                              overlayColor: overlayColor(colorScheme),
+                              customBorder: const CircleBorder(),
+                              onTapDown: _liveRoomController.onLikeTapDown,
+                              onTapUp: _liveRoomController.onLikeTapUp,
+                              onTapCancel: _liveRoomController.onLikeTapUp,
+                              child: const SizedBox.square(
+                                dimension: 34,
+                                child: Icon(
+                                  size: 22,
+                                  color: baseWhite,
+                                  Icons.thumb_up_off_alt,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 30,
+                              top: -12,
+                              child: Obx(() {
+                                final likeClickTime =
+                                    _liveRoomController.likeClickTime.value;
+                                if (likeClickTime == 0) {
+                                  return const SizedBox.shrink();
+                                }
+                                return AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 160),
+                                  transitionBuilder: (child, animation) {
+                                    return ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  child: Text(
+                                    key: ValueKey(likeClickTime),
+                                    'x$likeClickTime',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: colorScheme.isDark
+                                          ? colorScheme.primary
+                                          : colorScheme.inversePrimary,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: 34,
+                    height: 34,
+                    child: IconButton(
+                      style: IconButton.styleFrom(padding: EdgeInsets.zero),
+                      onPressed: () => _liveRoomController.onSendDanmaku(true),
+                      icon: const Icon(
+                        size: 22,
+                        color: baseWhite,
+                        Icons.emoji_emotions_outlined,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -44,7 +44,9 @@ class ArticleOpus extends StatelessWidget {
                       ? null
                       : width * card.height! / card.width!;
                   width ??= maxWidth;
-                  return GestureDetector(
+                  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                  return InkWell(
+                    borderRadius: Style.mdRadius,
                     onTap: () {
                       switch (item.attributes?.clazz) {
                         case 'article-card card':

@@ -178,9 +178,10 @@ class _WhisperBlockPageState extends State<WhisperBlockPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  GestureDetector(
+                  // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+                  InkWell(
                     onTap: Get.back,
-                    behavior: HitTestBehavior.opaque,
+                    customBorder: const CircleBorder(),
                     child: Icon(
                       Icons.clear,
                       color: theme.colorScheme.onSurfaceVariant,

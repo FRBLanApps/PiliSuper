@@ -522,8 +522,8 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
                   );
                 }
               }
-              return GestureDetector(
-                behavior: .opaque,
+              // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+              return InkWell(
                 onTap: () => PageUtils.imageView(
                   quality: 60,
                   imgList: pics.map((e) => SourceModel(url: e.url!)).toList(),
@@ -578,7 +578,8 @@ class _ArticlePageState extends CommonDynPageState<ArticlePage> {
         controller.articleData?.publishTime;
     return Padding(
       padding: const .symmetric(vertical: 10),
-      child: GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      child: InkWell(
         onTap: () => Get.toNamed(
           '/member?mid=${controller.summary.author?.mid}',
         ),

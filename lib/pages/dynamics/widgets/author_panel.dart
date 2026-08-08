@@ -125,7 +125,8 @@ class AuthorPanel extends StatelessWidget {
     ];
     Widget header;
     if (moduleAuthor.type == 'AUTHOR_TYPE_NORMAL') {
-      header = GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      header = InkWell(
         onTap: () => {
           feedBack(),
           Get.toNamed('/member?mid=${moduleAuthor.mid}'),

@@ -347,9 +347,9 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                           if (_isPaying) {
                             return const SizedBox.shrink();
                           }
-                          return GestureDetector(
+                          // TV 遥控器需要可获得焦点，故用 InkWell 替换 GestureDetector
+                          return InkWell(
                             onTap: index == 0 ? null : () => _onScroll(0),
-                            behavior: HitTestBehavior.opaque,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12),
                               child: Image.asset(
@@ -370,8 +370,8 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                         if (_isPaying) {
                           return const SizedBox.shrink();
                         }
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
+                        // TV 遥控器需要可获得焦点，故用 InkWell 替换 GestureDetector
+                        return InkWell(
                           onTap: index == 1 ? null : () => _onScroll(1),
                           child: Padding(
                             padding: const EdgeInsets.only(right: 12),
@@ -423,13 +423,13 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                 clipBehavior: Clip.none,
                 alignment: Alignment.centerLeft,
                 children: [
-                  GestureDetector(
+                  // TV 遥控器需要可获得焦点，故用 InkWell 替换 GestureDetector
+                  InkWell(
                     onTap: () {
                       final newVal = !_coinWithLike.value;
                       _coinWithLike.value = newVal;
                       GStorage.setting.put(SettingBoxKey.coinWithLike, newVal);
                     },
-                    behavior: HitTestBehavior.opaque,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -451,9 +451,10 @@ class _PayCoinsPageState extends State<PayCoinsPage>
                     ),
                   ),
                   Center(
-                    child: GestureDetector(
+                    // TV 遥控器需要可获得焦点，故用 InkWell 替换 GestureDetector
+                    child: InkWell(
                       onTap: Get.back,
-                      behavior: HitTestBehavior.opaque,
+                      customBorder: const CircleBorder(),
                       child: SizedBox(
                         width: 30,
                         height: 30,

@@ -9,6 +9,7 @@ import 'package:PiliPlus/pages/search_panel/pgc/view.dart';
 import 'package:PiliPlus/pages/search_panel/user/view.dart';
 import 'package:PiliPlus/pages/search_panel/video/view.dart';
 import 'package:PiliPlus/pages/search_result/controller.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -74,7 +75,8 @@ class _SearchResultPageState extends State<SearchResultPage>
             width: 1,
           ),
         ),
-        title: GestureDetector(
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        title: InkWell(
           onTap: () {
             if (_isFromSearch) {
               Get.back();
@@ -85,7 +87,6 @@ class _SearchResultPageState extends State<SearchResultPage>
               );
             }
           },
-          behavior: HitTestBehavior.opaque,
           child: SizedBox(
             width: double.infinity,
             child: Text(
@@ -101,7 +102,12 @@ class _SearchResultPageState extends State<SearchResultPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TabBar(
-              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+              // widget 级 overlayColor 优先于主题，硬编码 transparent 会把
+              // tvTheme 补的焦点叠色一起抹掉，TV 上表现为类型栏完全没有焦点。
+              // 触屏仍需 transparent 来压掉点击涟漪。
+              overlayColor: DeviceUtils.isTV
+                  ? null
+                  : const WidgetStatePropertyAll(Colors.transparent),
               splashFactory: NoSplash.splashFactory,
               padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
               controller: _tabController,

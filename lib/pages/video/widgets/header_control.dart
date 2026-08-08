@@ -924,7 +924,8 @@ class HeaderControlState extends State<HeaderControl>
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: 45,
-                    child: GestureDetector(
+                    // 使用 InkWell 使其可被 TV 遥控器方向键聚焦
+                    child: InkWell(
                       onTap: () => SmartDialog.showToast(
                         '标灰画质需要bilibili会员（已是会员？请关闭无痕模式）；4k和杜比视界播放效果可能不佳',
                       ),

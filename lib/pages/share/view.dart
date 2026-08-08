@@ -112,12 +112,12 @@ class _SharePanelState extends State<SharePanel> {
                     final item = _userList[index];
                     return Builder(
                       builder: (context) {
-                        return GestureDetector(
+                        // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+                        return InkWell(
                           onTap: () {
                             item.selected = !item.selected;
                             (context as Element).markNeedsBuild();
                           },
-                          behavior: HitTestBehavior.opaque,
                           child: SizedBox(
                             width: 65,
                             child: Stack(
@@ -174,7 +174,8 @@ class _SharePanelState extends State<SharePanel> {
                   },
                 ),
               ),
-              GestureDetector(
+              // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+              InkWell(
                 onTap: () async {
                   _focusNode.unfocus();
                   final UserModel? userModel = await Navigator.of(context).push(
@@ -188,7 +189,6 @@ class _SharePanelState extends State<SharePanel> {
                     setState(() {});
                   }
                 },
-                behavior: HitTestBehavior.opaque,
                 child: SizedBox(
                   width: 65,
                   child: Column(

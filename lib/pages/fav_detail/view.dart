@@ -429,7 +429,8 @@ class _FavDetailPageState extends State<FavDetailPage> with GridMixin {
                               ),
                             ),
                           ),
-                          GestureDetector(
+                          // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                          InkWell(
                             onTap: () => Get.toNamed(
                               '/member?mid=${folderInfo.upper!.mid}',
                             ),

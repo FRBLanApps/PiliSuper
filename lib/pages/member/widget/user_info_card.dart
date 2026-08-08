@@ -116,11 +116,13 @@ class UserInfoCard extends StatelessWidget {
       '${type.title}: $count',
       alignment: const Alignment(0.0, -0.8),
     );
-    return GestureDetector(
-      behavior: .opaque,
+    // 用 InkWell 而非 GestureDetector：粉丝/关注是跳转入口，后者不参与焦点树，
+    // TV 遥控器无法聚焦。onTap 为 null 时（点赞数）InkWell 自身不可聚焦，符合预期。
+    return InkWell(
       onTap: onTap,
       onLongPress: PlatformUtils.isMobile ? onShowCount : null,
       onSecondaryTap: PlatformUtils.isDesktop ? onShowCount : null,
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Align(
         alignment: type.alignment,
         widthFactor: 1.0,
@@ -178,7 +180,8 @@ class UserInfoCard extends StatelessWidget {
         }
       }
       try {
-        liveMedal = GestureDetector(
+        // InkWell 而非 GestureDetector：粉丝牌可点击进入粉丝勋章墙，需可聚焦。
+        liveMedal = InkWell(
           onTap: showLiveMedalWall,
           child: MedalWidget(
             medalName: detailV2.medalName!,
@@ -200,7 +203,8 @@ class UserInfoCard extends StatelessWidget {
         runSpacing: 8,
         crossAxisAlignment: .center,
         children: [
-          GestureDetector(
+          // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+          InkWell(
             onTap: () => Utils.copyText(card.name!),
             child: Text(
               card.name!,
@@ -328,7 +332,8 @@ class UserInfoCard extends StatelessWidget {
         runSpacing: 8,
         crossAxisAlignment: .center,
         children: [
-          GestureDetector(
+          // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+          InkWell(
             onTap: () => Utils.copyText(card.mid.toString()),
             child: Text(
               'UID: ${card.mid}',
@@ -346,7 +351,8 @@ class UserInfoCard extends StatelessWidget {
                 ),
               );
               if (hasUri) {
-                return GestureDetector(
+                // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                return InkWell(
                   onTap: () => PiliScheme.routePushFromUrl(item.uri!),
                   child: child,
                 );
@@ -620,8 +626,8 @@ class UserInfoCard extends StatelessWidget {
     }
     final controller = headerControllerBuilder();
     final memCacheWidth = width.cacheSize(context);
-    return GestureDetector(
-      behavior: .opaque,
+    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+    return InkWell(
       onTap: () => PageUtils.imageView(
         initialPage: controller.page?.round() ?? 0,
         imgList: imgUrls.map((e) => SourceModel(url: e.fullCover)).toList(),
@@ -691,8 +697,8 @@ class UserInfoCard extends StatelessWidget {
     Alignment alignment = .center,
   }) {
     final img = fullCover ?? imgUrl;
-    return GestureDetector(
-      behavior: .opaque,
+    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+    return InkWell(
       onTap: () => PageUtils.imageView(imgList: [SourceModel(url: img)]),
       child: fromHero(
         tag: img,
@@ -773,7 +779,8 @@ class UserInfoCard extends StatelessWidget {
       ),
     );
     if (prInfo.url?.isNotEmpty ?? false) {
-      return GestureDetector(
+      // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+      return InkWell(
         onTap: () => PageUtils.handleWebview(prInfo.url!),
         child: child,
       );
@@ -827,7 +834,8 @@ class UserInfoCard extends StatelessWidget {
     String desc,
     VoidCallback onTap,
   ) {
-    return GestureDetector(
+    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+    return InkWell(
       onTap: onTap,
       child: Row(
         mainAxisSize: .min,
@@ -953,7 +961,8 @@ class UserInfoCard extends StatelessWidget {
         ],
       ),
     );
-    return GestureDetector(
+    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+    return InkWell(
       onTap: () => FollowedPage.toFollowedPage(mid: card.mid, name: card.name),
       child: child,
     );

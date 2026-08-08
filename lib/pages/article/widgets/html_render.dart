@@ -51,7 +51,8 @@ Widget htmlRender({
             );
           }
           final width = isEmote ? 22.0 : maxWidth;
-          return GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+          return InkWell(
             onTap: () => PageUtils.imageView(
               imgList: [SourceModel(url: imgUrl)],
               quality: 60,

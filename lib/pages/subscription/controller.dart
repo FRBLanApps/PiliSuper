@@ -1,15 +1,17 @@
+import 'package:PiliPlus/common/widgets/dialog/dialog.dart';
 import 'package:PiliPlus/http/fav.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/user.dart';
 import 'package:PiliPlus/models_new/sub/sub/data.dart';
 import 'package:PiliPlus/models_new/sub/sub/list.dart';
-import 'package:PiliPlus/pages/common/common_list_controller.dart';
+import 'package:PiliPlus/pages/common/multi_select/base.dart';
+import 'package:PiliPlus/pages/common/multi_select/multi_select_controller.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class SubController extends CommonListController<SubData, SubItemModel> {
+class SubController extends MultiSelectController<SubData, SubItemModel> {
   late final account = Accounts.main;
 
   @override
@@ -27,7 +29,36 @@ class SubController extends CommonListController<SubData, SubItemModel> {
     return super.queryData(isRefresh);
   }
 
-  // 取消订阅
+  // 批量取消订阅
+  @override
+  void onRemove() {
+    showConfirmDialog(
+      context: Get.context!,
+      title: const Text('提示'),
+      content: const Text('确定取消所选订阅吗？'),
+      onConfirm: () async {
+        final removeList = allChecked.toSet();
+        SmartDialog.showLoading(msg: '请求中');
+        bool hasError = false;
+        for (final item in removeList) {
+          final res = await FavHttp.cancelSub(
+            id: item.id!,
+            type: item.type!,
+          );
+          if (!res.isSuccess) {
+            hasError = true;
+          }
+        }
+        SmartDialog.dismiss();
+        if (hasError) {
+          SmartDialog.showToast('部分取消失败');
+        }
+        await afterDelete(removeList);
+      },
+    );
+  }
+
+  // 单个取消订阅
   void cancelSub(SubItemModel subFolderItem) {
     showDialog(
       context: Get.context!,

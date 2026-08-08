@@ -100,8 +100,8 @@ class _FavNoteChildPageState extends State<FavNoteChildPage>
                         },
                       ),
                     ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                    InkWell(
                       onTap: () => _favNoteController.handleSelect(
                         checked: !_favNoteController.allSelected.value,
                         disableSelect: false,

@@ -26,8 +26,8 @@ Widget moreTextButton({
   if (padding != null) {
     child = Padding(padding: padding, child: child);
   }
-  return GestureDetector(
-    behavior: HitTestBehavior.opaque,
+  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+  return InkWell(
     onTap: onTap,
     child: child,
   );

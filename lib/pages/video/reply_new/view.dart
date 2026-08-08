@@ -243,9 +243,10 @@ class _ReplyPageState extends CommonRichTextPubPageState<ReplyPage> {
       required Icon icon,
       required String title,
     }) {
-      return GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      return InkWell(
         onTap: onTap,
-        behavior: HitTestBehavior.opaque,
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
         child: Column(
           spacing: 5,
           mainAxisSize: MainAxisSize.min,

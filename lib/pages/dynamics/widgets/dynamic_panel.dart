@@ -294,7 +294,9 @@ class DynamicPanel extends StatelessWidget {
       ),
     );
     if (moduleDispute.jumpUrl?.isNotEmpty == true) {
-      return GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      return InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
         onTap: () => PageUtils.handleWebview(moduleDispute.jumpUrl!),
         child: child,
       );

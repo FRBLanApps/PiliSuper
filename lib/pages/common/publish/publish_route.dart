@@ -40,7 +40,13 @@ class PublishRoute<T> extends PopupRoute<T> {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: pageBuilder(context, animation, secondaryAnimation),
+      // PopupRoute 不像 Scaffold 那样提供 Material 祖先，而各发布面板内的 InkWell
+      // （TV 遥控器聚焦所需）缺少 Material 会在运行时抛 `No Material widget found`。
+      // 在此统一补一层透明 Material，覆盖所有经本路由挂载的面板。
+      child: Material(
+        type: MaterialType.transparency,
+        child: pageBuilder(context, animation, secondaryAnimation),
+      ),
     );
   }
 

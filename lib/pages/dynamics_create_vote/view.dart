@@ -219,8 +219,8 @@ class _CreateVotePageState extends State<CreateVotePage> {
                 width: 100,
                 child: Text('投票截止时间', style: _leadingStyle),
               ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+              InkWell(
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   DateTime? newDate = await showDatePicker(
@@ -323,8 +323,10 @@ class _CreateVotePageState extends State<CreateVotePage> {
           ),
         ),
         if (showImg)
-          GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+          InkWell(
             onTap: onPickImg,
+            borderRadius: const BorderRadius.all(Radius.circular(6)),
             child: NetworkImgLayer(
               src: imgUrl,
               width: 40,

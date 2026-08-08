@@ -158,8 +158,8 @@ class _LiveAreaDetailPageState extends State<LiveAreaDetailPage> {
     required AreaItem item,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -97,8 +97,8 @@ class _CreateReservePageState extends State<CreateReservePage> {
                 child: Text('时间', style: _leadingStyle),
               ),
               Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                child: InkWell(
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     DateTime? newDate = await showDatePicker(

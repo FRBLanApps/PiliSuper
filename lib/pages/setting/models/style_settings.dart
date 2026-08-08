@@ -26,6 +26,7 @@ import 'package:PiliPlus/pages/setting/widgets/multi_select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/select_dialog.dart';
 import 'package:PiliPlus/pages/setting/widgets/slider_dialog.dart';
 import 'package:PiliPlus/plugin/pl_player/utils/fullscreen.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/extension/file_ext.dart';
 import 'package:PiliPlus/utils/extension/get_ext.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';
@@ -418,18 +419,43 @@ void _showUiScaleDialog(
     text: uiScale.toStringAsFixed(2),
   );
 
+  // 横向 Slider 把四个方向键都注册成 _AdjustSliderIntent（framework
+  // slider.dart:649-652），上下键会被当成增减数值吃掉，遥控器因此无法离开滑条。
+  // FocusNode.onKeyEvent 先于 Shortcuts 执行，所以在这里把上下键改回方向遍历，
+  // 其余按键（左右调节）照旧交给 Slider。对话框内其他控件用原生几何遍历即可。
+  final sliderFocus = DeviceUtils.isTV
+      ? (FocusNode(debugLabel: 'uiScaleSlider')
+          ..onKeyEvent = (node, event) {
+            if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+              return KeyEventResult.ignored;
+            }
+            final direction = switch (event.logicalKey) {
+              LogicalKeyboardKey.arrowUp => TraversalDirection.up,
+              LogicalKeyboardKey.arrowDown => TraversalDirection.down,
+              _ => null,
+            };
+            if (direction == null) return KeyEventResult.ignored;
+            node.focusInDirection(direction);
+            return KeyEventResult.handled;
+          })
+      : null;
+
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('界面缩放'),
       contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
       content: StatefulBuilder(
-        onDispose: textController.dispose,
+        onDispose: () {
+          textController.dispose();
+          sliderFocus?.dispose();
+        },
         builder: (context, setDialogState) => Column(
           spacing: 20,
           mainAxisSize: MainAxisSize.min,
           children: [
             Slider(
+              focusNode: sliderFocus,
               padding: .zero,
               value: uiScale,
               min: minUiScale,

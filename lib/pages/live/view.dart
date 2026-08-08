@@ -324,8 +324,10 @@ class _LivePageState extends State<LivePage>
                 if (index == listLength) {
                   return Align(
                     alignment: const Alignment(0, -0.3),
-                    child: GestureDetector(
+                    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                    child: InkWell(
                       onTap: () => Get.to(const LiveFollowPage()),
+                      customBorder: const CircleBorder(),
                       child: Container(
                         width: 40,
                         height: 40,
@@ -346,8 +348,8 @@ class _LivePageState extends State<LivePage>
                   padding: const .only(right: 5),
                   child: SizedBox(
                     width: 65,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                    child: InkWell(
                       onTap: () => PageUtils.toLiveRoom(item.roomid),
                       onLongPress: () {
                         Feedback.forLongPress(context);

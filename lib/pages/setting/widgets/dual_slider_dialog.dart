@@ -1,5 +1,7 @@
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show LogicalKeyboardKey, KeyDownEvent;
 
 class DualSliderDialog extends StatefulWidget {
   final double value1;
@@ -34,12 +36,56 @@ class DualSliderDialog extends StatefulWidget {
 class _DualSliderDialogState extends State<DualSliderDialog> {
   late double _tempValue1;
   late double _tempValue2;
+  final _cancelFocus = FocusNode();
+
+  // TV 上直接把 FocusNode 传给 Slider 并重写 onKeyEvent，优先于 Slider 内部
+  // 的 _AdjustSliderIntent Action，使上下键跳到下一个节点而非被 Slider 消费。
+  late final FocusNode? _slider1Focus;
+  late final FocusNode? _slider2Focus;
 
   @override
   void initState() {
     super.initState();
     _tempValue1 = widget.value1;
     _tempValue2 = widget.value2;
+    if (DeviceUtils.isTV) {
+      final slider2Focus = FocusNode();
+      _slider2Focus = slider2Focus
+        ..onKeyEvent = (node, event) {
+          if (event is KeyDownEvent) {
+            final key = event.logicalKey;
+            if (key == LogicalKeyboardKey.arrowDown ||
+                key == LogicalKeyboardKey.arrowUp) {
+              _cancelFocus.requestFocus();
+              return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        };
+      _slider1Focus = FocusNode()
+        ..onKeyEvent = (node, event) {
+          if (event is KeyDownEvent) {
+            final key = event.logicalKey;
+            if (key == LogicalKeyboardKey.arrowDown ||
+                key == LogicalKeyboardKey.arrowUp) {
+              slider2Focus.requestFocus();
+              return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        };
+    } else {
+      _slider1Focus = null;
+      _slider2Focus = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _slider1Focus?.dispose();
+    _slider2Focus?.dispose();
+    _cancelFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,6 +105,7 @@ class _DualSliderDialogState extends State<DualSliderDialog> {
           Builder(
             builder: (context) {
               return Slider(
+                focusNode: _slider1Focus,
                 value: _tempValue1,
                 min: widget.min,
                 max: widget.max,
@@ -76,6 +123,7 @@ class _DualSliderDialogState extends State<DualSliderDialog> {
           Builder(
             builder: (context) {
               return Slider(
+                focusNode: _slider2Focus,
                 value: _tempValue2,
                 min: widget.min,
                 max: widget.max,
@@ -93,6 +141,7 @@ class _DualSliderDialogState extends State<DualSliderDialog> {
       ),
       actions: [
         TextButton(
+          focusNode: _cancelFocus,
           onPressed: Navigator.of(context).pop,
           child: Text(
             '取消',

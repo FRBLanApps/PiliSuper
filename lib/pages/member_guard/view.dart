@@ -112,8 +112,8 @@ class _MemberGuardState extends State<MemberGuard> {
   }
 
   Widget _buildTopItem(GuardItem item, double size) {
-    final child = GestureDetector(
-      behavior: .opaque,
+    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+    final child = InkWell(
       onTap: () => Get.toNamed('/member?mid=${item.uid}'),
       child: Padding(
         padding: const .symmetric(vertical: 10.0),

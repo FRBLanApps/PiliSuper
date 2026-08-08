@@ -99,7 +99,8 @@ class _AboutPageState extends State<AboutPage> {
           bottom: padding.bottom + 100,
         ),
         children: [
-          GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+          InkWell(
             onTap: () {
               if (++_pressCount == 5) {
                 _pressCount = 0;

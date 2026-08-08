@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android TV 启动器横幅（要求 320x180 xhdpi，即 160x90dp）。
+  声明了 LEANBACK_LAUNCHER 的应用必须提供 android:banner，否则 TV 启动器
+  无法正确显示图标，且 Play 商店的 TV lint 会报错。
+  这里用矢量复用启动图标的 logo 路径与品牌色，避免引入额外位图资源。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="90dp"
+    android:viewportWidth="160.0"
+    android:viewportHeight="90.0">
+
+    <!-- 背景 -->
+    <path
+        android:fillColor="@color/ic_launcher_background"
+        android:pathData="M0,0h160v90H0z" />
+
+    <!-- logo：由 ic_launcher_foreground 的 108x108 视口缩放并平移到左侧居中 -->
+    <group
+        android:translateX="26.0"
+        android:translateY="9.0"
+        android:scaleX="0.667"
+        android:scaleY="0.667">
+        <path
+            android:fillColor="@color/ic_launcher_foreground"
+            android:fillType="evenOdd"
+            android:pathData="M56,54L39.78,54l2.22,-10.94h14c3.02,0 5.47,2.45 5.47,5.47 0,3.02 -2.45,5.47 -5.47,5.47zM56,35.77h-9.62l-7.13,36.45h7.51L48.92,61.29h7.08c7.05,0 12.76,-5.71 12.76,-12.76 0,-7.05 -5.71,-12.76 -12.76,-12.76z" />
+    </group>
+</vector>

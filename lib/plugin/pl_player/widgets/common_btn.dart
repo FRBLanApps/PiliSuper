@@ -25,12 +25,17 @@ class ComBtn extends StatelessWidget {
     final child = SizedBox(
       width: width,
       height: height,
-      child: GestureDetector(
-        onTap: onTap,
-        onLongPress: onLongPress,
-        onSecondaryTap: onSecondaryTap,
-        behavior: HitTestBehavior.opaque,
-        child: icon,
+      // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦。
+      // 播放器控制层（尤其直播间）祖先链中没有 Material，InkWell 缺少 Material
+      // 祖先会在运行时抛 `No Material widget found`，故补一层透明 Material。
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          onSecondaryTap: onSecondaryTap,
+          child: icon,
+        ),
       ),
     );
     if (tooltip != null) {

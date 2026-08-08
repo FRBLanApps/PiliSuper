@@ -204,8 +204,8 @@ class _DynTopicPageState extends State<DynTopicPage>
                 height: kToolbarHeight,
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.only(left: 45, right: 78),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                child: InkWell(
                   onTap: () => Get.toNamed(
                     '/member?mid=${response.topicCreator!.uid}',
                   ),

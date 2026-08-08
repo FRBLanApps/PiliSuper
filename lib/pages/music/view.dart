@@ -363,7 +363,8 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
         ],
       );
     }
-    child = GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    child = InkWell(
       onTap: artist.mid == null || artist.mid == 0
           ? () => Utils.copyText(artist.name!)
           : () => Get.toNamed(
@@ -428,7 +429,8 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
+                  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                  InkWell(
                     onTap: () => PageUtils.imageView(
                       imgList: [SourceModel(url: item.mvCover!)],
                     ),
@@ -447,10 +449,10 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
+                        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                        InkWell(
                           onTap: () => _searchMusic(item),
                           onLongPress: () => Utils.copyText(item.musicTitle!),
-                          behavior: HitTestBehavior.opaque,
                           child: MarqueeText(
                             item.musicTitle!,
                             spacing: 30,
@@ -487,11 +489,15 @@ class _MusicDetailPageState extends CommonDynPageState<MusicDetailPage> {
                                     fontSize: 11,
                                   ),
                             if (item.mvCid != 0)
-                              GestureDetector(
+                              // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                              InkWell(
                                 onTap: () => PageUtils.toVideoPage(
                                   bvid: item.mvBvid,
                                   cid: item.mvCid,
                                   aid: item.mvAid,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4),
                                 ),
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(

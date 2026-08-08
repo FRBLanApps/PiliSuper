@@ -112,7 +112,9 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        GestureDetector(
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
           onTap: () => PageUtils.imageView(
             imgList: imageList
                 .map(

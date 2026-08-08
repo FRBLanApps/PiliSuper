@@ -1,28 +1,44 @@
 diff --git a/packages/flutter/lib/src/material/navigation_drawer.dart b/packages/flutter/lib/src/material/navigation_drawer.dart
-index 8a16764cb0c..031c2267d97 100644
+index 8a16764cb0c..98e0c50aa4b 100644
 --- a/packages/flutter/lib/src/material/navigation_drawer.dart
 +++ b/packages/flutter/lib/src/material/navigation_drawer.dart
-@@ -67,8 +67,11 @@ class NavigationDrawer extends StatelessWidget {
+@@ -67,6 +67,7 @@ class NavigationDrawer extends StatelessWidget {
      this.onDestinationSelected,
      this.selectedIndex = 0,
      this.tilePadding = const EdgeInsets.symmetric(horizontal: 12.0),
 +    this.flex = 1,
    });
  
+   /// The background color of the [Material] that holds the [NavigationDrawer]'s
+@@ -136,6 +137,8 @@ class NavigationDrawer extends StatelessWidget {
+   ///
+   /// A valid [selectedIndex] satisfies 0 <= [selectedIndex] < number of [NavigationDrawerDestination].
+   /// For an invalid [selectedIndex] like `-1`, all destinations will appear unselected.
 +  final int flex;
 +
-   /// The background color of the [Material] that holds the [NavigationDrawer]'s
-   /// contents.
-   ///
-@@ -192,6 +195,7 @@ class NavigationDrawer extends StatelessWidget {
+   final int? selectedIndex;
+ 
+   /// Called when one of the [NavigationDrawerDestination] children is selected.
+@@ -192,9 +195,17 @@ class NavigationDrawer extends StatelessWidget {
            children: <Widget>[
              ?header,
              Expanded(
 +              flex: flex,
                child: Material(
                  type: MaterialType.transparency,
-                 child: ListView(children: wrappedChildren),
-@@ -410,7 +414,7 @@ class _NavigationDestinationBuilder extends StatelessWidget {
+-                child: ListView(children: wrappedChildren),
++                child: Center(
++                  child: SingleChildScrollView(
++                    child: Column(
++                      mainAxisSize: MainAxisSize.min,
++                      children: wrappedChildren,
++                    ),
++                  ),
++                ),
+               ),
+             ),
+             ?footer,
+@@ -410,7 +421,7 @@ class _NavigationDestinationBuilder extends StatelessWidget {
        child: _NavigationDestinationSemantics(
          child: SizedBox(
            height: navigationDrawerTheme.tileHeight ?? defaults.tileHeight,

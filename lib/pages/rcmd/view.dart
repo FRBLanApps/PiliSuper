@@ -74,11 +74,14 @@ class _RcmdPageState extends State<RcmdPage>
                   }
                   if (controller.lastRefreshAt != null) {
                     if (controller.lastRefreshAt == index) {
-                      return GestureDetector(
-                        onTap: () => controller
-                          ..animateToTop()
-                          ..onRefresh(),
-                        child: Card(
+                      // 用 InkWell 而非 GestureDetector：该卡片混在信息流的
+                      // 视频卡片之间，GestureDetector 不参与焦点树，TV 遥控器
+                      // 走到这一格会无处落焦。
+                      return Card(
+                        child: InkWell(
+                          onTap: () => controller
+                            ..animateToTop()
+                            ..onRefresh(),
                           child: Container(
                             alignment: Alignment.center,
                             padding: const .symmetric(horizontal: 10),

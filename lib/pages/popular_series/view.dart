@@ -109,8 +109,8 @@ class _PopularSeriesPageState extends State<PopularSeriesPage> with GridMixin {
 
   Widget _buildSeriesList(PopularSeriesConfig config) {
     final colorScheme = ColorScheme.of(context);
-    Widget child = GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    Widget child = InkWell(
       onTap: () {
         final number = _controller.number;
         final seriesList = _controller.seriesList!;

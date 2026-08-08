@@ -106,8 +106,8 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                         },
                       ),
                     ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                    InkWell(
                       onTap: () => _favPgcController.handleSelect(
                         checked: !_favPgcController.allSelected.value,
                         disableSelect: false,
@@ -133,8 +133,8 @@ class _FavPgcChildPageState extends State<FavPgcChildPage>
                         .map(
                           (item) => Padding(
                             padding: const EdgeInsets.only(left: 25),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
+                            // InkWell 而非 GestureDetector：需可聚焦以支持 TV 遥控器 D-pad 导航。
+                            child: InkWell(
                               onTap: () {
                                 if (_favPgcController.checkedCount != 0) {
                                   _favPgcController.onUpdateList(

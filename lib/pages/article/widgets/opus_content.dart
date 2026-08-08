@@ -268,7 +268,8 @@ class OpusContent extends StatelessWidget {
                   );
                 }
                 final images = this.images();
-                return GestureDetector(
+                // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                return InkWell(
                   onTap: () => PageUtils.imageView(
                     imgList: images,
                     initialPage: images.indexWhere((e) => e.url == pic.url),
@@ -563,7 +564,8 @@ class OpusContent extends StatelessWidget {
                   final goods = element.linkCard!.card!.goods!;
                   child = Column(
                     children: goods.items!.map((e) {
-                      return GestureDetector(
+                      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                      return InkWell(
                         onTap: () {
                           if (e.jumpUrl?.isNotEmpty == true) {
                             PiliScheme.routePushFromUrl(e.jumpUrl!);

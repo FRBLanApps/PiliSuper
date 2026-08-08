@@ -20,6 +20,7 @@ import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/mobile_observer.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,11 @@ class _MainAppState extends PopScopeState<MainApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      // Android 系统切回前台时 Flutter 引擎会把 FocusHighlightMode 重置为
+      // 触摸模式，导致 TV 上焦点高亮再次消失。在此重新强制为 traditional 模式。
+      if (DeviceUtils.isTV) {
+        FocusManager.instance.highlightStrategy = .alwaysTraditional;
+      }
       _mainController
         ..checkUnreadDynamic()
         ..checkDefaultSearch(true)
@@ -284,16 +290,26 @@ class _MainAppState extends PopScopeState<MainApp>
 
   Widget? get _bottomNav {
     Widget? bottomNav;
-    if (_mainController.navigationBars.length > 1) {
+    // On portrait phones, cap bottom bar to 6 items.
+    // Tablets, landscape, and sidebar are unlimited.
+    const int _portraitPhoneMaxNavItems = 6;
+    final isPortraitPhone = !context.isTablet && context.isPortrait;
+    final navBars = isPortraitPhone
+        ? _mainController.navigationBars.take(_portraitPhoneMaxNavItems).toList()
+        : _mainController.navigationBars;
+    // On portrait phones, shorten '稍后再看' → '待看' to save space.
+    String labelOf(NavigationBarType e) =>
+        (isPortraitPhone && e == NavigationBarType.later) ? '待看' : e.label;
+    if (navBars.length > 1) {
       if (_mainController.floatingNavBar) {
         bottomNav = Obx(
           () => FloatingNavigationBar(
             onDestinationSelected: _mainController.setIndex,
             selectedIndex: _mainController.selectedIndex.value,
-            destinations: _mainController.navigationBars
+            destinations: navBars
                 .map(
                   (e) => FloatingNavigationDestination(
-                    label: e.label,
+                    label: labelOf(e),
                     icon: _buildIcon(type: e),
                     selectedIcon: _buildIcon(type: e, selected: true),
                   ),
@@ -307,10 +323,10 @@ class _MainAppState extends PopScopeState<MainApp>
             maintainBottomViewPadding: true,
             onDestinationSelected: _mainController.setIndex,
             selectedIndex: _mainController.selectedIndex.value,
-            destinations: _mainController.navigationBars
+            destinations: navBars
                 .map(
                   (e) => NavigationDestination(
-                    label: e.label,
+                    label: labelOf(e),
                     icon: _buildIcon(type: e),
                     selectedIcon: _buildIcon(type: e, selected: true),
                   ),
@@ -327,10 +343,10 @@ class _MainAppState extends PopScopeState<MainApp>
             selectedFontSize: 12,
             unselectedFontSize: 12,
             type: .fixed,
-            items: _mainController.navigationBars
+            items: navBars
                 .map(
                   (e) => BottomNavigationBarItem(
-                    label: e.label,
+                    label: labelOf(e),
                     icon: _buildIcon(type: e),
                     activeIcon: _buildIcon(type: e, selected: true),
                   ),
@@ -385,7 +401,7 @@ class _MainAppState extends PopScopeState<MainApp>
                   backgroundColor: Colors.transparent,
                   onDestinationSelected: _mainController.setIndex,
                   selectedIndex: _mainController.selectedIndex.value,
-                  header: Expanded(flex: 4, child: userAndSearchVertical()),
+                  header: userAndSearchVertical(),
                   tilePadding: const .symmetric(vertical: 5, horizontal: 12),
                   indicatorShape: const RoundedRectangleBorder(
                     borderRadius: .all(.circular(16)),

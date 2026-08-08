@@ -191,8 +191,8 @@ class _PgcPageState extends State<PgcPage> with AutomaticKeepAliveClientMixin {
               },
             )
           : const SizedBox.shrink(),
-    Error(:final errMsg) => GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦（点击重试）
+    Error(:final errMsg) => InkWell(
       onTap: controller.queryPgcTimeline,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),

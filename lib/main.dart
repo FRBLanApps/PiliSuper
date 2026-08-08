@@ -18,6 +18,7 @@ import 'package:PiliPlus/services/service_locator.dart';
 import 'package:PiliPlus/utils/cache_manager.dart';
 import 'package:PiliPlus/utils/calc_window_position.dart';
 import 'package:PiliPlus/utils/date_utils.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/json_file_handler.dart';
 import 'package:PiliPlus/utils/max_screen_size.dart';
@@ -28,6 +29,7 @@ import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/theme_utils.dart';
+import 'package:PiliPlus/utils/tv_text_field_escape.dart';
 import 'package:PiliPlus/utils/utils.dart';
 import 'package:catcher_2/catcher_2.dart';
 import 'package:collection/collection.dart';
@@ -111,9 +113,17 @@ void main() async {
   HttpOverrides.global = _CustomHttpOverrides();
 
   if (PlatformUtils.isMobile) {
-    if (Platform.isAndroid) MaxScreenSize.init();
+    if (Platform.isAndroid) {
+      MaxScreenSize.init();
+      // 必须在决定屏幕朝向与焦点高亮策略之前完成。
+      await DeviceUtils.initTV();
+    }
     await Future.wait([
-      if (Pref.horizontalScreen) ?fullMode() else ?portraitUpMode(),
+      // TV 恒为横屏设备，不能锁竖屏。
+      if (Pref.horizontalScreen || DeviceUtils.isTV)
+        ?fullMode()
+      else
+        ?portraitUpMode(),
       setupServiceLocator(),
     ]);
   } else if (Platform.isWindows) {
@@ -126,6 +136,15 @@ void main() async {
     }
   } else if (Platform.isMacOS) {
     await setupServiceLocator();
+  }
+
+  if (DeviceUtils.isTV) {
+    // Android 平台的 FocusManager 默认以 `automatic` 策略启动，初始判定为触摸
+    // 模式，此时 InkWell 等组件不会绘制 focusColor —— 表现就是遥控器操作时看不到
+    // 任何选中态。TV 无触摸，直接强制 traditional 策略始终绘制焦点高亮。
+    FocusManager.instance.highlightStrategy = .alwaysTraditional;
+    // 遥控器没有 Tab 键，方向键是唯一导航手段，但输入框会静默吃掉它们。
+    TvTextFieldEscape.install();
   }
 
   Request();
@@ -297,6 +316,19 @@ class MyApp extends StatelessWidget {
     final uiScale = Pref.uiScale;
     final mediaQuery = MediaQuery.of(context);
     final textScaler = TextScaler.linear(Pref.defaultTextScale);
+    // 遥控器只有方向键，没有指针。directional 模式下 Slider 只把左右键绑到调值
+    // （slider.dart 的 _directionalNavShortcutMap），上下键因 Shortcuts.modal
+    // 默认 false 而向上冒泡到 WidgetsApp 的 DirectionalFocusAction，焦点得以移出。
+    // 同时禁用态控件也可获焦，让用户能停到「发布」上看清为何点不动。
+    //
+    // 注意：本设置对 common/widgets/flutter/vertical_slider.dart 有副作用——它照搬
+    // 上游同一套 switch，directional 下纵向控件反而只能左右键调值（轴错位）。目前
+    // 无实际影响：唯一使用者 VolumeButton 只在 kDebugMode || isDesktop 下构建
+    // （pages/audio/view.dart:821），TV release 不会渲染。若将来 VolumeButton
+    // 上 TV，需给该 fork 补一份纵向的 directional map。
+    final navigationMode = DeviceUtils.isTV
+        ? NavigationMode.directional
+        : mediaQuery.navigationMode;
     if (uiScale != 1.0) {
       child = MediaQuery(
         data: mediaQuery.copyWith(
@@ -306,6 +338,7 @@ class MyApp extends StatelessWidget {
           viewInsets: mediaQuery.viewInsets / uiScale,
           viewPadding: tmpPadding ?? mediaQuery.viewPadding / uiScale,
           devicePixelRatio: mediaQuery.devicePixelRatio * uiScale,
+          navigationMode: navigationMode,
         ),
         child: child!,
       );
@@ -315,11 +348,14 @@ class MyApp extends StatelessWidget {
           textScaler: textScaler,
           padding: tmpPadding,
           viewPadding: tmpPadding,
+          navigationMode: navigationMode,
         ),
         child: child!,
       );
     }
-    if (PlatformUtils.isDesktop) {
+    // TV 上系统返回键也上报为 escape，与桌面同样需要 BackDetector 拦截：
+    // 若当前焦点在输入框里优先 unfocus，否则正常执行返回。
+    if (PlatformUtils.isDesktop || DeviceUtils.isTV) {
       return BackDetector(
         onBack: _onBack,
         child: child,

@@ -281,8 +281,8 @@ class _NavigationDestinationBuilderState
   Widget build(BuildContext context) {
     final info = _NavigationDestinationInfo.of(context);
 
-    final child = GestureDetector(
-      behavior: .opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    final child = InkWell(
       onTap: widget.enabled ? info.onTap : null,
       child: _NavigationBarDestinationLayout(
         icon: widget.buildIcon(context),

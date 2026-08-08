@@ -715,7 +715,8 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
         }
         return Positioned.fill(
           bottom: -2,
-          child: GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+          child: InkWell(
             onTap: () {
               if (!videoDetailController.isFileSource) {
                 if (videoDetailController.isQuerying) {
@@ -740,7 +741,6 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
                 plPlayerController!.onDoubleTapCenter();
               }
             },
-            behavior: .opaque,
             child: _buildOverlayToolBar(scrollRatio),
           ),
         );
@@ -1455,9 +1455,9 @@ class _VideoDetailPageVState extends State<VideoDetailPageV>
           if (!videoDetailController.autoPlay) {
             return Positioned.fill(
               bottom: -1,
-              child: GestureDetector(
+              // 使用 InkWell 以支持 TV 遥控器 D-pad 聚焦
+              child: InkWell(
                 onTap: handlePlay,
-                behavior: .opaque,
                 child: Obx(
                   () => NetworkImgLayer(
                     type: .emote,

@@ -61,8 +61,8 @@ class _WhisperDetailPageState
     );
     return SimpleScaffold(
       appBar: AppBar(
-        title: GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+        title: InkWell(
           onTap: () {
             if (_whisperDetailController.mid != null) {
               feedBack();

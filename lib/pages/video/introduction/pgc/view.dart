@@ -142,7 +142,8 @@ class _PgcIntroPageState extends State<PgcIntroPage> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        GestureDetector(
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        InkWell(
           onTap: () => PageUtils.imageView(
             imgList: [SourceModel(url: item.cover!)],
           ),
@@ -283,12 +284,12 @@ class _PgcIntroPageState extends State<PgcIntroPage> {
           if (isLandscape) ...desc(),
         ],
       );
-      return GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      return InkWell(
         onTap: () => widget.showIntroDetail(
           item,
           introController.videoTags.value,
         ),
-        behavior: HitTestBehavior.opaque,
         child: SizedBox(
           height: 153,
           child: Column(
@@ -313,8 +314,8 @@ class _PgcIntroPageState extends State<PgcIntroPage> {
 
     // pugv
     Widget upInfo(int mid, String avatar, String name, {String? role}) =>
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        InkWell(
           onTap: () => Get.toNamed('/member?mid=$mid'),
           child: Row(
             spacing: 8,

@@ -140,7 +140,8 @@ class _AiDetailState extends State<AiConclusionPanel>
       color: theme.colorScheme.surface,
       child: Column(
         children: [
-          GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+          InkWell(
             onTap: Get.back,
             child: SizedBox(
               height: 35,

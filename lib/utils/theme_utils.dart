@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/style.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flutter/cupertino.dart' show CupertinoThemeData;
@@ -155,7 +156,49 @@ abstract final class ThemeUtils {
         themeData = darkenTheme(themeData);
       }
     }
+    if (DeviceUtils.isTV) {
+      themeData = tvTheme(themeData);
+    }
     return themeData;
+  }
+
+  /// 强化焦点可见性，供 Android TV 使用。
+  ///
+  /// M3 默认的 focusColor 只有约 10% alpha，在 3 米观看距离下几乎无法分辨当前
+  /// 选中项。这里统一提高焦点态的对比度：容器用高 alpha 主色填充，并给按钮类
+  /// 组件补一圈描边，使焦点在纯色封面图上同样可辨。
+  static ThemeData tvTheme(ThemeData themeData) {
+    final colorScheme = themeData.colorScheme;
+    final focusColor = colorScheme.primary.withValues(alpha: 0.45);
+    final focusBorder = WidgetStateProperty<BorderSide?>.fromMap({
+      WidgetState.focused: BorderSide(color: colorScheme.primary, width: 2),
+      WidgetState.any: null,
+    });
+    // 按钮类组件不读 ThemeData.focusColor，焦点态需经 overlayColor 单独指定。
+    final overlay = WidgetStateProperty<Color?>.fromMap({
+      WidgetState.focused: focusColor,
+      WidgetState.any: null,
+    });
+    return themeData.copyWith(
+      focusColor: focusColor,
+      // 遥控器导航没有 hover 概念，抑制 hover 叠色以免与焦点态混淆。
+      hoverColor: Colors.transparent,
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(overlayColor: overlay, side: focusBorder),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(overlayColor: overlay, side: focusBorder),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: ButtonStyle(overlayColor: overlay, side: focusBorder),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(overlayColor: overlay),
+      ),
+      // Tab 本身可聚焦，但焦点态只通过 overlayColor 呈现，默认值在 TV 上看不出
+      // 差别，表现就像整条类型栏没有焦点。
+      tabBarTheme: TabBarThemeData(overlayColor: overlay),
+    );
   }
 
   static ThemeData darkenTheme(ThemeData themeData) {

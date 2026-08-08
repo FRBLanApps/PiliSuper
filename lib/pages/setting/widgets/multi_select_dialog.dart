@@ -1,3 +1,4 @@
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,9 +27,20 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
     _tempValues = widget.initValues.toSet();
   }
 
+  void _toggle(T key) {
+    setState(() {
+      if (_tempValues.contains(key)) {
+        _tempValues.remove(key);
+      } else {
+        _tempValues.add(key);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isTV = DeviceUtils.isTV;
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
       title: Text(widget.title),
@@ -39,9 +51,30 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: widget.values.entries.map((i) {
-              return Builder(
-                builder: (context) {
-                  bool isChecked = _tempValues.contains(i.key);
+              return StatefulBuilder(
+                builder: (context, localSetState) {
+                  final isChecked = _tempValues.contains(i.key);
+                  if (isTV) {
+                    // TV 上：仅 onTap（遥控器确定键）才翻转，方向键只移动焦点。
+                    // CheckboxListTile 在 alwaysTraditional 模式下 onChanged 会
+                    // 因焦点移入而触发，导致方向键经过时意外翻转选项；改为 ListTile
+                    // + 只读 Checkbox，让 onTap 控制翻转。
+                    return ListTile(
+                      dense: true,
+                      leading: IgnorePointer(
+                        child: Checkbox(
+                          value: isChecked,
+                          onChanged: null,
+                          materialTapTargetSize: .shrinkWrap,
+                        ),
+                      ),
+                      title: Text(
+                        i.value,
+                        style: theme.textTheme.titleMedium!,
+                      ),
+                      onTap: () => _toggle(i.key),
+                    );
+                  }
                   return CheckboxListTile(
                     dense: true,
                     value: isChecked,
@@ -50,12 +83,7 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
                       i.value,
                       style: theme.textTheme.titleMedium!,
                     ),
-                    onChanged: (value) {
-                      isChecked
-                          ? _tempValues.remove(i.key)
-                          : _tempValues.add(i.key);
-                      (context as Element).markNeedsBuild();
-                    },
+                    onChanged: (_) => _toggle(i.key),
                   );
                 },
               );

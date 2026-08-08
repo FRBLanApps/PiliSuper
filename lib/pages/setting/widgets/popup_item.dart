@@ -1,5 +1,6 @@
 import 'package:PiliPlus/common/widgets/flutter/list_tile.dart';
 import 'package:PiliPlus/models/common/enum_with_label.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:flutter/material.dart' hide ListTile;
 
@@ -74,6 +75,29 @@ class _PopupListTileState<T> extends State<PopupListTile<T>> {
     });
   }
 
+  /// TV 遥控器确定键激活：用组件中心位置弹出菜单，行为与触摸激活一致。
+  void _showMenuFromCenter(T value) {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    final topLeft = box.localToGlobal(Offset.zero);
+    final bottomRight = box.localToGlobal(box.size.bottomRight(Offset.zero));
+    showMenu<T?>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        topLeft.dx,
+        topLeft.dy,
+        bottomRight.dx,
+        bottomRight.dy,
+      ),
+      items: widget.itemBuilder(context),
+      initialValue: value,
+    ).then<void>((T? newValue) {
+      if (!mounted) return;
+      if (newValue == null || newValue == value) return;
+      widget.onSelected(newValue, _refresh);
+    });
+  }
+
   void _refresh() {
     if (mounted) {
       setState(() {});
@@ -113,6 +137,8 @@ class _PopupListTileState<T> extends State<PopupListTile<T>> {
       safeArea: widget.safeArea,
       enabled: widget.enabled,
       onTapUp: (details) => _showButtonMenu(details, value),
+      // TV 遥控器确定键走 onTap 路径（不产生 TapUpDetails），用组件中心定位弹出菜单。
+      onTap: DeviceUtils.isTV ? () => _showMenuFromCenter(value) : null,
       leading: widget.leading,
       title: title,
       subtitle: subtitle,

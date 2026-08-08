@@ -314,7 +314,7 @@ class PlPlayerController with BlockConfigMixin {
 
   late List<double> speedList = Pref.speedList;
   late bool enableAutoLongPressSpeed = Pref.enableAutoLongPressSpeed;
-  late final showControlDuration = Pref.enableLongShowControl
+  late final showControlDuration = (DeviceUtils.isTV || Pref.enableLongShowControl)
       ? const Duration(seconds: 30)
       : const Duration(seconds: 3);
   // 字幕
@@ -1223,7 +1223,10 @@ class PlPlayerController with BlockConfigMixin {
   Future<void> pause({bool notify = true, bool isInterrupt = false}) async {
     await _videoPlayerController?.pause();
     playerStatus.value = PlayerStatus.paused;
-
+    // TV 上暂停时强制显示控件，让遥控器用户看到播放/恢复按钮。
+    if (DeviceUtils.isTV) {
+      controls = true;
+    }
     // 主动暂停时让出音频焦点
     if (!isInterrupt) {
       audioSessionHandler?.setActive(false);

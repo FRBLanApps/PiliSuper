@@ -146,7 +146,8 @@ class ReplyItemGrpc extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, ColorScheme colorScheme) {
     final member = replyItem.member;
-    Widget header = GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    Widget header = InkWell(
       onTap: () {
         feedBack();
         Get.toNamed('/member?mid=${replyItem.mid}');

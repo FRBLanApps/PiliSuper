@@ -482,7 +482,8 @@ class _SavePanelState extends State<SavePanel> {
                                             ],
                                           ),
                                         ),
-                                        GestureDetector(
+                                        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                                        InkWell(
                                           onTap: () => Utils.copyText(uri),
                                           child: Container(
                                             width: 88,

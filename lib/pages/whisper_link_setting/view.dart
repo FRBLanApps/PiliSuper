@@ -258,8 +258,8 @@ class _WhisperLinkSettingPageState extends State<WhisperLinkSettingPage> {
   }
 
   Widget _errWidget(String? errMsg, VoidCallback onTap) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,

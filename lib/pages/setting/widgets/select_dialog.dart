@@ -1,13 +1,15 @@
+import 'package:PiliPlus/common/widgets/single_choice_list.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
 import 'package:PiliPlus/models/video/play/url.dart';
 import 'package:PiliPlus/utils/cdn_speed_service.dart';
+import 'package:PiliPlus/utils/device_utils.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/video_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
-class SelectDialog<T> extends StatelessWidget {
+class SelectDialog<T> extends StatefulWidget {
   final T? value;
   final String title;
   final List<(T, String)> values;
@@ -24,43 +26,71 @@ class SelectDialog<T> extends StatelessWidget {
   });
 
   @override
+  State<SelectDialog<T>> createState() => _SelectDialogState<T>();
+}
+
+class _SelectDialogState<T> extends State<SelectDialog<T>> {
+  // TV 上用两步流程：方向键只移动焦点（更新 _pendingValue），确定键才提交。
+  // 非 TV 保持原来的「焦点即选中立刻 pop」行为。
+  late T? _pendingValue;
+  late final List<T> _itemValues;
+
+  @override
+  void initState() {
+    super.initState();
+    _pendingValue = widget.value;
+    _itemValues = widget.values.map((e) => e.$1).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final titleMedium = TextTheme.of(context).titleMedium!;
+    final isTV = DeviceUtils.isTV;
     return AlertDialog(
       clipBehavior: Clip.hardEdge,
-      title: Text(title),
-      constraints: subtitleBuilder != null
+      title: Text(widget.title),
+      constraints: widget.subtitleBuilder != null
           ? const BoxConstraints.tightFor(width: 320)
           : null,
       contentPadding: const EdgeInsets.symmetric(vertical: 12),
       content: Material(
         type: .transparency,
         child: SingleChildScrollView(
-          child: RadioGroup<T>(
-            onChanged: (v) => Navigator.of(context).pop(v ?? value),
-            groupValue: value,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                values.length,
-                (index) {
-                  final item = values[index];
-                  return RadioListTile<T>(
-                    toggleable: toggleable,
-                    dense: true,
-                    value: item.$1,
-                    title: Text(
-                      item.$2,
-                      style: titleMedium,
-                    ),
-                    subtitle: subtitleBuilder?.call(context, index),
-                  );
-                },
-              ),
-            ),
+          child: SingleChoiceList<T>(
+            values: _itemValues,
+            selectedValue: _pendingValue,
+            toggleable: widget.toggleable,
+            dense: true,
+            // TV：只预选，等「确定」按钮提交。非 TV：选中即关闭。
+            onChanged: isTV
+                ? (v) => setState(() => _pendingValue = v)
+                : (v) => Navigator.of(context).pop(v ?? widget.value),
+            titleBuilder: (context, index) =>
+                Text(widget.values[index].$2, style: titleMedium),
+            subtitleBuilder: widget.subtitleBuilder,
           ),
         ),
       ),
+      // TV 模式下显示「取消/确定」按钮，非 TV 无按钮（点击即关闭）。
+      actions: isTV
+          ? [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+              ),
+              TextButton(
+                // toggleable 取消选择时 _pendingValue 为 null，调用方将其视为
+                // 「不做改动」，与取消一致，故直接提交而不回退为原值。
+                onPressed: () => Navigator.of(context).pop(_pendingValue),
+                child: const Text('确定'),
+              ),
+            ]
+          : null,
     );
   }
 }

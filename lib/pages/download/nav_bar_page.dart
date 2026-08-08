@@ -27,14 +27,15 @@ import 'package:flutter/material.dart'
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-class DownloadPage extends StatefulWidget {
-  const DownloadPage({super.key});
+/// NavBar-embedded download page.
+class DownloadNavBarPage extends StatefulWidget {
+  const DownloadNavBarPage({super.key});
 
   @override
-  State<DownloadPage> createState() => _DownloadPageState();
+  State<DownloadNavBarPage> createState() => _DownloadNavBarPageState();
 }
 
-class _DownloadPageState extends State<DownloadPage> with GridMixin {
+class _DownloadNavBarPageState extends State<DownloadNavBarPage> with GridMixin {
   final _downloadService = Get.find<DownloadService>();
   final _controller = Get.put(DownloadPageController());
   final _progress = ChangeNotifier();
@@ -49,174 +50,179 @@ class _DownloadPageState extends State<DownloadPage> with GridMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final padding = MediaQuery.viewPaddingOf(context);
-    return Obx(() {
-      final enableMultiSelect = _controller.enableMultiSelect.value;
-      return popScope(
-        canPop: !enableMultiSelect,
-        onPopInvokedWithResult: (didPop, result) {
-          if (enableMultiSelect) {
-            _controller.handleSelect();
-          }
-        },
-        child: SimpleScaffold(
-          appBar: MultiSelectAppBarWidget(
-                ctr: _controller,
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: Obx(() {
+        final enableMultiSelect = _controller.enableMultiSelect.value;
+        return popScope(
+          canPop: !enableMultiSelect,
+          onPopInvokedWithResult: (didPop, result) {
+            if (enableMultiSelect) _controller.handleSelect();
+          },
+          child: SimpleScaffold(
+            appBar: MultiSelectAppBarWidget(
+              ctr: _controller,
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  onPressed: () async {
+                    final future = [
+                      for (final page in _controller.allChecked)
+                        for (final e in page.entries)
+                          _downloadService.downloadDanmaku(
+                            entry: e,
+                            isUpdate: true,
+                          ),
+                    ];
+                    _controller.handleSelect();
+                    final res = await Future.wait(future);
+                    if (res.every((e) => e)) {
+                      SmartDialog.showToast('更新成功');
+                    } else {
+                      SmartDialog.showToast('更新失败');
+                    }
+                  },
+                  child: Text(
+                    '更新',
+                    style: TextStyle(color: theme.colorScheme.onSurface),
+                  ),
+                ),
+              ],
+              child: AppBar(
+                automaticallyImplyLeading: false,
                 actions: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
-                    ),
+                  IconButton(
+                    tooltip: '搜索',
                     onPressed: () async {
-                      final future = [
-                        for (final page in _controller.allChecked)
-                          for (final e in page.entries)
-                            _downloadService.downloadDanmaku(
-                              entry: e,
-                              isUpdate: true,
-                            ),
-                      ];
-                      _controller.handleSelect();
-                      final res = await Future.wait(future);
-                      if (res.every((e) => e)) {
-                        SmartDialog.showToast('更新成功');
+                      await _downloadService.waitForInitialization;
+                      if (!mounted) return;
+                      Get.to(DownloadSearchPage(progress: _progress));
+                    },
+                    icon: const Icon(Icons.search),
+                  ),
+                  IconButton(
+                    tooltip: '多选',
+                    onPressed: () {
+                      if (enableMultiSelect) {
+                        _controller.handleSelect();
                       } else {
-                        SmartDialog.showToast('更新失败');
+                        _controller.enableMultiSelect.value = true;
                       }
                     },
-                    child: Text(
-                      '更新',
-                      style: TextStyle(color: theme.colorScheme.onSurface),
-                    ),
+                    icon: const Icon(Icons.edit_note),
                   ),
+                  const SizedBox(width: 6),
                 ],
-                child: AppBar(
-                  title: const Text('离线缓存'),
-                  actions: [
-                    IconButton(
-                      tooltip: '搜索',
-                      onPressed: () async {
-                        await _downloadService.waitForInitialization;
-                        if (!mounted) return;
-                        Get.to(DownloadSearchPage(progress: _progress));
-                      },
-                      icon: const Icon(Icons.search),
-                    ),
-                    IconButton(
-                      tooltip: '多选',
-                      onPressed: () {
-                        if (enableMultiSelect) {
-                          _controller.handleSelect();
-                        } else {
-                          _controller.enableMultiSelect.value = true;
-                        }
-                      },
-                      icon: const Icon(Icons.edit_note),
-                    ),
-                    const SizedBox(width: 6),
-                  ],
-                ),
               ),
-          body: Padding(
-            padding: EdgeInsets.only(left: padding.left, right: padding.right),
-            child: CustomScrollView(
-              slivers: [
-                Obx(() {
-                  final entry =
-                      _downloadService.waitDownloadQueue.firstWhereOrNull(
-                        (e) => e.cid == _downloadService.curCid,
-                      ) ??
-                      _downloadService.waitDownloadQueue.firstOrNull;
-                  if (entry != null) {
-                    return SliverMainAxisGroup(
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.only(left: 12, bottom: 7),
-                          sliver: SliverToBoxAdapter(
-                            child: Text(
-                              '正在缓存 (${_downloadService.waitDownloadQueue.length})',
+            ),
+            body: Padding(
+              padding:
+                  EdgeInsets.only(left: padding.left, right: padding.right),
+              child: CustomScrollView(
+                slivers: [
+                  Obx(() {
+                    final entry =
+                        _downloadService.waitDownloadQueue.firstWhereOrNull(
+                          (e) => e.cid == _downloadService.curCid,
+                        ) ??
+                        _downloadService.waitDownloadQueue.firstOrNull;
+                    if (entry != null) {
+                      return SliverMainAxisGroup(
+                        slivers: [
+                          SliverPadding(
+                            padding:
+                                const EdgeInsets.only(left: 12, bottom: 7),
+                            sliver: const SliverToBoxAdapter(
+                              child: Text('正在缓存'),
                             ),
                           ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 110,
-                            child: DetailItem(
-                              entry: entry,
-                              progress: _progress,
-                              downloadService: _downloadService,
-                              showTitle: true,
-                              isCurr: true,
-                              controller: _controller,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return const SliverToBoxAdapter();
-                }),
-                Obx(() {
-                  if (_controller.pages.isNotEmpty) {
-                    return SliverMainAxisGroup(
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(
-                            left: 12,
-                            bottom: 7,
-                            top: _downloadService.waitDownloadQueue.isEmpty
-                                ? 0
-                                : 7,
-                          ),
-                          sliver: const SliverToBoxAdapter(
-                            child: Text('已缓存视频'),
-                          ),
-                        ),
-                        SliverGrid.builder(
-                          gridDelegate: gridDelegate,
-                          itemBuilder: (context, index) {
-                            final item = _controller.pages[index];
-                            if (item.entries.length == 1) {
-                              final entry = item.entries.first;
-                              return DetailItem(
+                          SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: 110,
+                              child: DetailItem(
                                 entry: entry,
                                 progress: _progress,
                                 downloadService: _downloadService,
                                 showTitle: true,
-                                onDelete: () {
-                                  _downloadService.deleteDownload(
-                                    entry: entry,
-                                    removeList: true,
-                                  );
-                                  GStorage.watchProgress.delete(
-                                    entry.cid.toString(),
-                                  );
-                                },
-                                checked: item.checked,
-                                onSelect: (_) => _controller.onSelect(item),
+                                isCurr: true,
                                 controller: _controller,
-                              );
-                            }
-                            return _buildItem(theme, item, enableMultiSelect);
-                          },
-                          itemCount: _controller.pages.length,
-                        ),
-                      ],
-                    );
-                  }
-                  if (_downloadService.waitDownloadQueue.isNotEmpty) {
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                     return const SliverToBoxAdapter();
-                  }
-                  return const HttpError();
-                }),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: padding.bottom + 100),
-                ),
-              ],
+                  }),
+                  Obx(() {
+                    if (_controller.pages.isNotEmpty) {
+                      return SliverMainAxisGroup(
+                        slivers: [
+                          SliverPadding(
+                            padding: EdgeInsets.only(
+                              left: 12,
+                              bottom: 7,
+                              top:
+                                  _downloadService.waitDownloadQueue.isEmpty
+                                      ? 0
+                                      : 7,
+                            ),
+                            sliver: const SliverToBoxAdapter(
+                              child: Text('已缓存视频'),
+                            ),
+                          ),
+                          SliverGrid.builder(
+                            gridDelegate: gridDelegate,
+                            itemBuilder: (context, index) {
+                              final item = _controller.pages[index];
+                              if (item.entries.length == 1) {
+                                final entry = item.entries.first;
+                                return DetailItem(
+                                  entry: entry,
+                                  progress: _progress,
+                                  downloadService: _downloadService,
+                                  showTitle: true,
+                                  onDelete: () {
+                                    _downloadService.deleteDownload(
+                                      entry: entry,
+                                      removeList: true,
+                                    );
+                                    GStorage.watchProgress.delete(
+                                      entry.cid.toString(),
+                                    );
+                                  },
+                                  checked: item.checked,
+                                  onSelect: (_) =>
+                                      _controller.onSelect(item),
+                                  controller: _controller,
+                                );
+                              }
+                              return _buildItem(
+                                  theme, item, enableMultiSelect);
+                            },
+                            itemCount: _controller.pages.length,
+                          ),
+                        ],
+                      );
+                    }
+                    if (_downloadService.waitDownloadQueue.isNotEmpty) {
+                      return const SliverToBoxAdapter();
+                    }
+                    return const HttpError();
+                  }),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: padding.bottom + 100),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 
   Widget _buildItem(
@@ -358,8 +364,8 @@ class _DownloadPageState extends State<DownloadPage> with GridMixin {
                       ),
                     ),
                     Row(
-                      crossAxisAlignment: .end,
-                      mainAxisAlignment: .spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           '${CacheManager.formatSize(pageInfo.entries.fold(0, (p, n) => p + n.totalBytes))}  ${first.ownerName ?? ""}',

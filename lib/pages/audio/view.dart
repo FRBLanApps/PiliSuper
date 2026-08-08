@@ -548,8 +548,8 @@ class _AudioPageState extends State<AudioPage> {
   }) {
     final isCurr = playMode == _controller.playMode.value;
     final color = isCurr ? colorScheme.primary : colorScheme.outline;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: () {
         Get.back();
         if (!isCurr) {
@@ -924,7 +924,8 @@ class _AudioPageState extends State<AudioPage> {
                   key: const PageStorageKey(_AudioPageState),
                   children: [
                     Center(
-                      child: GestureDetector(
+                      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                      child: InkWell(
                         onTap: () => PageUtils.imageView(
                           imgList: [SourceModel(url: cover)],
                         ),
@@ -946,8 +947,8 @@ class _AudioPageState extends State<AudioPage> {
                     ),
                     const SizedBox(height: 12),
                     if (audioItem.owner.hasName()) ...[
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                      InkWell(
                         onTap: () {
                           _controller.player?.pause();
                           Get.toNamed('/member?mid=${audioItem.owner.mid}');

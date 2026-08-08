@@ -240,7 +240,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     children: [
       Row(
         children: [
-          GestureDetector(
+          // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+          InkWell(
             onTap: () => Utils.copyText(memberInfoModel.name ?? ''),
             child: Text(
               memberInfoModel.name ?? '',
@@ -386,7 +387,8 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
             ? NumUtils.numFormat(userStat['likes'])
             : '';
     }
-    return GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
       child: Text(
         '$num${type.title}',
@@ -398,7 +400,9 @@ class _HorizontalMemberPageState extends State<HorizontalMemberPage> {
     );
   }
 
-  Widget _buildAvatar(String face) => GestureDetector(
+  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+  Widget _buildAvatar(String face) => InkWell(
+    customBorder: const CircleBorder(),
     onTap: () => PageUtils.imageView(
       imgList: [SourceModel(url: face)],
     ),

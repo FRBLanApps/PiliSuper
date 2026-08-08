@@ -77,8 +77,9 @@ class PendantAvatar extends StatelessWidget {
       type: ImageType.avatar,
     );
     if (onTap != null) {
-      avatar = GestureDetector(
-        behavior: .opaque,
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      avatar = InkWell(
+        customBorder: const CircleBorder(),
         onTap: onTap,
         child: avatar,
       );
@@ -108,8 +109,10 @@ class PendantAvatar extends StatelessWidget {
     final fontSize = liveFontSize ?? 13.0;
     return Positioned(
       bottom: liveBottom ?? 0.0,
-      child: GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      child: InkWell(
         onTap: () => PageUtils.toLiveRoom(roomId),
+        borderRadius: Style.mdRadius,
         child: Container(
           padding: const .symmetric(horizontal: 5, vertical: 1),
           decoration: BoxDecoration(

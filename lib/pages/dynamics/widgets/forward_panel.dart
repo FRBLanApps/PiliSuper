@@ -110,7 +110,8 @@ Widget _forwardAuthor({
   final isNormalAuth = moduleAuthor.type == 'AUTHOR_TYPE_NORMAL';
   return Row(
     children: [
-      GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      InkWell(
         onTap: isNormalAuth
             ? () => Get.toNamed('/member?mid=${moduleAuthor.mid}')
             : null,

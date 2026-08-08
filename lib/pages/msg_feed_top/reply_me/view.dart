@@ -119,8 +119,10 @@ class _ReplyMePageState extends State<ReplyMePage> {
                     },
                     onLongPress: onLongPress,
                     onSecondaryTap: PlatformUtils.isMobile ? null : onLongPress,
-                    leading: GestureDetector(
+                    // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+                    leading: InkWell(
                       onTap: () => Get.toNamed('/member?mid=${item.user?.mid}'),
+                      customBorder: const CircleBorder(),
                       child: NetworkImgLayer(
                         width: 45,
                         height: 45,

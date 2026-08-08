@@ -80,72 +80,85 @@ class VideoCardV extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     void onLongPress() => imageSaveDialog(
       title: videoItem.title,
       cover: videoItem.cover,
       bvid: videoItem.bvid,
     );
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Card(
-          child: InkWell(
-            onTap: onPushDetail,
-            onLongPress: onLongPress,
-            onSecondaryTap: PlatformUtils.isMobile ? null : onLongPress,
-            borderRadius: const .all(.circular(12)),
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                AspectRatio(
-                  aspectRatio: Style.aspectRatio,
-                  child: LayoutBuilder(
-                    builder: (context, boxConstraints) {
-                      double maxWidth = boxConstraints.maxWidth;
-                      double maxHeight = boxConstraints.maxHeight;
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          NetworkImgLayer(
-                            src: videoItem.cover,
-                            width: maxWidth,
-                            height: maxHeight,
-                            borderRadius: const .vertical(top: .circular(12)),
-                          ),
-                          if (videoItem.duration > 0)
-                            PBadge(
-                              bottom: 6,
-                              right: 7,
-                              size: .small,
-                              type: .gray,
-                              text: DurationUtils.formatDuration(
-                                videoItem.duration,
+    // FocusTraversalGroup 确保 D-pad 焦点顺序稳定：先卡片主体（order 1），
+    // 再 popup 按钮（order 2）。不加此包裹时 Stack 的几何排序会让 popup 随机
+    // 获焦，表现为遥控器偶发弹出菜单。
+    return FocusTraversalGroup(
+      policy: OrderedTraversalPolicy(),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          FocusTraversalOrder(
+            order: const NumericFocusOrder(1),
+            child: Card(
+              child: InkWell(
+                onTap: onPushDetail,
+                onLongPress: onLongPress,
+                onSecondaryTap: PlatformUtils.isMobile ? null : onLongPress,
+                borderRadius: const .all(.circular(12)),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: Style.aspectRatio,
+                      child: LayoutBuilder(
+                        builder: (context, boxConstraints) {
+                          double maxWidth = boxConstraints.maxWidth;
+                          double maxHeight = boxConstraints.maxHeight;
+                          return Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              NetworkImgLayer(
+                                src: videoItem.cover,
+                                width: maxWidth,
+                                height: maxHeight,
+                                borderRadius:
+                                    const .vertical(top: .circular(12)),
                               ),
-                            ),
-                        ],
-                      );
-                    },
-                  ),
+                              if (videoItem.duration > 0)
+                                PBadge(
+                                  bottom: 6,
+                                  right: 7,
+                                  size: .small,
+                                  type: .gray,
+                                  text: DurationUtils.formatDuration(
+                                    videoItem.duration,
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    content(context),
+                  ],
                 ),
-                content(context),
-              ],
+              ),
             ),
           ),
-        ),
-        if (videoItem.goto == 'av')
-          Positioned(
-            right: -5,
-            bottom: -2,
-            width: 29,
-            height: 29,
-            child: VideoPopupMenu(
-              iconSize: 17,
-              videoItem: videoItem,
-              onRemove: onRemove,
+          if (videoItem.goto == 'av')
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(2),
+              child: Positioned(
+                right: -5,
+                bottom: -2,
+                width: 29,
+                height: 29,
+                child: VideoPopupMenu(
+                  iconSize: 17,
+                  videoItem: videoItem,
+                  onRemove: onRemove,
+                ),
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 

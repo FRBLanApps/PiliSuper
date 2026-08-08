@@ -153,8 +153,8 @@ class _PgcReviewPostPanelState extends State<PgcReviewPostPanel> {
         if (!_isMod)
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-            child: GestureDetector(
-              behavior: .opaque,
+            // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+            child: InkWell(
               onTap: _shareFeed.toggle,
               child: Obx(
                 () {

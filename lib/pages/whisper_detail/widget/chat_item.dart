@@ -201,8 +201,8 @@ class ChatItem extends StatelessWidget {
 
   Widget msgTypeCommonShareCard_14(dynamic content, Color textColor) {
     if (content['source'] == '直播') {
-      return GestureDetector(
-        behavior: .opaque,
+      // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+      return InkWell(
         onTap: () {
           dynamic roomId = content['sourceID'];
           if (roomId is String) {
@@ -247,8 +247,8 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget msgTypeArticleCard_12(dynamic content, Color textColor) {
-    return GestureDetector(
-      behavior: .opaque,
+    // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: () => Get.toNamed(
         '/articlePage',
         parameters: {
@@ -321,7 +321,8 @@ class ChatItem extends StatelessWidget {
               ),
             ),
             for (final i in content['sub_cards'])
-              GestureDetector(
+              // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+              InkWell(
                 onTap: () async {
                   String? bvid = IdUtils.bvRegex
                       .firstMatch(i['jump_url'])
@@ -418,8 +419,9 @@ class ChatItem extends StatelessWidget {
         ),
         child: LayoutBuilder(
           builder: (_, constrains) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
+            // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+            return InkWell(
+              borderRadius: Style.mdRadius,
               onTap: () async {
                 try {
                   SmartDialog.showLoading();
@@ -571,9 +573,9 @@ class ChatItem extends StatelessWidget {
           'unsupported source type: ${content['source']}',
         );
     }
-    return GestureDetector(
+    // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
-      behavior: .opaque,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -639,7 +641,9 @@ class ChatItem extends StatelessWidget {
         child: child,
       );
     }
-    return GestureDetector(
+    // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
+      borderRadius: Style.mdRadius,
       onTap: () => PageUtils.imageView(imgList: [SourceModel(url: url)]),
       child: child,
     );
@@ -729,8 +733,8 @@ class ChatItem extends StatelessWidget {
         final String? text = content['jump_text$index'];
         return [
           Divider(color: theme.colorScheme.primary.withValues(alpha: 0.05)),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
+          // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+          InkWell(
             onTap: () => PiliScheme.routePushFromUrl(uri),
             child: Text(
               text != null && text.isNotEmpty ? text : '查看详情',
@@ -804,7 +808,9 @@ class ChatItem extends StatelessWidget {
           ),
         );
         if (url != null && url.isNotEmpty) {
-          child = GestureDetector(
+          // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+          child = InkWell(
+            borderRadius: Style.mdRadius,
             onTap: () => PiliScheme.routePushFromUrl(url),
             child: child,
           );

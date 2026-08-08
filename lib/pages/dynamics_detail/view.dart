@@ -126,15 +126,21 @@ class _DynamicDetailPageState
     return SelectionTapRegionSurface(
       /// apply `lib/scripts/scrollable.patch`
       isScrolling: () => _scrollable?.shouldIgnorePointer ?? false,
-      child: SimpleScaffold(
-        appBar: _buildAppBar(),
-        body: Padding(
-          padding: EdgeInsets.only(left: padding.left, right: padding.right),
-          child: _buildBody(),
-        ),
-        fab: SlideTransition(
-          position: fabAnimation,
-          child: _buildBottom(),
+      // ReadingOrderTraversalPolicy 使焦点按屏幕几何顺序从上到下遍历，让底部
+      // 操作栏（fab slot）在 body 内容区之后自然获焦，而不会死锁在列表末尾。
+      child: FocusTraversalGroup(
+        policy: ReadingOrderTraversalPolicy(),
+        child: SimpleScaffold(
+          appBar: _buildAppBar(),
+          body: Padding(
+            padding:
+                EdgeInsets.only(left: padding.left, right: padding.right),
+            child: _buildBody(),
+          ),
+          fab: SlideTransition(
+            position: fabAnimation,
+            child: _buildBottom(),
+          ),
         ),
       ),
     );

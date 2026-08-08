@@ -137,8 +137,8 @@ class _ArticleListPageState extends State<ArticleListPage> with GridMixin {
                   ),
                   if (_controller.author != null) ...[
                     const SizedBox(height: 10),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+                    InkWell(
                       onTap: () =>
                           Get.toNamed('/member?mid=${_controller.author!.mid}'),
                       child: Row(

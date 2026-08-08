@@ -35,9 +35,22 @@
         </intent>
     </queries>
 
+    <!--
+      Android TV 支持。
+      leanback 声明为非必需，保证手机/平板仍可安装；
+      touchscreen 声明为非必需，否则 TV 设备无法安装。
+    -->
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
     <application xmlns:tools="http://schemas.android.com/tools"
         android:name="${applicationName}"
         android:allowBackup="false"
+        android:banner="@drawable/tv_banner"
         android:enableOnBackInvokedCallback="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -76,6 +89,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!-- Android TV 启动器仅识别 LEANBACK_LAUNCHER -->
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
             <intent-filter android:label="PiliPlus">
                 <action android:name="android.intent.action.VIEW" />

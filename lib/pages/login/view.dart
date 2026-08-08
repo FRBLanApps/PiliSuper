@@ -133,7 +133,8 @@ class _LoginPageState extends State<LoginPage> {
         Obx(
           () {
             final url = _loginPageCtr.codeInfo.value.dataOrNull?.url ?? '';
-            return GestureDetector(
+            // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+            return InkWell(
               onTap: () => Utils.copyText(
                 url,
                 toastText: '已复制到剪贴板，可粘贴至已登录的app私信处发送，然后点击已发送的链接打开',

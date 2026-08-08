@@ -224,8 +224,8 @@ class _LiveAreaPageState extends State<LiveAreaPage> {
     required AreaItem item,
     required VoidCallback onPressed,
   }) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: () {
         if (_controller.isEditing.value) {
           if (item.id != 0) {

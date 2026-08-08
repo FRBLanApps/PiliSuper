@@ -600,7 +600,8 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
       required Icon icon,
       required String title,
     }) {
-      return GestureDetector(
+      // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+      return InkWell(
         onTap: onTap,
         child: Column(
           spacing: 5,
@@ -835,9 +836,10 @@ class _CreateDynPanelState extends CommonRichTextPubPageState<CreateDynPanel> {
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            GestureDetector(
+            // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+            InkWell(
               onTap: _onReserve,
-              behavior: HitTestBehavior.opaque,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),

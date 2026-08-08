@@ -34,9 +34,9 @@ class _HotPageState extends State<HotPage>
     required String title,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Column(
         spacing: 4,
         mainAxisSize: MainAxisSize.min,

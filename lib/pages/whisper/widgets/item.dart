@@ -260,7 +260,9 @@ class WhisperSessionItem extends StatelessWidget {
               .resImage
               .imageSrc;
 
-          return GestureDetector(
+          // 改用 InkWell 以支持 TV 遥控器方向键聚焦
+          return InkWell(
+            customBorder: const CircleBorder(),
             onTap: item.sessionInfo.avatar.hasMid()
                 ? () =>
                       Get.toNamed('/member?mid=${item.sessionInfo.avatar.mid}')

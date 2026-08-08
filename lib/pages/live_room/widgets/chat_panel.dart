@@ -175,39 +175,48 @@ class LiveRoomChatPanel extends StatelessWidget {
               return AnimatedOpacity(
                 opacity: isEmpty ? 0 : 1,
                 duration: const Duration(milliseconds: 120),
-                child: GestureDetector(
-                  onTap: isEmpty
-                      ? null
-                      : () => liveRoomController.pageController?.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeInOut,
+                // 使用 InkWell 以支持 TV 遥控器方向键聚焦。
+                // 直播间祖先链为裸 ScaffoldLayout，无 Material，故补一层透明 Material。
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    onTap: isEmpty
+                        ? null
+                        : () =>
+                              liveRoomController.pageController?.animateToPage(
+                                1,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeInOut,
+                              ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
                         ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      color: const Color(0x2FFFFFFF),
-                      border: Border.all(color: Colors.white24, width: 0.7),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
-                    child: Text.rich(
-                      style: const TextStyle(color: Colors.white, height: 1),
-                      strutStyle: const StrutStyle(height: 1, leading: 0),
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text:
-                                'SC(${liveRoomController.superChatMsg.length})',
-                          ),
-                          const WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Icon(
-                              size: 18,
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
+                        color: const Color(0x2FFFFFFF),
+                        border: Border.all(color: Colors.white24, width: 0.7),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(10, 4, 4, 4),
+                      child: Text.rich(
+                        style: const TextStyle(color: Colors.white, height: 1),
+                        strutStyle: const StrutStyle(height: 1, leading: 0),
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  'SC(${liveRoomController.superChatMsg.length})',
                             ),
-                          ),
-                        ],
+                            const WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Icon(
+                                size: 18,
+                                Icons.keyboard_arrow_right,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

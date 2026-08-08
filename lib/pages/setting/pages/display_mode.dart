@@ -1,4 +1,5 @@
 import 'package:PiliPlus/common/widgets/scaffold/simple_scaffold.dart';
+import 'package:PiliPlus/common/widgets/single_choice_list.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
 import 'package:collection/collection.dart';
@@ -38,6 +39,12 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
     }
   }
 
+  void _applyMode(DisplayMode mode) {
+    FlutterDisplayMode.setPreferredMode(mode).whenComplete(
+      () => Future.delayed(const Duration(milliseconds: 100), fetchAll),
+    );
+  }
+
   // 初始化mode/手动设置
   Future<void> init() async {
     try {
@@ -75,30 +82,17 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
             ),
           ),
           Expanded(
-            child: RadioGroup(
-              onChanged: (DisplayMode? newMode) {
-                FlutterDisplayMode.setPreferredMode(
-                  newMode!,
-                ).whenComplete(
-                  () => Future.delayed(
-                    const Duration(milliseconds: 100),
-                    fetchAll,
-                  ),
-                );
+            child: SingleChoiceList<DisplayMode>(
+              scrollable: true,
+              values: modes,
+              selectedValue: preferred,
+              onChanged: (mode) => _applyMode(mode!),
+              titleBuilder: (context, index) {
+                final DisplayMode mode = modes[index];
+                return mode == DisplayMode.auto
+                    ? const Text('自动')
+                    : Text('$mode${mode == active ? '  [系统]' : ''}');
               },
-              groupValue: preferred,
-              child: ListView.builder(
-                itemCount: modes.length,
-                itemBuilder: (context, index) {
-                  final DisplayMode mode = modes[index];
-                  return RadioListTile<DisplayMode>(
-                    value: mode,
-                    title: mode == DisplayMode.auto
-                        ? const Text('自动')
-                        : Text('$mode${mode == active ? '  [系统]' : ''}'),
-                  );
-                },
-              ),
             ),
           ),
         ],

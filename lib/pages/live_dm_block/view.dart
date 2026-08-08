@@ -327,9 +327,9 @@ class _LiveDmBlockPageState extends State<LiveDmBlockPage> {
       );
     }
 
-    return GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Column(
         spacing: 5,
         children: [

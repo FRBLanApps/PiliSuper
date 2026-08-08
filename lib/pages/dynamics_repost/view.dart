@@ -204,8 +204,8 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
     ),
   );
 
-  Widget _buildEditPlaceHolder(ThemeData theme) => GestureDetector(
-    behavior: HitTestBehavior.opaque,
+  // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+  Widget _buildEditPlaceHolder(ThemeData theme) => InkWell(
     onTap: () {
       setState(() => _expanded = true);
       Future.delayed(_durtion, () {

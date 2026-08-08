@@ -106,8 +106,10 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
           itemCount: length,
           itemBuilder: (context, index) {
             if (index == length - 1) {
-              return GestureDetector(
+              // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+              return InkWell(
                 onTap: _showColorPicker,
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: Container(
                   decoration: BoxDecoration(
                     color: themeData.colorScheme.secondaryContainer,
@@ -235,8 +237,10 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   );
 
   Widget _buildColorItem(Color color) {
-    return GestureDetector(
+    // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+    return InkWell(
       onTap: () => _color.value = color,
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Container(
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -287,8 +291,10 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   Widget _buildPositionItem(int mode, String title) {
     return Obx(
       () => Expanded(
-        child: GestureDetector(
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        child: InkWell(
           onTap: () => _mode.value = mode,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -315,8 +321,10 @@ class _SendDanmakuPanelState extends CommonTextPubPageState<SendDanmakuPanel> {
   Widget _buildFontSizeItem(int fontSize, String title) {
     return Obx(
       () => Expanded(
-        child: GestureDetector(
+        // 使用 InkWell 以支持 TV 遥控器方向键聚焦
+        child: InkWell(
           onTap: () => _fontSize.value = fontSize,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
