@@ -7,8 +7,8 @@ import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/models_new/login_devices/device.dart';
 import 'package:PiliPlus/pages/login_devices/controller.dart';
 import 'package:PiliPlus/utils/extension/widget_ext.dart';
-import 'package:flutter/material.dart' hide ListTile;
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart' hide ListTile;
 
 class LoginDevicesPage extends StatefulWidget {
   const LoginDevicesPage({super.key});
@@ -45,27 +45,30 @@ class LoginDevicesPageState extends State<LoginDevicesPage> {
     ColorScheme colorScheme,
     LoadingState<List<LoginDevice>?> loadingState,
   ) {
-    late final divider = Divider(
-      height: 1,
-      color: colorScheme.outline.withValues(alpha: 0.1),
-    );
-    return switch (loadingState) {
-      Loading() => const SliverToBoxAdapter(),
-      Success<List<LoginDevice>?>(:final response) =>
-        response != null && response.isNotEmpty
-            ? SliverList.separated(
-                itemBuilder: (context, index) {
-                  return _buildItem(colorScheme, response[index]);
-                },
-                itemCount: response.length,
-                separatorBuilder: (_, _) => divider,
-              )
-            : HttpError(onReload: _controller.onReload),
-      Error(:final errMsg) => HttpError(
-        errMsg: errMsg,
-        onReload: _controller.onReload,
-      ),
-    };
+    switch (loadingState) {
+      case Loading():
+        return const SliverToBoxAdapter();
+      case Success<List<LoginDevice>?>(:final response):
+        if (response != null && response.isNotEmpty) {
+          final divider = Divider(
+            height: 1,
+            color: colorScheme.outline.withValues(alpha: 0.1),
+          );
+          return SliverList.separated(
+            itemBuilder: (context, index) {
+              return _buildItem(colorScheme, response[index]);
+            },
+            itemCount: response.length,
+            separatorBuilder: (_, _) => divider,
+          );
+        }
+        return HttpError(onReload: _controller.onReload);
+      case Error(:final errMsg):
+        return HttpError(
+          errMsg: errMsg,
+          onReload: _controller.onReload,
+        );
+    }
   }
 
   Widget _buildItem(ColorScheme colorScheme, LoginDevice item) {

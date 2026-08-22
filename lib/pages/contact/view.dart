@@ -5,7 +5,7 @@ import 'package:PiliPlus/pages/follow/child/child_view.dart';
 import 'package:PiliPlus/pages/follow_search/view.dart';
 import 'package:PiliPlus/pages/share/view.dart' show UserModel;
 import 'package:PiliPlus/utils/accounts.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 class ContactPage extends StatefulWidget {
@@ -43,13 +43,6 @@ class _ContactPageState extends State<ContactPage>
     return SimpleScaffold(
       appBar: AppBar(
         title: const Text('通讯录'),
-        bottom: TabBar(
-          controller: _controller,
-          tabs: const [
-            Tab(text: '我的关注'),
-            Tab(text: '我的粉丝'),
-          ],
-        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -70,16 +63,29 @@ class _ContactPageState extends State<ContactPage>
           const SizedBox(width: 16),
         ],
       ),
-      body: tabBarView(
-        controller: _controller,
+      body: Column(
         children: [
-          FollowChildPage(
-            mid: mid,
-            onSelect: widget.isFromSelect ? onSelect : null,
+          TabBar(
+            controller: _controller,
+            tabs: const [
+              Tab(text: '我的关注'),
+              Tab(text: '我的粉丝'),
+            ],
           ),
-          FansPage(
-            showName: false,
-            onSelect: widget.isFromSelect ? onSelect : null,
+          Expanded(
+            child: tabBarView(
+              controller: _controller,
+              children: [
+                FollowChildPage(
+                  mid: mid,
+                  onSelect: widget.isFromSelect ? onSelect : null,
+                ),
+                FansPage(
+                  showName: false,
+                  onSelect: widget.isFromSelect ? onSelect : null,
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -12,9 +12,9 @@ import 'package:PiliPlus/pages/webview/view.dart';
 import 'package:PiliPlus/utils/accounts.dart';
 import 'package:PiliPlus/utils/bili_utils.dart';
 import 'package:PiliPlus/utils/extension/theme_ext.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 class NoteListPage extends CommonSlidePage {
   const NoteListPage({
@@ -60,24 +60,27 @@ class _NoteListPageState extends State<NoteListPage>
       child: MiniScaffold(
         body: Column(
           children: [
-            SizedBox(
+            Container(
               height: 45,
-              child: AppBar(
-                primary: false,
-                automaticallyImplyLeading: false,
-                titleSpacing: 16,
-                toolbarHeight: 45,
-                backgroundColor: Colors.transparent,
-                title: Obx(() {
-                  final count = _controller.count.value;
-                  return Text('笔记${count == -1 ? '' : '($count)'}');
-                }),
-                shape: Border(
+              decoration: BoxDecoration(
+                border: Border(
                   bottom: BorderSide(
                     color: theme.colorScheme.outline.withValues(alpha: 0.1),
                   ),
                 ),
-                actions: [
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Obx(() {
+                      final count = _controller.count.value;
+                      return Text(
+                        '笔记${count == -1 ? '' : '($count)'}',
+                        style: const TextStyle(fontSize: 16),
+                      );
+                    }),
+                  ),
                   IconButton(
                     tooltip: '关闭',
                     icon: const Icon(Icons.close, size: 20),
@@ -177,34 +180,37 @@ class _NoteListPageState extends State<NoteListPage>
     ThemeData theme,
     LoadingState<List<VideoNoteItemModel>?> loadingState,
   ) {
-    late final divider = Divider(
-      height: 1,
-      color: theme.colorScheme.outline.withValues(alpha: 0.1),
-    );
-    return switch (loadingState) {
-      Loading() => SliverPrototypeExtentList.builder(
-        prototypeItem: const VideoReplySkeleton(),
-        itemBuilder: (_, _) => const VideoReplySkeleton(),
-        itemCount: 8,
-      ),
-      Success(:final response) =>
-        response != null && response.isNotEmpty
-            ? SliverList.separated(
-                itemBuilder: (context, index) {
-                  if (index == response.length - 1) {
-                    _controller.onLoadMore();
-                  }
-                  return _itemWidget(theme, response[index]);
-                },
-                itemCount: response.length,
-                separatorBuilder: (context, index) => divider,
-              )
-            : HttpError(onReload: _controller.onReload),
-      Error(:final errMsg) => HttpError(
-        errMsg: errMsg,
-        onReload: _controller.onReload,
-      ),
-    };
+    switch (loadingState) {
+      case Loading():
+        return SliverPrototypeExtentList.builder(
+          prototypeItem: const VideoReplySkeleton(),
+          itemBuilder: (_, _) => const VideoReplySkeleton(),
+          itemCount: 8,
+        );
+      case Success(:final response):
+        if (response != null && response.isNotEmpty) {
+          final divider = Divider(
+            height: 1,
+            color: theme.colorScheme.outline.withValues(alpha: 0.1),
+          );
+          return SliverList.separated(
+            itemBuilder: (context, index) {
+              if (index == response.length - 1) {
+                _controller.onLoadMore();
+              }
+              return _itemWidget(theme, response[index]);
+            },
+            itemCount: response.length,
+            separatorBuilder: (context, index) => divider,
+          );
+        }
+        return HttpError(onReload: _controller.onReload);
+      case Error(:final errMsg):
+        return HttpError(
+          errMsg: errMsg,
+          onReload: _controller.onReload,
+        );
+    }
   }
 
   Widget _itemWidget(ThemeData theme, VideoNoteItemModel item) {

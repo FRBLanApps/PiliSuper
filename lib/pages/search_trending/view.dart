@@ -16,7 +16,7 @@ import 'package:PiliPlus/utils/extension/num_ext.dart';
 import 'package:PiliPlus/utils/extension/size_ext.dart';
 import 'package:PiliPlus/utils/image_utils.dart';
 import 'package:cached_network_image_ce/cached_network_image.dart';
-import 'package:flutter/material.dart' hide ListTile;
+import 'package:material_ui/material_ui.dart' hide ListTile;
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:get/get.dart';
 
@@ -129,84 +129,87 @@ class _SearchTrendingPageState extends State<SearchTrendingPage> {
     ThemeData theme,
     LoadingState<List<SearchTrendingItemModel>?> loadingState,
   ) {
-    late final divider = Divider(
-      height: 1,
-      indent: 48,
-      color: theme.colorScheme.outline.withValues(alpha: 0.1),
-    );
-    return switch (loadingState) {
-      Loading() => linearLoading,
-      Success(:final response) =>
-        response != null && response.isNotEmpty
-            ? SliverList.separated(
-                itemCount: response.length,
-                itemBuilder: (context, index) {
-                  final item = response[index];
-                  return ListTile(
-                    dense: true,
-                    onTap: () => Get.toNamed(
-                      '/searchResult',
-                      parameters: {
-                        'keyword': item.keyword!,
-                      },
-                    ),
-                    leading: index < _controller.topCount
-                        ? const Icon(
-                            size: 17,
-                            Icons.vertical_align_top_outlined,
-                            color: Color(0xFFd1403e),
-                          )
-                        : Text(
-                            '${index + 1 - _controller.topCount}',
-                            style: TextStyle(
-                              fontWeight: .bold,
-                              color: ColourUtils.index2Color(
-                                index - _controller.topCount,
-                                theme.colorScheme.outline,
-                              ),
-                              fontSize: 17,
-                              fontStyle: FontStyle.italic,
-                            ),
+    switch (loadingState) {
+      case Loading():
+        return linearLoading;
+      case Success(:final response):
+        if (response != null && response.isNotEmpty) {
+          final divider = Divider(
+            height: 1,
+            indent: 48,
+            color: theme.colorScheme.outline.withValues(alpha: 0.1),
+          );
+          return SliverList.separated(
+            itemCount: response.length,
+            itemBuilder: (context, index) {
+              final item = response[index];
+              return ListTile(
+                dense: true,
+                onTap: () => Get.toNamed(
+                  '/searchResult',
+                  parameters: {
+                    'keyword': item.keyword!,
+                  },
+                ),
+                leading: index < _controller.topCount
+                    ? const Icon(
+                        size: 17,
+                        Icons.vertical_align_top_outlined,
+                        color: Color(0xFFd1403e),
+                      )
+                    : Text(
+                        '${index + 1 - _controller.topCount}',
+                        style: TextStyle(
+                          fontWeight: .bold,
+                          color: ColourUtils.index2Color(
+                            index - _controller.topCount,
+                            theme.colorScheme.outline,
                           ),
-                    title: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            item.keyword!,
-                            maxLines: 1,
-                            overflow: .ellipsis,
-                            strutStyle: const StrutStyle(height: 1, leading: 0),
-                            style: const TextStyle(height: 1, fontSize: 15),
-                          ),
+                          fontSize: 17,
+                          fontStyle: FontStyle.italic,
                         ),
-                        if (item.icon?.isNotEmpty == true) ...[
-                          const SizedBox(width: 4),
-                          CachedNetworkImage(
-                            height: 16,
-                            memCacheHeight: 16.cacheSize(context),
-                            imageUrl: ImageUtils.thumbnailUrl(item.icon!),
-                            placeholder: (_, _) => const SizedBox.shrink(),
-                          ),
-                        ] else if (item.showLiveIcon == true) ...[
-                          const SizedBox(width: 4),
-                          Image.asset(
-                            Assets.livingRect,
-                            width: 51,
-                            height: 16,
-                            cacheHeight: 16.cacheSize(context),
-                          ),
-                        ],
-                      ],
+                      ),
+                title: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        item.keyword!,
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        strutStyle: const StrutStyle(height: 1, leading: 0),
+                        style: const TextStyle(height: 1, fontSize: 15),
+                      ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) => divider,
-              )
-            : HttpError(onReload: _controller.onReload),
-      Error(:final errMsg) => HttpError(
-        errMsg: errMsg,
-        onReload: _controller.onReload,
-      ),
-    };
+                    if (item.icon?.isNotEmpty == true) ...[
+                      const SizedBox(width: 4),
+                      CachedNetworkImage(
+                        height: 16,
+                        memCacheHeight: 16.cacheSize(context),
+                        imageUrl: ImageUtils.thumbnailUrl(item.icon!),
+                        placeholder: (_, _) => const SizedBox.shrink(),
+                      ),
+                    ] else if (item.showLiveIcon == true) ...[
+                      const SizedBox(width: 4),
+                      Image.asset(
+                        Assets.livingRect,
+                        width: 51,
+                        height: 16,
+                        cacheHeight: 16.cacheSize(context),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => divider,
+          );
+        }
+        return HttpError(onReload: _controller.onReload);
+      case Error(:final errMsg):
+        return HttpError(
+          errMsg: errMsg,
+          onReload: _controller.onReload,
+        );
+    }
   }
 }

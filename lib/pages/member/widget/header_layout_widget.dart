@@ -17,8 +17,8 @@
 
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show BoxHitTestResult, BoxParentData;
+import 'package:PiliPlus/common/widgets/slotted_layout_helper.dart';
+import 'package:material_ui/material_ui.dart';
 
 const double kHeaderHeight = 135.0;
 
@@ -64,30 +64,27 @@ class HeaderLayoutWidget
 }
 
 class RenderHeaderWidget extends RenderBox
-    with SlottedContainerRenderObjectMixin<HeaderType, RenderBox> {
+    with
+        SlottedContainerRenderObjectMixin<HeaderType, RenderBox>,
+        SlottedLayoutMixin {
   RenderBox get header => childForSlot(.header)!;
   RenderBox get avatar => childForSlot(.avatar)!;
   RenderBox get actions => childForSlot(.actions)!;
 
-  Offset _getOffset(RenderBox child) {
-    return (child.parentData as BoxParentData).offset;
-  }
-
-  void _setOffset(RenderBox child, Offset offset) {
-    (child.parentData as BoxParentData).offset = offset;
-  }
+  @override
+  Iterable<HeaderType> get slots => HeaderType.values;
 
   @override
   void performLayout() {
     double height = kHeaderHeight;
     final maxWidth = constraints.maxWidth;
 
-    _setOffset(
+    setOffset(
       header..layout(constraints),
       Offset.zero,
     );
 
-    _setOffset(
+    setOffset(
       avatar..layout(constraints),
       const Offset(_kAvatarLeftPadding, _kAvatarTopPadding),
     );
@@ -105,7 +102,7 @@ class RenderHeaderWidget extends RenderBox
             ))
             .size;
     height += (math.max(_kAvatarEffectiveHeight, childSize.height)) + 5.0;
-    _setOffset(
+    setOffset(
       actions,
       Offset(
         maxWidth - childSize.width - _kActionsRightPadding,
@@ -119,28 +116,11 @@ class RenderHeaderWidget extends RenderBox
   @override
   void paint(PaintingContext context, Offset offset) {
     void doPaint(RenderBox child) {
-      context.paintChild(child, _getOffset(child) + offset);
+      context.paintChild(child, getOffset(child) + offset);
     }
 
     doPaint(header);
     doPaint(avatar);
     doPaint(actions);
-  }
-
-  @override
-  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
-    for (final child in children) {
-      final bool isHit = result.addWithPaintOffset(
-        offset: _getOffset(child),
-        position: position,
-        hitTest: (BoxHitTestResult result, Offset transformed) {
-          return child.hitTest(result, position: transformed);
-        },
-      );
-      if (isHit) {
-        return true;
-      }
-    }
-    return false;
   }
 }

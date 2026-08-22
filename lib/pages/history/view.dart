@@ -14,8 +14,8 @@ import 'package:PiliPlus/pages/history/controller.dart';
 import 'package:PiliPlus/pages/history/widgets/item.dart';
 import 'package:PiliPlus/utils/extension/scroll_controller_ext.dart';
 import 'package:PiliPlus/utils/grid.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key, this.type});
@@ -100,10 +100,7 @@ class _HistoryPageState extends State<HistoryPage>
               child: _buildAppBar,
             ),
             body: Padding(
-              padding: EdgeInsets.only(
-                left: padding.left,
-                right: padding.right,
-              ),
+              padding: .only(left: padding.left, right: padding.right),
               child: Obx(() {
                 final tabs = _historyController.tabs;
                 if (tabs.isEmpty) {
@@ -112,6 +109,7 @@ class _HistoryPageState extends State<HistoryPage>
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    ?_buildPauseTip,
                     TabBar(
                       controller: _historyController.tabController,
                       onTap: (index) {
@@ -142,7 +140,9 @@ class _HistoryPageState extends State<HistoryPage>
                             CustomHorizontalDragGestureRecognizer.new,
                         children: [
                           KeepAliveWrapper(child: child),
-                          ...tabs.map((item) => HistoryPage(type: item.type)),
+                          ...tabs.map(
+                            (item) => HistoryPage(type: item.type),
+                          ),
                         ],
                       ),
                     ),
@@ -158,7 +158,6 @@ class _HistoryPageState extends State<HistoryPage>
 
   AppBar get _buildAppBar => AppBar(
     title: const Text('观看记录'),
-    bottom: _buildPauseTip,
     actions: [
       IconButton(
         tooltip: '搜索',
