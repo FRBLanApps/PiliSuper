@@ -133,6 +133,13 @@ List<SettingsModel> get videoSettings => [
     onTap: _showLiveCellularQaDialog,
   ),
   NormalModel(
+    title: '投屏默认画质',
+    leading: const Icon(Icons.cast_outlined),
+    getSubtitle: () =>
+        '当前画质：${Pref.defaultCastQa == -1 ? '跟随播放画质' : VideoQuality.fromCode(Pref.defaultCastQa).desc}',
+    onTap: _showCastQaDialog,
+  ),
+  NormalModel(
     title: '首选解码格式',
     leading: const Icon(Icons.movie_creation_outlined),
     getSubtitle: () =>
@@ -332,11 +339,31 @@ Future<void> _showLiveQaDialog(
   }
 }
 
-Future<void> _showLiveCellularQaDialog(
+Future<void> _showCastQaDialog(
   BuildContext context,
   VoidCallback setState,
 ) async {
   final res = await showDialog<int>(
+    context: context,
+    builder: (context) => SelectDialog<int>(
+      title: '投屏默认画质',
+      value: Pref.defaultCastQa,
+      values: [
+        (-1, '跟随播放画质'),
+        ...VideoQuality.values.map((e) => (e.code, e.desc)),
+      ],
+    ),
+  );
+  if (res != null) {
+    await GStorage.setting.put(SettingBoxKey.defaultCastQa, res);
+    setState();
+  }
+}
+
+Future<void> _showLiveCellularQaDialog(
+  BuildContext context,
+  VoidCallback setState,
+) async {  final res = await showDialog<int>(
     context: context,
     builder: (context) => SelectDialog<int>(
       title: '蜂窝网络直播默认画质',

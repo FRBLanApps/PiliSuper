@@ -6,6 +6,7 @@ abstract final class SettingBoxKey {
       defaultVideoQaCellular = 'defaultVideoQaCellular',
       defaultAudioQa = 'defaultAudioQa',
       defaultAudioQaCellular = 'defaultAudioQaCellular',
+      defaultCastQa = 'defaultCastQa',
       autoPlayEnable = 'autoPlayEnable',
       fullScreenMode = 'fullScreenMode',
       preferCodecs = 'preferCodecs',

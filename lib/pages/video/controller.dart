@@ -36,6 +36,7 @@ import 'package:PiliPlus/models_new/video/video_play_info/subtitle.dart';
 import 'package:PiliPlus/models_new/video/video_stein_edgeinfo/data.dart';
 import 'package:PiliPlus/pages/audio/view.dart';
 import 'package:PiliPlus/pages/common/publish/publish_route.dart';
+import 'package:PiliPlus/pages/dlna/dlna_args.dart';
 import 'package:PiliPlus/pages/search/widgets/search_text.dart';
 import 'package:PiliPlus/pages/sponsor_block/block_mixin.dart';
 import 'package:PiliPlus/pages/video/download_panel/view.dart';
@@ -1658,38 +1659,33 @@ class VideoDetailController extends GetxController
 
   @pragma('vm:notify-debugger-on-exception')
   Future<void> onCast() async {
+    String? title;
+    try {
+      if (isUgc) {
+        title = Get.find<UgcIntroController>(
+          tag: heroTag,
+        ).videoDetail.value.title;
+      } else {
+        title = Get.find<PgcIntroController>(
+          tag: heroTag,
+        ).videoDetail.value.title;
+      }
+    } catch (_) {}
+    if (kDebugMode) {
+      debugPrint(title);
+    }
+
     SmartDialog.showLoading();
-    final res = await VideoHttp.tvPlayUrl(
+    final res = await DlnaArgs.create(
       cid: cid.value,
       objectId: epId ?? aid,
       playurlType: epId != null ? 2 : 1,
-      qn: currentVideoQa.value?.code,
+      qn: Pref.defaultCastQa < 0 ? currentVideoQa.value?.code : Pref.defaultCastQa,
+      title: title,
     );
     SmartDialog.dismiss();
     if (res case Success(:final response)) {
-      final first = response.durl?.firstOrNull;
-      if (first == null || first.playUrls.isEmpty) {
-        SmartDialog.showToast('不支持投屏');
-        return;
-      }
-      final url = VideoUtils.getCdnUrl(first.playUrls);
-
-      String? title;
-      try {
-        if (isUgc) {
-          title = Get.find<UgcIntroController>(
-            tag: heroTag,
-          ).videoDetail.value.title;
-        } else {
-          title = Get.find<PgcIntroController>(
-            tag: heroTag,
-          ).videoDetail.value.title;
-        }
-      } catch (_) {}
-      if (kDebugMode) {
-        debugPrint(title);
-      }
-      Get.toNamed('/dlna', parameters: {'url': url, 'title': ?title});
+      Get.toNamed('/dlna', arguments: response);
     } else {
       res.toast();
     }

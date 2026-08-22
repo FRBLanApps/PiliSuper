@@ -4,8 +4,12 @@ import 'package:PiliPlus/common/widgets/loading_widget/http_error.dart';
 import 'package:PiliPlus/common/widgets/loading_widget/loading_widget.dart';
 import 'package:PiliPlus/common/widgets/scaffold/simple_scaffold.dart';
 import 'package:PiliPlus/common/widgets/view_sliver_safe_area.dart';
+import 'package:PiliPlus/http/loading_state.dart';
+import 'package:PiliPlus/pages/dlna/dlna_args.dart';
+import 'package:PiliPlus/pages/dlna/dlna_utils.dart';
 import 'package:dlna_dart/dlna.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class DLNAPage extends StatefulWidget {
@@ -18,11 +22,11 @@ class DLNAPage extends StatefulWidget {
 class _DLNAPageState extends State<DLNAPage> {
   final _searcher = DLNAManager();
   final Map<String, DLNADevice> _deviceList = {};
-  late final _url = Get.parameters['url']!;
-  late final _title = Get.parameters['title'];
+  late final _args = Get.arguments as DlnaArgs;
 
   Timer? _timer;
   bool _isSearching = false;
+  bool _isSwitchingQa = false;
   DLNADevice? _lastDevice;
   String? _lastDeviceKey;
 
@@ -58,6 +62,60 @@ class _DLNAPageState extends State<DLNAPage> {
     }
   }
 
+  Future<void> _onSelectQuality(int qn) async {
+    if (_isSwitchingQa || qn == _args.qn) return;
+    _isSwitchingQa = true;
+    SmartDialog.showLoading();
+    final res = await _args.switchQuality(qn);
+    if (res case Success()) {
+      final device = _lastDevice;
+      // 重推前记录当前播放进度，重推后恢复
+      String? seekTime;
+      if (device != null) {
+        try {
+          seekTime = parseSeekTime(
+            await device.position().timeout(const Duration(seconds: 5)),
+          );
+        } catch (_) {}
+      }
+      SmartDialog.dismiss();
+      if (!mounted) {
+        // 页面已退出，仍完成重推以保持电视端播放
+        await _rePush(device, seekTime);
+        _isSwitchingQa = false;
+        return;
+      }
+      setState(() {});
+      SmartDialog.showToast('清晰度已切换为：${_args.qnDesc}');
+      await _rePush(device, seekTime);
+      _isSwitchingQa = false;
+    } else {
+      SmartDialog.dismiss();
+      _isSwitchingQa = false;
+      if (!mounted) return;
+      res.toast();
+    }
+  }
+
+  Future<void> _rePush(DLNADevice? device, String? seekTime) async {
+    if (device == null) return;
+    await device.setUrl(_args.url, title: _args.title ?? '');
+    await device.play();
+    if (seekTime != null) {
+      // 部分设备就绪需要时间，seek 失败延时重试一次
+      for (final wait in const [
+        Duration(milliseconds: 500),
+        Duration(milliseconds: 1500),
+      ]) {
+        await Future.delayed(wait);
+        try {
+          await device.seek(seekTime).timeout(const Duration(seconds: 8));
+          break;
+        } catch (_) {}
+      }
+    }
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -75,6 +133,31 @@ class _DLNAPageState extends State<DLNAPage> {
       appBar: AppBar(
         title: const Text('投屏'),
         actions: [
+          if (_args.qualities.length > 1)
+            PopupMenuButton<int>(
+              tooltip: '清晰度',
+              initialValue: _args.qn,
+              onSelected: _onSelectQuality,
+              itemBuilder: (context) => _args.qualities
+                  .map(
+                    (item) => PopupMenuItem(
+                      value: item.code,
+                      child: Text(item.desc),
+                    ),
+                  )
+                  .toList(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 2,
+                  children: [
+                    Text(_args.qnDesc),
+                    const Icon(Icons.arrow_drop_down, size: 20),
+                  ],
+                ),
+              ),
+            ),
           IconButton(
             tooltip: '搜索',
             onPressed: _onSearch,
@@ -119,7 +202,7 @@ class _DLNAPageState extends State<DLNAPage> {
               _lastDevice = device;
               _lastDeviceKey = key;
               setState(() {});
-              await device.setUrl(_url, title: _title ?? '');
+              await device.setUrl(_args.url, title: _args.title ?? '');
               await device.play();
             },
           );
