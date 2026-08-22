@@ -106,8 +106,8 @@ dependencies:
       ref: v10.9.0
   get:
     git:
-      url: https://github.com/bggRGjQaUbCoE/getx.git
-      ref: version_4.7.2
+      url: https://github.com/FRBLanApps/getx.git
+      ref: feat/predictive-back
   hive_ce: ^2.19.3
   html: ^0.15.4
   http2: ^2.3.1
