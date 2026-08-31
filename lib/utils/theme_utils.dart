@@ -146,7 +146,11 @@ abstract final class ThemeUtils {
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          // PredictiveBackFullscreenPageTransitionsBuilder falls back to
+          // ZoomPageTransitionsBuilder below API 34, so behavior is
+          // unchanged on older devices.
+          TargetPlatform.android:
+              PredictiveBackFullscreenPageTransitionsBuilder(),
         },
       ),
     );
