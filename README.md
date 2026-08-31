@@ -11,9 +11,6 @@
 ![GitHub License](https://img.shields.io/github/license/FRBLanApps/PiliSuper?style=flat&logo=GNU&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html)
 ![GitHub all releases](https://img.shields.io/github/downloads/FRBLanApps/PiliSuper/total?style=flat&logo=Github)
 
-[![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?logo=telegram)](https://t.me/FRBLanApps_Group)
-[![QQ Group](https://img.shields.io/badge/QQ-Join%20Group-green?logo=QQ)](https://qm.qq.com/cgi-bin/qm/qr?k=1047446965)
-
 </div>
     <p>使用Flutter开发的BiliBili第三方客户端</p>
 
@@ -26,10 +23,24 @@
 </div>
 <br/>
 
-## 登陆凭证与设置的迁移
+> [!TIP]
+> **登录凭证与设置的迁移**
+>
+> 本项目的设置信息已不再建议迁移至上游 PiliPlus，但上游的配置信息仍可用于本项目。
+> 迁移选项入口：**我的 - 设置 - 关于 - 导入/导出登录信息/设置**
 
-本项目的设置信息已不再建议迁移至上游 PiliPlus，但上游的配置信息仍可用于本项目。
-迁移选项入口：**我的 - 设置 - 关于 - 导入/导出登录信息/设置**
+> [!NOTE]
+> 时过境迁，转眼又是一年九月。开发者们也将回归学业，在下个长假之前，项目可能不会有太多功能更新；但闲暇之余，我们仍会关注并回复大家的意见与反馈。期待下个长假再会！
+
+如果你想参与项目维护，或想与其他用户交流，欢迎加群：
+
+<details>
+<summary>加群方式</summary>
+
+- Telegram: [点击加群](https://t.me/FRBLanApps_Group)
+- QQ: [点击加群](https://qm.qq.com/cgi-bin/qm/qr?k=udtok7jenzFQq_T_oGBkSYELBZJg1Pcp&jump_from=webapi&authKey=Whu6v%2B49D4byn9Q2ahb0bOWOXB0uW4Ym2G7cI0mjI6YfTgYmMyVc2%2Br34Egm9GAf)
+
+</details>
 
 ## 适配平台
 

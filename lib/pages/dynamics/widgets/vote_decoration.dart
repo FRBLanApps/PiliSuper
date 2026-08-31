@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class VoteDecoration extends Decoration {
   const VoteDecoration({
@@ -62,12 +62,7 @@ class _VoteDecorationPainter extends BoxPainter {
   final VoteDecoration _decoration;
 
   Paint? _cachedBackgroundPaint;
-  Rect? _rectForCachedBackgroundPaint;
   Paint _getBackgroundPaint(Rect rect, TextDirection? textDirection) {
-    assert(
-      _rectForCachedBackgroundPaint == null,
-    );
-
     if (_cachedBackgroundPaint == null) {
       final paint = Paint()..color = _decoration.color;
       _cachedBackgroundPaint = paint;

@@ -22,16 +22,18 @@ import 'package:PiliPlus/pages/whisper_detail/widget/chat_item.dart';
 import 'package:PiliPlus/pages/whisper_link_setting/view.dart';
 import 'package:PiliPlus/utils/extension/file_ext.dart';
 import 'package:PiliPlus/utils/extension/num_ext.dart';
-import 'package:PiliPlus/utils/extension/widget_ext.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/page_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_ui/material_ui.dart' hide TextField;
 import 'package:mime/mime.dart';
+
+const _kMaxExtent = 625.0;
+const _kConstraints = BoxConstraints(maxWidth: _kMaxExtent);
 
 class WhisperDetailPage extends CommonRichTextPubPage {
   const WhisperDetailPage({
@@ -128,27 +130,26 @@ class _WhisperDetailPageState
             Expanded(
               child: Listener(
                 onPointerDown: hidePanel,
-                behavior: HitTestBehavior.opaque,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Obx(
-                    () =>
-                        _buildBody(_whisperDetailController.loadingState.value),
-                  ),
+                behavior: .opaque,
+                child: Obx(
+                  () => _buildBody(_whisperDetailController.loadingState.value),
                 ),
               ),
             ),
             if (_whisperDetailController.mid != null) ...[
-              _buildInputView(theme, containerColor),
-              buildPanelContainer(
-                theme,
-                containerColor,
+              ConstrainedBox(
+                constraints: _kConstraints,
+                child: _buildInputView(theme, containerColor),
+              ),
+              ConstrainedBox(
+                constraints: _kConstraints,
+                child: buildPanelContainer(theme, containerColor),
               ),
             ] else
               SizedBox(height: padding.bottom),
           ],
         ),
-      ).constraintWidth(),
+      ),
     );
   }
 
@@ -158,6 +159,7 @@ class _WhisperDetailPageState
       Success(:final response) =>
         response != null && response.isNotEmpty
             ? ChatListView.separated(
+                maxExtent: _kMaxExtent,
                 itemCount: response.length,
                 padding: const .all(kChatListPadding),
                 physics: platformAlwaysClampingPhysics,
@@ -211,22 +213,23 @@ class _WhisperDetailPageState
         else
           PopupMenuItem(
             height: 42,
-            onTap: () => autoWrapReportDialog(
-              context,
-              ban: false,
-              ReportOptions.imMsgReport,
-              (reasonType, reasonDesc, banUid) =>
-                  _whisperDetailController.onReport(
-                    item,
-                    reasonType,
-                    reasonType == 0
-                        ? reasonDesc!
-                        : ReportOptions.imMsgReport['']![reasonType]!,
-                  ),
-            ),
+            onTap: () => onReport(item),
             child: const Text('举报', style: TextStyle(fontSize: 14)),
           ),
       ],
+    );
+  }
+
+  void onReport(Msg item) {
+    autoWrapReportDialog(
+      context,
+      ban: false,
+      ReportOptions.imMsgReport,
+      (reasonType, reasonDesc, banUid) => _whisperDetailController.onReport(
+        item,
+        reasonType,
+        reasonDesc ?? ReportOptions.imMsgReport['']![reasonType]!,
+      ),
     );
   }
 
@@ -254,19 +257,7 @@ class _WhisperDetailPageState
             : ListTile(
                 onTap: () {
                   Get.back();
-                  autoWrapReportDialog(
-                    context,
-                    ban: false,
-                    ReportOptions.imMsgReport,
-                    (reasonType, reasonDesc, banUid) =>
-                        _whisperDetailController.onReport(
-                          item,
-                          reasonType,
-                          reasonType == 0
-                              ? reasonDesc!
-                              : ReportOptions.imMsgReport['']![reasonType]!,
-                        ),
-                  );
+                  onReport(item);
                 },
                 dense: true,
                 title: const Text('举报', style: TextStyle(fontSize: 14)),

@@ -5,9 +5,9 @@ import 'package:PiliPlus/models/common/enum_with_label.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/utils/storage.dart';
 import 'package:PiliPlus/utils/storage_key.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BarSetPage extends StatefulWidget {
   const BarSetPage({super.key});
@@ -33,7 +33,8 @@ class _BarSetPageState extends State<BarSetPage> with ReorderMixin {
         .map(
           (e) => Pair(
             first: e,
-            second: cache?.contains(e.index) ??
+            second:
+                cache?.contains(e.index) ??
                 !(key == SettingBoxKey.navBarSort &&
                     const {
                       NavigationBarType.history,

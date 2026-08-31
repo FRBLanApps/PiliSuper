@@ -7,8 +7,8 @@ import 'package:PiliPlus/pages/common/slide/common_slide_page.dart';
 import 'package:PiliPlus/pages/video/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/controller.dart';
 import 'package:PiliPlus/utils/duration_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ViewPointsPage extends CommonSlidePage {
   const ViewPointsPage({
@@ -36,40 +36,38 @@ class _ViewPointsPageState extends State<ViewPointsPage>
   @override
   Widget buildPage(ThemeData theme) {
     return SimpleScaffold(
-      appBar: AppBar(
-        primary: false,
-        automaticallyImplyLeading: false,
-        titleSpacing: 16,
-        title: const Text('分段信息'),
-        toolbarHeight: 45,
-        actions: [
-          const Text(
-            '分段进度条 ',
-            style: TextStyle(fontSize: 16),
-          ),
-          Obx(
-            () => Transform.scale(
-              alignment: Alignment.centerLeft,
-              scale: 0.8,
-              child: Switch(
-                value: videoDetailController.showVP.value,
-                onChanged: videoDetailController.showVP.call,
-              ),
+      appBar: Container(
+        height: 45,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: theme.colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
-          iconButton(
-            context: context,
-            size: 30,
-            icon: const Icon(Icons.clear),
-            tooltip: '关闭',
-            onPressed: Get.back,
-          ),
-          const SizedBox(width: 16),
-        ],
-        shape: Border(
-          bottom: BorderSide(
-            color: theme.colorScheme.outline.withValues(alpha: 0.1),
-          ),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            const Expanded(child: Text('分段信息', style: TextStyle(fontSize: 16))),
+            Obx(
+              () => Transform.scale(
+                alignment: Alignment.centerLeft,
+                scale: 0.8,
+                child: Switch(
+                  value: videoDetailController.showVP.value,
+                  onChanged: videoDetailController.showVP.call,
+                ),
+              ),
+            ),
+            iconButton(
+              context: context,
+              size: 30,
+              icon: const Icon(Icons.clear),
+              tooltip: '关闭',
+              onPressed: Get.back,
+            ),
+            const SizedBox(width: 16),
+          ],
         ),
       ),
       body: enableSlide ? slideList(theme) : buildList(theme),

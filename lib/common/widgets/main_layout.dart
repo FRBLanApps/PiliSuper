@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart'
-    show BoxParentData, BoxHitTestResult, ChildLayoutHelper;
+import 'package:PiliPlus/common/widgets/slotted_layout_helper.dart';
+import 'package:flutter/rendering.dart' show ChildLayoutHelper;
+import 'package:material_ui/material_ui.dart';
 
 enum MainType { sideBar, bottomNav, body }
 
@@ -36,18 +36,15 @@ class MainLayout
 }
 
 class _RenderMainLayout extends RenderBox
-    with SlottedContainerRenderObjectMixin<MainType, RenderBox> {
+    with
+        SlottedContainerRenderObjectMixin<MainType, RenderBox>,
+        SlottedLayoutMixin {
   RenderBox? get sideBar => childForSlot(.sideBar);
   RenderBox? get bottomNav => childForSlot(.bottomNav);
   RenderBox get body => childForSlot(.body)!;
 
-  Offset _getOffset(RenderBox child) {
-    return (child.parentData as BoxParentData).offset;
-  }
-
-  void _setOffset(RenderBox child, Offset offset) {
-    (child.parentData as BoxParentData).offset = offset;
-  }
+  @override
+  Iterable<MainType> get slots => MainType.values;
 
   @override
   void performLayout() {
@@ -63,7 +60,7 @@ class _RenderMainLayout extends RenderBox
         sideBar,
         BoxConstraints.tightFor(height: constraints.maxHeight),
       ).width;
-      _setOffset(sideBar, .zero);
+      setOffset(sideBar, .zero);
 
       bodyOffset = Offset(sideBarWidth, 0);
       bodyConstraints = BoxConstraints.tightFor(
@@ -77,7 +74,7 @@ class _RenderMainLayout extends RenderBox
           bottomNav,
           constraints.loosen(),
         );
-        _setOffset(
+        setOffset(
           bottomNav,
           Offset(
             (constraints.maxWidth - bottomNavSize.width) / 2,
@@ -94,38 +91,19 @@ class _RenderMainLayout extends RenderBox
     }
 
     final body = this.body..layout(bodyConstraints);
-    _setOffset(body, bodyOffset);
+    setOffset(body, bodyOffset);
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
     void doPaint(RenderBox? child) {
       if (child != null) {
-        context.paintChild(child, _getOffset(child) + offset);
+        context.paintChild(child, getOffset(child) + offset);
       }
     }
 
     doPaint(sideBar);
     doPaint(body);
     doPaint(bottomNav);
-  }
-
-  @override
-  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
-    for (final type in MainType.values) {
-      final child = childForSlot(type);
-      if (child == null) continue;
-      final bool isHit = result.addWithPaintOffset(
-        offset: _getOffset(child),
-        position: position,
-        hitTest: (BoxHitTestResult result, Offset transformed) {
-          return child.hitTest(result, position: transformed);
-        },
-      );
-      if (isHit) {
-        return true;
-      }
-    }
-    return false;
   }
 }

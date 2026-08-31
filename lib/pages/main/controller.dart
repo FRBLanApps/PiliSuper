@@ -6,6 +6,7 @@ import 'package:PiliPlus/grpc/dyn.dart';
 import 'package:PiliPlus/http/loading_state.dart';
 import 'package:PiliPlus/http/msg.dart';
 import 'package:PiliPlus/models/common/dynamic/dynamic_badge_mode.dart';
+import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/pages/dynamics/controller.dart';
@@ -21,8 +22,8 @@ import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:PiliPlus/utils/update.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_throttle.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MainController extends GetxController
     with GetSingleTickerProviderStateMixin, AccountMixin {
@@ -102,7 +103,7 @@ class MainController extends GetxController
 
     hasDyn = navigationBars.contains(NavigationBarType.dynamics);
     if (dynamicBadgeMode != DynamicBadgeMode.hidden) {
-      if (hasDyn) {
+      if (hasDyn && navigationBars[selectedIndex.value] != .dynamics) {
         if (checkDynamic) {
           _lastCheckDynamicAt = DateTime.now().millisecondsSinceEpoch;
         }
@@ -227,13 +228,15 @@ class MainController extends GetxController
     late final List<NavigationBarType> navigationBars;
     if (navBarSort == null || navBarSort.isEmpty) {
       navigationBars = NavigationBarType.values
-          .where((item) => !const {
-            NavigationBarType.history,
-            NavigationBarType.fav,
-            NavigationBarType.download,
-            NavigationBarType.subscription,
-            NavigationBarType.later,
-          }.contains(item))
+          .where(
+            (item) => !const {
+              NavigationBarType.history,
+              NavigationBarType.fav,
+              NavigationBarType.download,
+              NavigationBarType.subscription,
+              NavigationBarType.later,
+            }.contains(item),
+          )
           .toList();
     } else {
       final mapped = navBarSort
@@ -346,6 +349,16 @@ class MainController extends GetxController
     if (hasHome) {
       homeController.showTopBar?.value = true;
     }
+  }
+
+  bool refreshRecommendations() {
+    if (navigationBars[selectedIndex.value] == NavigationBarType.home &&
+        homeController.tabs[homeController.tabController.index] ==
+            HomeTabType.rcmd) {
+      homeController.onRefresh();
+      return true;
+    }
+    return false;
   }
 
   @override
