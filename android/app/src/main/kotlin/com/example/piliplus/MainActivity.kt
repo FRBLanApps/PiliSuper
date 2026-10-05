@@ -1,6 +1,5 @@
 package com.example.piliplus
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -41,7 +40,6 @@ class MainActivity : AudioServiceActivity() {
         // 不置空 ExportChannel 的回调：共享引擎在 Activity 销毁后仍会继续
         // 后台导出，通知栏的「取消」依赖它回传 Dart。handler 只持有
         // applicationContext 与引擎 messenger，不会泄漏 Activity。
-        stopService(Intent(this, com.ryanheise.audioservice.AudioService::class.java))
         super.onDestroy()
     }
 

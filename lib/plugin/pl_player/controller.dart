@@ -1086,7 +1086,7 @@ class PlPlayerController with BlockConfigMixin, AudioNormalizationMixin {
           _onBufferingStarted();
         }
         if (!playerStatus.isCompleted) {
-          _stopWakeLockTimer();
+          if (playerStatus.isPlaying) _stopWakeLockTimer();
           _updatePlaybackState();
         }
       }),
