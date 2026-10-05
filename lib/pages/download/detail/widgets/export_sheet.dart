@@ -4,9 +4,9 @@ import 'package:PiliPlus/models/common/export_mode.dart';
 import 'package:PiliPlus/models_new/download/bili_download_entry_info.dart';
 import 'package:PiliPlus/services/export/cache_export_service.dart';
 import 'package:PiliPlus/utils/export/export_target.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// 进度对话框的 tag，用于「后台运行」与结束时定向关闭。
 const String _progressTag = 'cache_export_progress';

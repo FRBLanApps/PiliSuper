@@ -153,6 +153,11 @@ dist
 __pycache__/
 .venv/
 test*
+!/test/
+/test/*.dart
+!/test/*regression_test.dart
+!/test/cache_export_dialog_test.dart
+!/test/download_nav_bar_updates_test.dart
 !tool/build/tests/
 !tool/build/tests/test_*.py
 
