@@ -188,6 +188,20 @@ class RenameSandbox(unittest.TestCase):
 
 
 class FullRenameTests(RenameSandbox):
+    def test_english_credit_links_survive_repository_rename(self):
+        # Given
+        upstream = "https://github.com/bggRGjQaUbCoE/PiliPlus"
+        write("README.en.md", f"Credit to [{upstream}]({upstream}).\n"
+              f"Download: [{upstream}]({upstream}/releases)\n")
+
+        # When
+        run_rename()
+
+        # Then
+        lines = read("README.en.md").splitlines()
+        self.assertIn(upstream, lines[0])
+        self.assertIn("https://github.com/FRBLanApps/PiliSuper/releases", lines[1])
+
     def test_covers_all_platforms(self):
         run_rename()
 
