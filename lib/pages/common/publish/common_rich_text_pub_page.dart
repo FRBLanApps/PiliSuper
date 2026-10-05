@@ -283,7 +283,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
     final list = <Map<String, dynamic>>[];
     for (final e in editController.items) {
       switch (e.type) {
-        case .text || .composing || .common:
+        case .text || .composing || .common || .latex:
           list.add({
             "raw_text": e.text,
             "type": 1,
@@ -325,11 +325,13 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
   }
 
   late double _mentionOffset = 0;
+  MentionItem? get topMentionItem => null;
   Future<void>? onMention([bool fromClick = false]) async {
     final res = await DynMentionPanel.onDynMention(
       context,
       offset: _mentionOffset,
       onCachePos: (offset) => _mentionOffset = offset,
+      top: topMentionItem,
     );
     if (res != null) {
       if (res is MentionItem) {
@@ -465,13 +467,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
       final isEmoji = panelType.value == PanelType.emoji;
       return ToolbarIconButton(
         tooltip: isEmoji ? '输入' : '表情',
-        onPressed: () {
-          if (isEmoji) {
-            updatePanelType(PanelType.keyboard);
-          } else {
-            updatePanelType(PanelType.emoji);
-          }
-        },
+        onPressed: () => updatePanelType(isEmoji ? .keyboard : .emoji),
         icon: isEmoji
             ? const Icon(Icons.keyboard, size: 22)
             : const Icon(Icons.emoji_emotions, size: 22),
@@ -492,13 +488,7 @@ abstract class CommonRichTextPubPageState<T extends CommonRichTextPubPage>
       final isMore = panelType.value == PanelType.more;
       return ToolbarIconButton(
         tooltip: isMore ? '输入' : '更多',
-        onPressed: () {
-          if (isMore) {
-            updatePanelType(PanelType.keyboard);
-          } else {
-            updatePanelType(PanelType.more);
-          }
-        },
+        onPressed: () => updatePanelType(isMore ? .keyboard : .more),
         icon: isMore
             ? const Icon(Icons.keyboard, size: 22)
             : const Icon(Icons.add_circle_outline, size: 22),

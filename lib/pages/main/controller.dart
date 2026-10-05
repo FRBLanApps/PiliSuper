@@ -51,9 +51,10 @@ class MainController extends GetxController
   late bool hasHome = false;
   late final homeController = Get.putOrFind(HomeController.new);
 
+  late final disableLikeMsg = Pref.disableLikeMsg;
   late DynamicBadgeMode msgBadgeMode = Pref.msgBadgeMode;
   late Set<MsgUnReadType> msgUnReadTypes = Pref.msgUnReadTypeV2;
-  late final RxString msgUnReadCount = ''.obs;
+  late final RxnString msgUnReadCount = RxnString(null);
   late int lastCheckUnreadAt = 0;
 
   final enableMYBar = Pref.enableMYBar;
@@ -153,7 +154,7 @@ class MainController extends GetxController
               count += response.at;
               break;
             case MsgUnReadType.like:
-              count += response.like;
+              if (!disableLikeMsg) count += response.like;
               break;
             case MsgUnReadType.sysMsg:
               count += response.sysMsg;
@@ -165,12 +166,16 @@ class MainController extends GetxController
     return count;
   }
 
+  void clearUnreadMsg() {
+    msgUnReadCount.value = null;
+  }
+
   Future<void> queryUnreadMsg([bool isChangeType = false]) async {
     if (!accountService.isLogin.value ||
         !hasHome ||
         msgUnReadTypes.isEmpty ||
         msgBadgeMode == DynamicBadgeMode.hidden) {
-      msgUnReadCount.value = '';
+      clearUnreadMsg();
       return;
     }
 
@@ -179,7 +184,7 @@ class MainController extends GetxController
     final count = res.sum;
 
     final countStr = count == 0
-        ? ''
+        ? null
         : count > 99
         ? '99+'
         : count.toString();
@@ -240,7 +245,7 @@ class MainController extends GetxController
           .toList();
     } else {
       final mapped = navBarSort
-          .map((i) => NavigationBarType.values[i])
+          .map(NavigationBarType.values.elementAt)
           .toList();
       if (mapped.length > 6) {
         navigationBars = mapped.take(6).toList();
@@ -371,6 +376,7 @@ class MainController extends GetxController
   @override
   void onChangeAccount(bool isLogin) {
     if (isLogin) {
+      queryUnreadMsg();
       getUnreadDynamic();
     } else {
       setDynCount();

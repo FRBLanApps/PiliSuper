@@ -34,6 +34,7 @@ COMMON_PATCHES = [
     "text_painter.patch",
     "sliver.patch",
     "refresh_indicator.patch",
+    "double_tap_gesture.patch",
 ]
 
 ANDROID_PATCHES = [

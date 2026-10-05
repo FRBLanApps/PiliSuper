@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:PiliPlus/common/widgets/animated_height.dart';
 import 'package:PiliPlus/common/widgets/draggable_sheet/dyn.dart';
 import 'package:PiliPlus/common/widgets/flutter/text_field/text_field.dart';
@@ -6,8 +8,9 @@ import 'package:PiliPlus/common/widgets/scroll_physics.dart'
     show platformClampingPhysics;
 import 'package:PiliPlus/http/dynamics.dart';
 import 'package:PiliPlus/http/loading_state.dart';
-import 'package:PiliPlus/models/common/publish_panel_type.dart';
+import 'package:PiliPlus/http/video.dart';
 import 'package:PiliPlus/models/dynamics/result.dart';
+import 'package:PiliPlus/models_new/dynamic/dyn_mention/item.dart';
 import 'package:PiliPlus/pages/common/publish/common_rich_text_pub_page.dart';
 import 'package:PiliPlus/pages/dynamics_mention/controller.dart';
 import 'package:PiliPlus/pages/emote/controller.dart';
@@ -30,6 +33,10 @@ class RepostPanel extends CommonRichTextPubPage {
     this.pic,
     this.title,
     this.uname,
+    // reply
+    this.replyInfo,
+    // mention
+    this.mentionItem,
     super.autofocus = false,
   });
 
@@ -39,6 +46,12 @@ class RepostPanel extends CommonRichTextPubPage {
   final String? pic;
   final String? title;
   final String? uname;
+
+  // reply
+  final ({int oid, int replyType})? replyInfo;
+
+  // mention
+  final MentionItem? mentionItem;
 
   final DynamicItemModel? item;
   final String? dynIdStr;
@@ -55,6 +68,8 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
   late final String? _pic;
   late final String _text;
   late final String? _uname;
+
+  late final RxBool _reply = false.obs;
 
   static const _durtion = Duration(milliseconds: 300);
 
@@ -92,28 +107,26 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     Widget page([ScrollController? scrollController]) => Column(
       crossAxisAlignment: .start,
       mainAxisSize: _expanded ? .max : .min,
       children: [
         if (!_expanded) const SizedBox(height: 10),
-        _buildAppBar(theme),
+        _buildAppBar(),
         if (_expanded) ...[
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               controller: scrollController,
               physics: platformClampingPhysics,
-              children: _buildEditPanel(theme),
+              children: _buildEditPanel(),
             ),
           ),
           _buildToolbar,
-          buildPanelContainer(theme, Colors.transparent),
+          buildPanelContainer(Colors.transparent),
         ] else ...[
-          ..._buildEditPanel(theme),
-          ..._buildDismiss(theme),
+          ..._buildEditPanel(),
+          ..._buildDismiss(),
         ],
       ],
     );
@@ -137,11 +150,11 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
     );
   }
 
-  List<Widget> _buildEditPanel(ThemeData theme) => [
+  List<Widget> _buildEditPanel() => [
     Padding(
       padding: const .symmetric(horizontal: 16),
       child: _expanded
-          ? _buildEditWidget(theme)
+          ? _buildEditWidget()
           : DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
@@ -151,14 +164,14 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
                   ),
                 ),
               ),
-              child: _buildEditPlaceHolder(theme),
+              child: _buildEditPlaceHolder(),
             ),
     ),
     const SizedBox(height: 10),
-    _buildRefWidget(theme),
+    _buildRefWidget(),
   ];
 
-  Widget _buildRefWidget(ThemeData theme) => Card(
+  Widget _buildRefWidget() => Card(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -204,11 +217,11 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
     ),
   );
 
-  Widget _buildEditPlaceHolder(ThemeData theme) => GestureDetector(
+  Widget _buildEditPlaceHolder() => GestureDetector(
     behavior: HitTestBehavior.opaque,
     onTap: () {
       setState(() => _expanded = true);
-      Future.delayed(_durtion, () {
+      Timer(_durtion, () {
         if (mounted) {
           focusNode.requestFocus();
         }
@@ -227,37 +240,30 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
     ),
   );
 
-  Widget _buildEditWidget(ThemeData theme) => Listener(
-    onPointerUp: (event) {
-      if (readOnly.value) {
-        updatePanelType(PanelType.keyboard);
-      }
-    },
-    child: Obx(
-      () => RichTextField(
-        key: key,
-        controller: editController,
-        minLines: 4,
-        maxLines: null,
-        autofocus: false,
-        focusNode: focusNode,
-        onSubmitted: onSubmitted,
-        readOnly: readOnly.value,
-        decoration: InputDecoration(
-          hintText: '说点什么吧',
-          hintStyle: TextStyle(color: theme.colorScheme.outline),
-          border: const OutlineInputBorder(
-            borderSide: BorderSide.none,
-            gapPadding: 0,
-          ),
-          contentPadding: EdgeInsets.zero,
+  Widget _buildEditWidget() => Obx(
+    () => RichTextField(
+      key: key,
+      controller: editController,
+      minLines: 4,
+      maxLines: null,
+      autofocus: false,
+      focusNode: focusNode,
+      onSubmitted: onSubmitted,
+      readOnly: readOnly.value,
+      decoration: InputDecoration(
+        hintText: '说点什么吧',
+        hintStyle: TextStyle(color: theme.colorScheme.outline),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide.none,
+          gapPadding: 0,
         ),
-        // inputFormatters: [LengthLimitingTextInputFormatter(1000)],
+        contentPadding: EdgeInsets.zero,
       ),
+      // inputFormatters: [LengthLimitingTextInputFormatter(1000)],
     ),
   );
 
-  Widget _buildAppBar(ThemeData theme) => !_expanded
+  Widget _buildAppBar() => !_expanded
       ? Row(
           children: [
             const SizedBox(width: 16),
@@ -339,15 +345,51 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
   Widget get _buildToolbar => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: Row(
-      spacing: 16,
       children: [
         emojiBtn,
+        const SizedBox(width: 16),
         atBtn,
+        const Spacer(),
+        if (widget.replyInfo != null) replyBtn,
       ],
     ),
   );
 
-  List<Widget> _buildDismiss(ThemeData theme) => [
+  Widget get replyBtn {
+    return Obx(() {
+      final reply = _reply.value;
+      final color = reply
+          ? theme.colorScheme.primary
+          : theme.colorScheme.outline;
+      return GestureDetector(
+        onTap: _reply.toggle,
+        behavior: .translucent,
+        child: SizedBox(
+          height: 36,
+          child: Row(
+            spacing: 4,
+            mainAxisSize: .min,
+            children: [
+              reply
+                  ? Icon(Icons.check_box_outlined, color: color, size: 20)
+                  : Icon(
+                      Icons.check_box_outline_blank_outlined,
+                      color: color,
+                      size: 20,
+                    ),
+              Text(
+                '同时评论',
+                style: TextStyle(color: color, height: 1),
+                strutStyle: const StrutStyle(leading: 0, height: 1),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildDismiss() => [
     const SizedBox(height: 10),
     Divider(
       height: 1,
@@ -408,9 +450,33 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
     }
   }
 
+  Future<void> _replyIfNeeded() async {
+    final replyInfo = widget.replyInfo;
+    if (replyInfo == null || !_reply.value || editController.items.isEmpty) {
+      return;
+    }
+    final Map<String, int> atNameToMid = {};
+    for (final e in editController.items) {
+      if (e.type == .at) {
+        atNameToMid[e.rawText] ??= int.parse(e.id!);
+      }
+    }
+    final message = editController.rawText;
+    final res = await VideoHttp.replyAdd(
+      type: replyInfo.replyType,
+      oid: replyInfo.oid,
+      message: message,
+      atNameToMid: atNameToMid,
+    );
+    if (res is! Success) {
+      SmartDialog.showToast('评论失败: $res');
+    }
+  }
+
   @override
   Future<void> onCustomPublish({List? pictures}) async {
     SmartDialog.showLoading();
+    _replyIfNeeded();
     List<Map<String, dynamic>>? richContent = getRichContent();
     final hasRichText = richContent != null;
     List<Map<String, dynamic>>? repostContent = widget.item?.orig != null
@@ -446,4 +512,7 @@ class _RepostPanelState extends CommonRichTextPubPageState<RepostPanel>
 
   @override
   void onSave() {}
+
+  @override
+  MentionItem? get topMentionItem => widget.mentionItem;
 }

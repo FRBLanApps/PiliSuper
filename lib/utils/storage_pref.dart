@@ -268,9 +268,7 @@ abstract final class Pref {
 
   static String get hardwareDecoding => _setting.get(
     SettingBoxKey.hardwareDecoding,
-    defaultValue: Platform.isAndroid
-        ? HwDecType.androidDefault
-        : HwDecType.auto.hwdec,
+    defaultValue: HwDecType.kHwdec,
   );
 
   static String get videoSync =>
@@ -1048,6 +1046,8 @@ abstract final class Pref {
     return value == null || value.isEmpty ? defaultAssFontName : value;
   }
 
+  static String? get imageSavePath => _setting.get(SettingBoxKey.imageSavePath);
+
   static String? get liveCdnUrl => _setting.get(SettingBoxKey.liveCdnUrl);
 
   static bool get showBatteryLevel => _setting.get(
@@ -1094,4 +1094,7 @@ abstract final class Pref {
 
   static bool get enableDocProvider =>
       _setting.get(SettingBoxKey.enableDocProvider, defaultValue: false);
+
+  static bool get enableEmoteTooltip =>
+      _setting.get(SettingBoxKey.enableEmoteTooltip, defaultValue: false);
 }
