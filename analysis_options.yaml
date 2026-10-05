@@ -15,6 +15,7 @@ analyzer:
     package_names: ignore
   exclude:
     - lib/grpc/bilibili/**
+    - lib/**/*.g.dart
     - android/**
     - ios/**
     - linux/**

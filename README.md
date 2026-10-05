@@ -6,6 +6,8 @@
     <h1>PiliSuper</h1>
 <div align="center">
 
+中文 | [English](README.en.md)
+
 ![GitHub Repo stars](https://img.shields.io/github/stars/FRBLanApps/PiliSuper?style=flat&logo=Github)
 ![GitHub repo size](https://img.shields.io/github/repo-size/FRBLanApps/PiliSuper?style=flat&logo=Github)
 ![GitHub License](https://img.shields.io/github/license/FRBLanApps/PiliSuper?style=flat&logo=GNU&link=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html)
@@ -231,6 +233,10 @@
 请见[TODO.md](TODO.md)
 
 里面列出了很多功能和优化的想法，欢迎查看并提出建议)
+
+## 下载
+
+可以从 [PiliSuper Releases](https://github.com/FRBLanApps/PiliSuper/releases) 下载，或克隆本仓库在本地编译。
 
 <br/>
 

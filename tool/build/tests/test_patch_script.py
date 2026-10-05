@@ -38,6 +38,7 @@ class PatchTests(unittest.TestCase):
             "text_painter.patch",
             "sliver.patch",
             "refresh_indicator.patch",
+            "double_tap_gesture.patch",
         ]
 
         # When
@@ -65,8 +66,8 @@ class PatchTests(unittest.TestCase):
 
     def test_common_patch_set_includes_material_dependencies(self):
         self.assertEqual(
-            patch_script.COMMON_PATCHES[-3:],
-            ["text_painter.patch", "sliver.patch", "refresh_indicator.patch"],
+            patch_script.COMMON_PATCHES[-4:],
+            ["text_painter.patch", "sliver.patch", "refresh_indicator.patch", "double_tap_gesture.patch"],
         )
 
     def test_sdk_patch_plan_matches_platform_reset_rules(self):
@@ -213,15 +214,16 @@ class PatchTests(unittest.TestCase):
             self.assertEqual(unrelated.read_bytes(), b"crlf\r\nuntouched\r\n")
 
     def test_already_applied_project_patch_is_accepted(self):
-        completed = type("Completed", (), {"returncode": 0})()
+        completed = subprocess.CompletedProcess(["git"], 0)
         with patch.object(
             patch_script,
             "run_command",
-            side_effect=[type("Completed", (), {"returncode": 1})(), completed],
+            side_effect=[subprocess.CalledProcessError(1, ["git"]), completed],
         ) as run:
             patch_script.apply_project_patch(Path("patch.diff"), Path("."))
 
         self.assertEqual(run.call_count, 2)
+        self.assertIn("--reverse", run.call_args_list[1].args[0])
 
 
 if __name__ == "__main__":

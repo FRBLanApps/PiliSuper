@@ -52,7 +52,7 @@ SKIP_DIRECTORIES = {".git", ".codegraph", ".dart_tool", ".omo", ".pytest_cache",
 MANUAL_FILES = {"README.md"}
 
 # A line that credits upstream keeps pointing at the upstream repository.
-ATTRIBUTION_LINE = re.compile(r"致敬|原作者|上上游|上游|[Uu]pstream|[Aa]cknowledg")
+ATTRIBUTION_LINE = re.compile(r"致敬|原作者|上上游|上游|[Uu]pstream|[Aa]cknowledg|\b[Cc]redit\b")
 
 # Java/Kotlin keywords; a package segment may not be one of them.
 RESERVED_WORDS = {

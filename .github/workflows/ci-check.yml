@@ -35,6 +35,9 @@ jobs:
           flutter-version-file: pubspec.yaml
           cache: true
 
+      - name: Apply Linux SDK patches
+        run: python3 tool/build/patch.py linux
+
       - name: Resolve dependencies
         run: flutter pub get
 

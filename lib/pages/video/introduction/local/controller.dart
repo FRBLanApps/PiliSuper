@@ -43,7 +43,6 @@ class LocalIntroController extends CommonIntroController {
   @override
   void onClose() {
     aidSet.clear();
-    videoPlayerServiceHandler?.onVideoDetailDispose(heroTag);
     super.onClose();
   }
 
@@ -135,8 +134,8 @@ class LocalIntroController extends CommonIntroController {
       ..bvid = entry.bvid
       ..cid.value = entry.cid
       ..args['dirPath'] = entry.entryDirPath
-      ..initFileSource(entry, isInit: false)
-      ..playerInit();
+      ..initFileSource(entry)
+      ..initPlayerIfNeeded(false);
     videoDetail
       ..value.title = entry.showTitle
       ..refresh();

@@ -20,6 +20,7 @@ import 'package:PiliPlus/pages/dynamics_repost/view.dart';
 import 'package:PiliPlus/pages/video/reply/controller.dart';
 import 'package:PiliPlus/plugin/pl_player/models/play_repeat.dart';
 import 'package:PiliPlus/services/service_locator.dart';
+import 'package:PiliPlus/utils/android/android_helper.dart';
 import 'package:PiliPlus/utils/feed_back.dart';
 import 'package:PiliPlus/utils/global_data.dart';
 import 'package:PiliPlus/utils/id_utils.dart';
@@ -42,7 +43,15 @@ class PgcIntroController extends CommonIntroController {
       : '追剧';
 
   late final bool isPgc;
-  late final PgcInfoModel pgcItem;
+  late PgcInfoModel pgcItem;
+
+  ScrollController? _seasonController;
+  ScrollController seasonController(int index) {
+    if (_seasonController != null) return _seasonController!;
+    return _seasonController = ScrollController(
+      initialScrollOffset: index * 150,
+    );
+  }
 
   @override
   (Object, int) get getFavRidType => (epId!, 24);
@@ -64,6 +73,10 @@ class PgcIntroController extends CommonIntroController {
 
     super.onInit();
 
+    _onGetPgcInfo();
+  }
+
+  void _onGetPgcInfo() {
     if (isPgc) {
       if (isLogin) {
         queryIsFollowed();
@@ -139,7 +152,7 @@ class PgcIntroController extends CommonIntroController {
             child: const Text('其它app打开', style: TextStyle(fontSize: 14)),
             onPressed: () {
               Get.back();
-              PageUtils.launchURL(videoUrl);
+              PiliAndroidHelper.openUrl(videoUrl);
             },
           ),
           if (PlatformUtils.isMobile)
@@ -191,6 +204,10 @@ class PgcIntroController extends CommonIntroController {
                     title:
                         '${pgcItem.title}${item != null ? '\n${item.showTitle}' : ''}',
                     uname: '',
+                    replyInfo: (
+                      oid: videoDetailCtr.aid,
+                      replyType: videoDetailCtr.videoType.replyType,
+                    ),
                   ),
                 );
               },
@@ -368,8 +385,6 @@ class PgcIntroController extends CommonIntroController {
       if (nextIndex >= episodes.length) {
         if (playRepeat == PlayRepeat.listCycle) {
           nextIndex = 0;
-        } else if (playRepeat == PlayRepeat.autoPlayRelated) {
-          return false;
         } else {
           return false;
         }
@@ -477,5 +492,43 @@ class PgcIntroController extends CommonIntroController {
     } else {
       res.toast();
     }
+  }
+
+  bool _changingSeason = false;
+  bool get changingSeason => _changingSeason;
+
+  Future<bool> changeSeason(int seasonId) async {
+    if (_changingSeason) return false;
+    _changingSeason = true;
+    SmartDialog.showLoading();
+    try {
+      final res = await SearchHttp.pgcInfo(seasonId: seasonId, epId: epId);
+      if (res case Success(:final response)) {
+        final episodes = response.episodes;
+        if (episodes != null && episodes.isNotEmpty) {
+          pgcItem = response;
+          this.seasonId = seasonId;
+          onChangeEpisode(episodes.first);
+          _onGetPgcInfo();
+          return true;
+        } else {
+          SmartDialog.showToast('剧集为空');
+        }
+      } else {
+        res.toast();
+      }
+    } catch (_) {
+    } finally {
+      SmartDialog.dismiss();
+      _changingSeason = false;
+    }
+    return false;
+  }
+
+  @override
+  void onClose() {
+    _seasonController?.dispose();
+    _seasonController = null;
+    super.onClose();
   }
 }

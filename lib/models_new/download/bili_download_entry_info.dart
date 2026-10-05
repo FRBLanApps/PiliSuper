@@ -1,12 +1,11 @@
-import 'dart:io' show Platform, Process;
-
 import 'package:PiliPlus/models/common/video/video_type.dart';
+import 'package:PiliPlus/models_new/sponsor_block/segment_item.dart';
 import 'package:PiliPlus/pages/common/multi_select/base.dart'
     show MultiSelectData;
 import 'package:PiliPlus/utils/page_utils.dart';
+import 'package:PiliPlus/utils/path_utils.dart';
 import 'package:PiliPlus/utils/platform_utils.dart';
 import 'package:PiliPlus/utils/utils.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/route_manager.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -39,6 +38,8 @@ class BiliDownloadEntryInfo with MultiSelectData {
   final SourceInfo? source;
   EpInfo? ep;
 
+  List<SegmentItemModel>? segments;
+
   late String pageDirPath;
   late String entryDirPath;
   late DownloadStatus status = .wait;
@@ -47,7 +48,7 @@ class BiliDownloadEntryInfo with MultiSelectData {
 
   String get pageId => seasonId ?? avid.toString();
 
-  int get sortKey => ep?.sortIndex ?? pageData!.cid;
+  int get sortKey => ep?.sortIndex ?? pageData!.page;
 
   String get showTitle {
     if (pageData case PageInfo(:final part)) {
@@ -104,23 +105,7 @@ class BiliDownloadEntryInfo with MultiSelectData {
           PopupMenuItem(
             height: 38,
             child: const Text('打开本地文件夹', style: TextStyle(fontSize: 13)),
-            onTap: () async {
-              try {
-                final String executable;
-                if (Platform.isWindows) {
-                  executable = 'explorer';
-                } else if (Platform.isMacOS) {
-                  executable = 'open';
-                } else if (Platform.isLinux) {
-                  executable = 'xdg-open';
-                } else {
-                  throw UnimplementedError();
-                }
-                await Process.run(executable, [entryDirPath]);
-              } catch (e) {
-                SmartDialog.showToast(e.toString());
-              }
-            },
+            onTap: () => PathUtils.openDir(entryDirPath),
           )
         else
           PopupMenuItem(
@@ -169,6 +154,7 @@ class BiliDownloadEntryInfo with MultiSelectData {
     this.seasonId,
     this.source,
     this.ep,
+    this.segments,
   });
 
   factory BiliDownloadEntryInfo.fromJson(Map<String, dynamic> json) =>
@@ -207,6 +193,7 @@ class BiliDownloadEntryInfo with MultiSelectData {
         ep: json['ep'] != null
             ? EpInfo.fromJson(json['ep'] as Map<String, dynamic>)
             : null,
+        segments: SegmentItemModel.fromCache(json['segments']),
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -237,6 +224,7 @@ class BiliDownloadEntryInfo with MultiSelectData {
     'season_id': ?seasonId,
     'source': ?source?.toJson(),
     'ep': ?ep?.toJson(),
+    'segments': ?segments?.map((e) => e.toJson()).toList(),
   };
 
   @override
