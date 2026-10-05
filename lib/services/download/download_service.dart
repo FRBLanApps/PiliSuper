@@ -332,7 +332,9 @@ class DownloadService extends GetxService {
               DmGrpc.dmSegMobile(cid: cid, segmentIndex: index),
           ]);
           for (final response in responses) {
-            danmaku.elems.addAll(response.data.elems);
+            if (response case Success(:final response)) {
+              danmaku.elems.addAll(response.elems);
+            }
           }
           responses.clear();
         }
