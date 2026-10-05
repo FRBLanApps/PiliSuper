@@ -115,6 +115,20 @@ class LinuxPackageMetadataTests(unittest.TestCase):
         self.assertIn("libwebkit2gtk-4.1-dev", install)
         self.assertNotIn("webkit2gtk-4.1 \\", install)
 
+    def test_arch_job_installs_all_declared_runtime_dependencies(self):
+        # Given
+        workflow = (BUILD_ROOT.parents[1] / ".github/workflows/build.yml").read_text()
+        arch_job = workflow.split("\n  arch:", 1)[1].split("\n  notify-telegram:", 1)[0]
+
+        # When
+        install = next(line.strip()[5:] for line in arch_job.splitlines()
+                       if line.strip().startswith("run: pacman "))
+        packages = set(install.split())
+
+        # Then
+        self.assertTrue({"gtk3", "mpv", "json-glib", "webkit2gtk-4.1",
+                         "libayatana-appindicator"}.issubset(packages))
+
 
 if __name__ == "__main__":
     unittest.main()

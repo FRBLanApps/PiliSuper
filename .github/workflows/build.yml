@@ -701,7 +701,7 @@ jobs:
     container: archlinux:base-devel
     steps:
       - name: Install job dependencies
-        run: pacman -Syu --noconfirm git python zstd gtk3 mpv libayatana-appindicator
+        run: pacman -Syu --noconfirm git python zstd gtk3 mpv json-glib webkit2gtk-4.1 libayatana-appindicator
 
       - uses: actions/checkout@v6
         with:
